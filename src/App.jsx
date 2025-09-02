@@ -14,21 +14,19 @@ const AnimatedRoutes = () => {
   const location = useLocation();
 
   return (
-    <AnimatePresence initial={false} mode="sync">
-        <NewNavbar />
-      <Routes location={location} key={location.pathname}>
-      
-        <Route path="/" element={<Home />} />
-        <Route path="/blog" element={<BlogPage />} />
-        
-      
-
-      </Routes>
-        <Footer/>
-        <div className="w-full text-center py-4 text-gray-400 text-xs font-light">
+    <>
+      <NewNavbar />
+      <AnimatePresence initial={false} mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Home />} />
+          <Route path="/blog" element={<BlogPage />} />
+        </Routes>
+      </AnimatePresence>
+      <Footer />
+      <div className="w-full text-center py-4 text-gray-400 text-xs font-light">
         Designed and developed by TheSocialKollab
       </div>
-    </AnimatePresence>
+    </>
   );
 };
 

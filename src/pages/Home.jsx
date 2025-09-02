@@ -5,7 +5,7 @@ import NewHero from "../components/NewHero.jsx";
 import Recommended from "../components/Recommended.jsx";
 import MostRead from "../components/MostRead.jsx";
 import Latest from "../components/Latest.jsx";
-import Footer from "../components/Footer.jsx";
+
 
 export default function Home() {
   return (

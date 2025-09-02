@@ -1,0 +1,120 @@
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-fadeOutUp {
+  animation: fadeOutUp 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Typography */
+.font-cormorant {
+  font-family: "Cormorant Garamond", serif;
+  font-feature-settings: "liga" 1, "rlig" 1, "calt" 1;
+}
+
+.font-playfair {
+  font-family: "Playfair Display", serif;
+}
+
+/* Hover effects */
+.hover-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.hover-underline::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: currentColor;
+  transform-origin: center;
+  transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1);
+  opacity: 0.8;
+}
+
+.hover-underline:hover::after {
+  transform: scaleX(0.7);
+}
+
+/* Custom gradients */
+.gradient-overlay {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+/* Smooth scrolling container */
+.smooth-scroll {
+  @apply overflow-y-scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Smooth transition helpers */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 500ms;
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 500ms;
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 500ms;
+}

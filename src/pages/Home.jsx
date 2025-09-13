@@ -1,10 +1,13 @@
-import React from "react";
-import NewNavbar from "../components/NewNavbar.jsx";
+
 import NewHero from "../components/NewHero.jsx";
 
 import Recommended from "../components/Recommended.jsx";
-import MostRead from "../components/MostRead.jsx";
-import Latest from "../components/Latest.jsx";
+
+import Founder from "../components/Founder.jsx";
+import TopBooks from "../components/TopBooks.jsx";
+import ExamPreparation from "../components/ExamPreparation.jsx";
+import TopicSummaries from "../components/TopicSummaries.jsx";
+import AcademicHelp from "../components/AcademicHelp.jsx";
 
 
 export default function Home() {
@@ -12,9 +15,12 @@ export default function Home() {
     <>
       
       <NewHero />
+      <Founder/>
       <Recommended />
-			<MostRead/>
-			<Latest/>
+			<TopBooks/>
+			<ExamPreparation/>
+      <TopicSummaries/>
+      <AcademicHelp/>
 			
       
     </>

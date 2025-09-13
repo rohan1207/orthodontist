@@ -28,10 +28,11 @@ export default function Navbar() {
 
   const menuItems = [
     { name: "Home", href: "/" },
-    { name: "Blogs", href: "/blog" },
-    { name: "Tutorials", href: "/tutorials" },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
+    { name: "Articles", href: "/articles" },
+    { name: "Top Books", href: "/top-books" },
+    { name: "Exam Preparation", href: "/exam-prep" },
+    { name: "Topic Summaries", href: "/summaries" },
+    { name: "Academic Help", href: "/academic-help" },
   ];
 
   return (
@@ -39,55 +40,59 @@ export default function Navbar() {
       <nav
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-white/95 shadow-sm border-b border-gray-200"
+            ? "bg-white/95 shadow-sm border-b border-gray-200 backdrop-blur-sm"
             : "bg-transparent"
         }`}
         style={{ fontFamily: NAV_FONT }}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-8 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-8 py-3">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full border border-gray-900 flex items-center justify-center">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="black"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="4" y="4" width="16" height="16" rx="4" />
-                <path d="M8 8h8v8H8z" />
-              </svg>
-            </div>
+            <img src="/logo.png" alt="Logo" className="h-12 w-12 md:h-12 md:w-12" />
             <Link to="/">
               <span
                 className="text-lg font-normal tracking-wide"
                 style={{ letterSpacing: "0.08em" }}
               >
-                OrthoEdge
+                OrthoChronicles
+              </span>
+              <span
+                className="text-sm font-light block text-gray-600"
+                style={{ letterSpacing: "0.1em", marginTop: "-4px" }}
+              >
+                Your Dental Companion
               </span>
             </Link>
           </div>
-          {/* Right Side */}
-          <div className="flex items-center gap-2 md:gap-6">
-            <button
-              className="hidden md:flex items-center gap-2 px-6 py-2 rounded-full border border-gray-900 bg-white hover:bg-gray-50 transition-all text-base font-normal"
-              style={{ fontFamily: NAV_FONT }}
-            >
-              <Link to="/blog" className="flex items-center gap-2">
-                <span className="text-xl font-bold">+</span> Read Our Blogs
+
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center gap-6">
+            {menuItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className="text-gray-700 hover:text-gray-900 transition-colors duration-300 text-sm font-medium"
+              >
+                {item.name}
               </Link>
-            </button>
+            ))}
+          </div>
+
+          {/* Right Side Actions */}
+          <div className="flex items-center gap-2 md:gap-4">
+            <Link
+              to="/contact"
+              className="hidden md:block px-5 py-2.5 rounded-full border border-gray-300 bg-white hover:bg-gray-50 transition-all text-sm font-medium text-gray-800"
+            >
+              Contact Us
+            </Link>
             <button
-              className="p-2 rounded focus:outline-none"
+              className="lg:hidden p-2 rounded focus:outline-none"
               onClick={() => setMenuOpen(true)}
             >
               <svg
-                width="32"
-                height="32"
+                width="28"
+                height="28"
                 viewBox="0 0 32 32"
                 fill="none"
                 stroke="black"
@@ -102,7 +107,7 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-      {/* Elegant Popup Menu */}
+      {/* Mobile Popup Menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -113,13 +118,13 @@ export default function Navbar() {
             className="fixed inset-0 w-full h-full z-[60] bg-white/95 backdrop-blur-lg"
             style={{ fontFamily: NAV_FONT }}
           >
-            <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-full gap-6">
+            <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-full gap-4">
               {menuItems.map((item) => (
                 <motion.a
                   key={item.name}
                   href={item.href}
-                  whileHover={{ scale: 1.06, x: 8 }}
-                  className="text-3xl md:text-4xl font-normal text-gray-900 px-6 py-2 rounded transition-all duration-200"
+                  whileHover={{ scale: 1.05, x: 6 }}
+                  className="text-2xl md:text-3xl font-normal text-gray-900 px-6 py-2 rounded transition-all duration-200"
                   style={{ letterSpacing: "0.04em" }}
                   onClick={() => setMenuOpen(false)}
                 >
@@ -127,10 +132,17 @@ export default function Navbar() {
                 </motion.a>
               ))}
               <button
-                className="absolute top-8 right-8 p-2"
+                className="absolute top-6 right-6 p-2"
                 onClick={() => setMenuOpen(false)}
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
                   <line x1="18" y1="6" x2="6" y2="18"></line>
                   <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>

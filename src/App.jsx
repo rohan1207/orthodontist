@@ -9,6 +9,7 @@ import NewNavbar from "./components/NewNavbar.jsx";
 
 import BlogPage from "./pages/BlogPage.jsx";
 import Footer from "./components/Footer.jsx";
+import AcademicHelpPage from "./pages/AcademicHelpPage.jsx";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const AnimatedRoutes = () => {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/academic-help" element={<AcademicHelpPage />} />
         </Routes>
       </AnimatePresence>
       <Footer />

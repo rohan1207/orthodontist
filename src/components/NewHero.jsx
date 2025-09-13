@@ -21,7 +21,7 @@ export default function NewHero() {
 
   return (
     <section
-      className="relative min-h-screen overflow-hidden bg-white"
+      className="relative min-h-screen overflow-hidden bg-white mt-16"
       onMouseMove={handleMouseMove}
       style={{ fontFamily: HERO_FONT }}
     >
@@ -61,7 +61,7 @@ export default function NewHero() {
               <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-green-200/50 rounded-full px-6 py-3 shadow-lg">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                 <span className="text-sm font-medium text-slate-700">
-                  ✨ Premium Orthodontic Resources
+                  ✨ Trusted Orthodontic Resources
                 </span>
               </div>
 

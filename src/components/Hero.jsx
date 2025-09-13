@@ -46,7 +46,7 @@ const Hero = () => {
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden mt-16"
       style={{ backgroundColor: HERO_BG }}
     >
       {/* Decorative Elements */}

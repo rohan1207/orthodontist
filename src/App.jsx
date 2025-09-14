@@ -10,6 +10,12 @@ import NewNavbar from "./components/NewNavbar.jsx";
 import BlogPage from "./pages/BlogPage.jsx";
 import Footer from "./components/Footer.jsx";
 import AcademicHelpPage from "./pages/AcademicHelpPage.jsx";
+import ArticlesPage from "./pages/ArticlesPage.jsx";
+import TopBooksPage from "./pages/TopBooksPage.jsx";
+import ExamPreparationPage from "./pages/ExamPreparationPage.jsx";
+import TopicSummariesPage from "./pages/TopicSummariesPage.jsx";
+import ContactPage from "./pages/ContactPage.jsx";
+
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -22,6 +28,11 @@ const AnimatedRoutes = () => {
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/academic-help" element={<AcademicHelpPage />} />
+          <Route path="/articles" element={<ArticlesPage />} />
+          <Route path="/top-books" element={<TopBooksPage />} />
+          <Route path="/exam-prep" element={<ExamPreparationPage />} />
+          <Route path="/summaries" element={<TopicSummariesPage />} />
+          <Route path="/contact" element={<ContactPage/>} />
         </Routes>
       </AnimatePresence>
       <Footer />

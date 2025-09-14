@@ -29,7 +29,7 @@ const services = [
       "Detailed similarity report",
       "Suggestions for improvement"
     ],
-    pricing: "From  ₹10 per document"
+    pricing: "From  ₹1000 per document"
   },
   {
     id: 'proofreading',
@@ -44,7 +44,7 @@ const services = [
       "Citation format checking",
       "24-48 hour turnaround"
     ],
-    pricing: "From  ₹15 per 1000 words"
+    pricing: "From  ₹150 per 1000 words"
   },
   {
     id: 'review',
@@ -59,7 +59,7 @@ const services = [
       "Structure analysis",
       "Improvement recommendations"
     ],
-    pricing: "From  ₹25 per article"
+    pricing: "From  ₹2500 per article"
   },
   {
     id: 'consultation',
@@ -74,7 +74,7 @@ const services = [
       "Writing structure advice",
       "Citation assistance"
     ],
-    pricing: "From  ₹30 per hour"
+    pricing: "From  ₹3000 per hour"
   }
 ];
 

@@ -103,7 +103,7 @@ export default function AcademicHelp() {
     <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -116,7 +116,7 @@ export default function AcademicHelp() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+            className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4"
           >
             Expert Academic Assistance
           </motion.h2>
@@ -124,14 +124,14 @@ export default function AcademicHelp() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-xl text-gray-600 max-w-3xl mx-auto"
+            className="text-base md:text-xl text-gray-600 max-w-3xl mx-auto"
           >
             Professional support for your academic journey with plagiarism checking, proofreading, and expert consultation services.
           </motion.p>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
           <StatsItem 
             icon={ClockIcon}
             value="24/7"
@@ -155,7 +155,7 @@ export default function AcademicHelp() {
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-12 md:mb-16">
           {services.map((service) => (
             <ServiceCard key={service.id} service={service} />
           ))}
@@ -169,7 +169,7 @@ export default function AcademicHelp() {
         >
           <Link
             to="/academic-help"
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity duration-200"
+            className="group inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold text-base md:text-lg hover:opacity-90 transition-opacity duration-200"
           >
             Explore All Academic Services
             <motion.span

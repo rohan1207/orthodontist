@@ -16,8 +16,9 @@ export default function Home() {
       
       <NewHero />
       <Founder/>
+      <TopBooks/>
       <Recommended />
-			<TopBooks/>
+			
 			<ExamPreparation/>
       <TopicSummaries/>
       <AcademicHelp/>

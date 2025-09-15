@@ -58,7 +58,7 @@ const ExamCard = ({ module }) => {
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
       className="relative group"
     >
-      <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+      <div className="absolute -inset-0.5 rounded-xl md:rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500"
            style={{ 
              background: `linear-gradient(to right, ${module.color.split(' ')[1]}, ${module.color.split(' ')[3]})`,
              filter: 'blur(8px)',
@@ -66,12 +66,12 @@ const ExamCard = ({ module }) => {
            }} 
       />
       
-      <div className="relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-shadow duration-500">
+      <div className="relative bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-shadow duration-500 min-h-[340px] md:min-h-[360px]">
         {/* Header */}
-        <div className="flex items-start justify-between mb-6">
-          <div className="p-3 rounded-xl bg-gradient-to-r opacity-90"
+        <div className="flex items-start justify-between mb-4 md:mb-6">
+          <div className="p-2 md:p-3 rounded-lg md:rounded-xl bg-gradient-to-r opacity-90"
                style={{ background: `linear-gradient(to right, ${module.color.split(' ')[1]}, ${module.color.split(' ')[3]})` }}>
-            <module.icon className="w-6 h-6 text-white" />
+            <module.icon className="w-5 h-5 md:w-6 md:h-6 text-white" />
           </div>
           <motion.div 
             initial={{ scale: 0.5, opacity: 0 }}
@@ -79,33 +79,33 @@ const ExamCard = ({ module }) => {
             transition={{ delay: 0.2 }}
             className="flex items-center gap-1"
           >
-            <span className="text-2xl font-bold text-green-600">{module.successRate}</span>
+            <span className="text-xl md:text-2xl font-bold text-green-600">{module.successRate}</span>
             <span className="text-sm text-gray-500">success</span>
           </motion.div>
         </div>
 
         {/* Content */}
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">{module.title}</h3>
-        <p className="text-gray-600 mb-6 line-clamp-2">{module.description}</p>
+        <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-1 md:mb-2 line-clamp-1">{module.title}</h3>
+        <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6 line-clamp-2">{module.description}</p>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-2 md:gap-4 mb-4 md:mb-6">
           <div className="text-center">
             <div className="text-sm text-gray-500">Duration</div>
-            <div className="font-semibold text-gray-700">{module.duration}</div>
+            <div className="text-sm md:text-base font-semibold text-gray-700">{module.duration}</div>
           </div>
           <div className="text-center border-x border-gray-100">
             <div className="text-sm text-gray-500">Students</div>
-            <div className="font-semibold text-gray-700">{module.students}</div>
+            <div className="text-sm md:text-base font-semibold text-gray-700">{module.students}</div>
           </div>
           <div className="text-center">
             <div className="text-sm text-gray-500">Subjects</div>
-            <div className="font-semibold text-gray-700">{module.subjects}</div>
+            <div className="text-sm md:text-base font-semibold text-gray-700">{module.subjects}</div>
           </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="relative h-1.5 bg-gray-100 rounded-full overflow-hidden mb-6">
+        <div className="relative h-1 md:h-1.5 bg-gray-100 rounded-full overflow-hidden mb-4 md:mb-6">
           <motion.div
             initial={{ width: 0 }}
             whileInView={{ width: module.successRate }}
@@ -120,7 +120,7 @@ const ExamCard = ({ module }) => {
         {/* Action Button */}
         <Link
           to={`/exam-prep/${module.id}`}
-          className="group relative w-full inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-xl text-white transition-all duration-200"
+          className="group relative w-full inline-flex items-center justify-center px-4 py-2 md:px-6 md:py-3 text-sm font-medium rounded-lg md:rounded-xl text-white transition-all duration-200"
           style={{ 
             background: `linear-gradient(to right, ${module.color.split(' ')[1]}, ${module.color.split(' ')[3]})`,
           }}
@@ -157,7 +157,7 @@ export default function ExamPreparation() {
     <section className="py-16 md:py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -172,7 +172,7 @@ export default function ExamPreparation() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+            className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4"
           >
             Your Path to NEET MDS Success
           </motion.h2>
@@ -181,14 +181,14 @@ export default function ExamPreparation() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-xl text-gray-600 max-w-3xl mx-auto"
+            className="text-base md:text-xl text-gray-600 max-w-3xl mx-auto"
           >
             Structured preparation modules designed by top educators with proven success rates.
           </motion.p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
           <StatsCounter value="15k+" label="Active Students" icon={UserGroupIcon} />
           <StatsCounter value="92%" label="Success Rate" icon={ChartBarIcon} />
           <StatsCounter value="50+" label="Mock Tests" icon={DocumentTextIcon} />
@@ -196,7 +196,7 @@ export default function ExamPreparation() {
         </div>
 
         {/* Modules Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
           {examModules.map((module) => (
             <ExamCard key={module.id} module={module} />
           ))}
@@ -207,11 +207,11 @@ export default function ExamPreparation() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-16 text-center"
+          className="mt-12 md:mt-16 text-center"
         >
           <Link
-            to="/exam-preparation"
-            className="group inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold text-lg"
+            to="/exam-prep"
+            className="group inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold text-base md:text-lg"
           >
             View All Preparation Modules
             <motion.span

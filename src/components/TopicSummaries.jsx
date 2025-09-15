@@ -213,7 +213,7 @@ export default function TopicSummaries() {
 
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <motion.div
@@ -228,7 +228,7 @@ export default function TopicSummaries() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+            className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4"
           >
             Master Complex Topics with Ease
           </motion.h2>
@@ -236,14 +236,14 @@ export default function TopicSummaries() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-xl text-gray-600 max-w-3xl mx-auto"
+            className="text-base md:text-xl text-gray-600 max-w-3xl mx-auto"
           >
             Comprehensive summaries curated from multiple textbooks, designed for quick understanding and effective revision.
           </motion.p>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
           <StatBox icon={DocumentTextIcon} value="50+" label="Topics Covered" />
           <StatBox icon={BookOpenIcon} value="15+" label="Textbook Sources" />
           <StatBox icon={ClockIcon} value="2-3x" label="Faster Learning" />
@@ -251,7 +251,7 @@ export default function TopicSummaries() {
         </div>
 
         {/* Topics Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-12 md:mb-16">
           {sampleTopics.map((topic) => (
             <motion.div
               key={topic.id}
@@ -278,8 +278,8 @@ export default function TopicSummaries() {
           className="text-center"
         >
           <Link
-            to="/topic-summaries"
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity duration-200"
+            to="/summaries"
+            className="group inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold text-base md:text-lg hover:opacity-90 transition-opacity duration-200"
           >
             Explore All Topic Summaries
             <motion.span

@@ -42,7 +42,7 @@ const RecommendedCard = ({ article }) => {
 
   return (
     <motion.div
-      className="relative w-full aspect-[4/5] cursor-pointer"
+      className="relative w-full aspect-[3/4] sm:aspect-[4/5] cursor-pointer"
       style={{ perspective: '1000px' }}
       onHoverStart={() => setIsFlipped(true)}
       onHoverEnd={() => setIsFlipped(false)}
@@ -70,34 +70,34 @@ const RecommendedCard = ({ article }) => {
               </span>
             </div>
           </div>
-          <div className="p-4">
-            <h3 className="text-lg font-medium text-gray-900 line-clamp-2">
+          <div className="p-3 sm:p-4">
+            <h3 className="text-base sm:text-lg font-medium text-gray-900 line-clamp-2">
               {article.title}
             </h3>
-            <p className="mt-2 text-sm text-gray-500">{article.readTime}</p>
+            <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-500">{article.readTime}</p>
           </div>
         </div>
 
         {/* Back of Card */}
         <div
-          className="absolute w-full h-full bg-white rounded-2xl p-6 flex flex-col shadow-sm border border-gray-100"
+          className="absolute w-full h-full bg-white rounded-2xl p-4 sm:p-6 flex flex-col shadow-sm border border-gray-100"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
           <div className="flex-1">
             <span className="inline-block px-3 py-1 rounded-full bg-green-500/90 text-white text-xs font-medium">
               {article.category}
             </span>
-            <h3 className="mt-4 text-lg font-medium text-gray-900">
+            <h3 className="mt-3 sm:mt-4 text-base sm:text-lg font-medium text-gray-900">
               {article.title}
             </h3>
-            <p className="mt-3 text-sm text-gray-600 line-clamp-4">
+            <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-gray-600 line-clamp-3 sm:line-clamp-4">
               {article.description}
             </p>
           </div>
-          <div className="mt-4">
+          <div className="mt-3 sm:mt-4">
             <Link 
               to={`/article/${article.id}`}
-              className="inline-block w-full py-3 text-center rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm font-medium transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-block w-full py-2.5 sm:py-3 text-center rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm font-medium transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
               Read Article
             </Link>
@@ -121,7 +121,7 @@ export default function Recommended() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
           {recommendedArticles.map((article) => (
             <RecommendedCard key={article.id} article={article} />
           ))}

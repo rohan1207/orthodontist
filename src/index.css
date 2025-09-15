@@ -8,6 +8,16 @@
 /* Base styles */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+body{
+  width:100%;
+  height:100%;
+  overflow-x: hidden;
+}
+/* Prevent any React root overflow (some canvas/3D and transforms can exceed) */
+#root{
+  overflow-x: hidden;
 }
 
 /* Custom Animations */

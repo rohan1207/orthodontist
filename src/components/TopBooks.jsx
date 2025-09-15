@@ -49,6 +49,7 @@ const BookCard = ({ book }) => {
       animate={isOpen ? "open" : "closed"}
       onHoverStart={() => setIsOpen(true)}
       onHoverEnd={() => setIsOpen(false)}
+      onClick={() => setIsOpen((v) => !v)}
     >
       <div 
         className="absolute inset-0" 
@@ -180,20 +181,20 @@ const BookCard = ({ book }) => {
 
       {/* Environmental shadow - positioned relative to parent */}
       <motion.div
-        className="absolute -bottom-8 left-1/2 -translate-x-1/2 rounded-full opacity-50 pointer-events-none"
+        className="absolute -bottom-2 md:-bottom-6 left-1/2 -translate-x-1/2 rounded-full opacity-50 pointer-events-none"
         style={{
           background: 'radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%)',
-          width: '100%',
-          height: '20px',
+          width: '95%',
+          height: '14px',
           transform: 'rotateX(60deg)'
         }}
         variants={{
           open: {
-            width: '90%',
+            width: '85%',
             opacity: 0.3,
           },
           closed: {
-            width: '100%',
+            width: '95%',
             opacity: 0.2,
           }
         }}
@@ -216,10 +217,13 @@ export default function TopBooks() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10 lg:gap-12">
           <div className="contents" style={{ contain: 'paint style layout' }}>
             {topBooksData.map((book) => (
-              <div key={book.id} className="relative w-full" style={{ minHeight: '450px' }}>
+              <div
+                key={book.id}
+                className="relative w-full min-h-[280px] sm:min-h-[360px] md:min-h-[440px] pb-3 md:pb-6"
+              >
                 <BookCard book={book} />
               </div>
             ))}

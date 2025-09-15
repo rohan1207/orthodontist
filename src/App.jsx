@@ -45,7 +45,7 @@ const AnimatedRoutes = () => {
 
 const App = () => {
   return (
-    <div className="min-h-screen w-full bg-white">
+    <div className="min-h-screen w-full bg-white overflow-x-hidden">
       <BrowserRouter>
         <AnimatedRoutes />
       </BrowserRouter>

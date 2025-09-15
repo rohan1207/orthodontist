@@ -49,18 +49,21 @@ export default function NewHero() {
         <HeroInteractive mousePosition={mousePosition} />
       </div>
 
+      {/* Mobile readability overlay over 3D (keeps desktop unchanged) */}
+      <div className="absolute inset-0 z-[5] pointer-events-none lg:hidden bg-gradient-to-b from-white/90 via-white/70 to-transparent" />
+
       {/* Main Content */}
       <div className={`relative z-10 min-h-screen flex flex-col justify-center px-4 md:px-8 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             
             {/* Left Content */}
-            <div className="flex-1 text-center lg:text-left space-y-8">
+            <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8">
               
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-green-200/50 rounded-full px-6 py-3 shadow-lg">
+              <div className="inline-flex items-center gap-2 bg-white/85 backdrop-blur-md border border-green-200/50 rounded-full px-5 py-2.5 md:px-6 md:py-3 shadow-lg">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-sm font-medium text-slate-700">
+                <span className="text-xs md:text-sm font-medium text-slate-700">
                   ✨ Trusted Orthodontic Resources
                 </span>
               </div>
@@ -70,7 +73,8 @@ export default function NewHero() {
                 <h1 
                   className="font-bold tracking-tight leading-[0.95]"
                   style={{
-                    fontSize: 'clamp(2.5rem, 7vw, 5rem)',
+                    // Smaller minimum on phones, unchanged on larger screens
+                    fontSize: 'clamp(1.8rem, 8vw, 5rem)',
                     background: 'linear-gradient(135deg, #10b981 0%, #22c55e 50%, #84cc16 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -86,22 +90,22 @@ export default function NewHero() {
 
               {/* Subtitle */}
               <div className="space-y-6">
-                <p className="text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                <p className="text-base md:text-xl text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
                   <span className="font-semibold text-black">Cracked NEET MDS?</span> Your orthodontic journey starts here! ✨
                 </p>
                 
-                <p className="text-base md:text-lg text-slate-500 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                <p className="text-sm md:text-lg text-slate-500 leading-relaxed max-w-xl mx-auto lg:mx-0">
                   From clinics to exams—we make the tough stuff simple. Get summaries, reviews, strategies & trusted resources.
                 </p>
                 
-                <p className="text-sm md:text-base text-transparent bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text font-medium">
+                <p className="text-xs md:text-base text-transparent bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text font-medium">
                   Your academic anchor, from Braces to Breakthroughs. 🦷
                 </p>
               </div>
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+                <button className="group relative px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <span className="relative flex items-center gap-2">
                     Start Learning ✨
@@ -111,7 +115,7 @@ export default function NewHero() {
                   </span>
                 </button>
                 
-                <button className="px-8 py-4 bg-white/80 backdrop-blur-md text-slate-700 font-semibold rounded-2xl border border-slate-200/50 shadow-lg hover:shadow-xl hover:bg-white/90 transition-all duration-300 hover:-translate-y-1">
+                <button className="px-6 py-3 md:px-8 md:py-4 bg-white/80 backdrop-blur-md text-slate-700 font-semibold rounded-2xl border border-slate-200/50 shadow-lg hover:shadow-xl hover:bg-white/90 transition-all duration-300 hover:-translate-y-1">
                   Explore Resources 📚
                 </button>
               </div>
@@ -138,7 +142,7 @@ export default function NewHero() {
             </div>
 
             {/* Right Visual Space - Reserved for 3D */}
-            <div className="flex-1 relative h-96 lg:h-[600px] pointer-events-none">
+            <div className="flex-1 relative h-72 md:h-96 lg:h-[600px] pointer-events-none">
               {/* 3D element sits behind as background */}
             </div>
           </div>
@@ -222,12 +226,12 @@ function HeroScene({ hovered, target, mousePosition }) {
 
   // Minimal orb set (premium, subtle)
   const orbData = useMemo(() => [
-    { p: isMobile ? [1.6, 1.4, 0.4] : [5.2, 0.9, 0.6], c: "#22c55e", size: 0.14, speed: 1.1 },
-    { p: isMobile ? [-1.4, 1.6, 0.2] : [3.6, -0.8, 0.5], c: "#10b981", size: 0.12, speed: 1.3 },
-    { p: isMobile ? [0.8, 2.4, -0.1] : [4.6, 2.0, -0.3], c: "#84cc16", size: 0.16, speed: 0.9 },
+    { p: isMobile ? [0.8, 1.2, 0.4] : [5.2, 0.9, 0.6], c: "#22c55e", size: isMobile ? 0.1 : 0.14, speed: 1.1 },
+    { p: isMobile ? [-0.9, 1.4, 0.2] : [3.6, -0.8, 0.5], c: "#10b981", size: isMobile ? 0.09 : 0.12, speed: 1.3 },
+    { p: isMobile ? [0.5, 2.0, -0.1] : [4.6, 2.0, -0.3], c: "#84cc16", size: isMobile ? 0.12 : 0.16, speed: 0.9 },
     // background
-    { p: [-6, -2, -2], c: "#10b981", size: 0.22, speed: 0.5 },
-    { p: [7, 3, -3], c: "#22c55e", size: 0.24, speed: 0.6 },
+    { p: [-6, -2, -2], c: "#10b981", size: isMobile ? 0.18 : 0.22, speed: 0.5 },
+    { p: [7, 3, -3], c: "#22c55e", size: isMobile ? 0.2 : 0.24, speed: 0.6 },
   ], [isMobile]);
 
   return (
@@ -239,10 +243,10 @@ function HeroScene({ hovered, target, mousePosition }) {
       <group ref={group}>
         {/* Tooth PNG on the right */}
         <Float speed={1.3} rotationIntensity={0.18} floatIntensity={0.35}>
-          <group position={isMobile ? [0, 0.4, 0] : [4.0, 0.2, 0]}>
+          <group position={isMobile ? [0, 0.6, 0] : [4.0, 0.2, 0]} scale={isMobile ? 0.8 : 1}>
             {/* Soft halo ring */}
             <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, -0.12]}>
-              <torusGeometry args={[2.6, 0.02, 16, 120]} />
+              <torusGeometry args={[isMobile ? 2.0 : 2.6, 0.02, 16, 120]} />
               <meshStandardMaterial
                 color="#22c55e"
                 emissive="#22c55e"
@@ -254,7 +258,7 @@ function HeroScene({ hovered, target, mousePosition }) {
 
             <Image
               url={TOOTH_URL}
-              scale={[4.4, 4.4, 1]}
+              scale={isMobile ? [3.6, 3.6, 1] : [4.4, 4.4, 1]}
               transparent
               toneMapped={false}
               onPointerOver={(e) => { e.stopPropagation(); setOver(true); }}

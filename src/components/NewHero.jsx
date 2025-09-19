@@ -258,7 +258,7 @@ function HeroScene({ hovered, target }) {
           {/* Display hero.png from public as a floating card */}
           <group position={[0, 0, 0]}>
             <Image
-              url="/tooth1.png"
+              url="/tooth2.png"
               scale={[3.1, 3.1, 1]}
               transparent
               toneMapped={false}

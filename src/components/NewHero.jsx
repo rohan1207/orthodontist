@@ -1,29 +1,20 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Environment, Image } from "@react-three/drei";
-import gsap from "gsap";
 
 const HERO_FONT = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
-const TOOTH_URL = "/tooth1.png"; // main right-side PNG
+// Right-side visual uses hero.png card with torus + orbs (from Hero.jsx logic)
 
 export default function NewHero() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
-  const handleMouseMove = (e) => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 20;
-    const y = (e.clientY / window.innerHeight - 0.5) * 20;
-    setMousePosition({ x, y });
-  };
-
   return (
     <section
-      className="relative min-h-screen overflow-hidden bg-[#D1E7FF] mt-16"
-      onMouseMove={handleMouseMove}
+      className="relative min-h-screen overflow-visible bg-[#D1E7FF] mt-16"
       style={{ fontFamily: HERO_FONT }}
     >
   {/* Subtle blue wash */}
@@ -45,14 +36,6 @@ export default function NewHero() {
           />
         ))}
       </div>
-
-      {/* 3D Interactive Background */}
-      <div className="absolute inset-0 z-0">
-        <HeroInteractive mousePosition={mousePosition} />
-      </div>
-
-      {/* Mobile readability overlay over 3D (keeps desktop unchanged) */}
-      <div className="absolute inset-0 z-[5] pointer-events-none lg:hidden bg-gradient-to-b from-white/90 via-white/70 to-transparent" />
 
       {/* Main Content */}
       <div
@@ -108,7 +91,7 @@ export default function NewHero() {
                 </p>
 
                 <p className="text-xs md:text-base text-transparent bg-gradient-to-r from-[#004492] to-[#1E5AA5] bg-clip-text font-medium">
-                  Your academic anchor, from Braces to Breakthroughs. 🦷
+                  Your academic anchor 🦷
                 </p>
               </div>
 
@@ -130,7 +113,7 @@ export default function NewHero() {
                     <img
                       src="/flower.png"
                       alt=""
-                      className="w-12 h-12 group-hover:animate-[spin_6s_linear_infinite]"
+                      className="w-14 h-14 group-hover:animate-[spin_6s_linear_infinite]"
                     />
                   </div>
                   <span className="relative z-[2] flex items-center gap-2">
@@ -151,9 +134,9 @@ export default function NewHero() {
                     className="pointer-events-none absolute top-2 right-2 z-[1] transform translate-x-6 -translate-y-6 opacity-0 scale-75 transition-all duration-500 ease-out group-hover:translate-x-0 group-hover:-translate-y-0 group-hover:opacity-100 group-hover:scale-100"
                   >
                     <img
-                      src="/flower.png"
+                      src="/flower2.png"
                       alt=""
-                      className="w-12 h-12 group-hover:animate-[spin_6s_linear_infinite]"
+                      className="w-14 h-14 group-hover:animate-[spin_6s_linear_infinite]"
                     />
                   </div>
                   <span className="relative z-[2]">Start Learning</span>
@@ -188,9 +171,11 @@ export default function NewHero() {
               </div>
             </div>
 
-            {/* Right Visual Space - Reserved for 3D */}
-            <div className="flex-1 relative h-72 md:h-96 lg:h-[600px] pointer-events-none">
-              {/* 3D element sits behind as background */}
+            {/* Right Visual Space - 3D Canvas embedded (receives hover events) */}
+            <div className="flex-1 relative h-68 md:h-95 lg:h-[550px]">
+              <div className="absolute inset-0 rounded-2xl overflow-visible">
+                <HeroInteractive />
+              </div>
             </div>
           </div>
         </div>
@@ -208,7 +193,8 @@ export default function NewHero() {
   );
 }
 
-function HeroInteractive({ mousePosition }) {
+// === Interactive 3D cluster (hover/touch reactive) — ported from Hero.jsx ===
+function HeroInteractive() {
   const [hovered, setHovered] = useState(false);
   const target = useRef({ x: 0, y: 0 });
 
@@ -218,15 +204,20 @@ function HeroInteractive({ mousePosition }) {
       : { left: 0, top: 0, width: 1, height: 1 };
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    target.current.x = x * 0.6; // gentle tilt amount
-    target.current.y = -y * 0.4;
+    target.current.x = x * 0.8;
+    target.current.y = -y * 0.6;
   };
 
   return (
     <Canvas
-      className="absolute inset-0"
+      className="absolute inset-0 bg-transparent"
       dpr={[1, 2]}
-      camera={{ position: [0, 0, 12], fov: 40 }}
+      camera={{ position: [0, 0, 4.5], fov: 50 }}
+      gl={{ alpha: true, antialias: true }}
+      onCreated={(state) => {
+        state.gl.setClearColor(0x000000, 0);
+        if (state.scene) state.scene.background = null;
+      }}
       onPointerMove={onMove}
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => {
@@ -234,191 +225,80 @@ function HeroInteractive({ mousePosition }) {
         target.current.x = 0;
         target.current.y = 0;
       }}
+      onPointerDown={() => setHovered(true)}
+      onPointerUp={() => setHovered(false)}
     >
-      <HeroScene
-        hovered={hovered}
-        target={target}
-        mousePosition={mousePosition}
-      />
+      <HeroScene hovered={hovered} target={target} />
     </Canvas>
   );
 }
 
-function HeroScene({ hovered, target, mousePosition }) {
+function HeroScene({ hovered, target }) {
   const group = useRef();
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
-  const [over, setOver] = useState(false); // direct hover over tooth
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Smooth rotation
-      gsap.to(group.current.rotation, {
-        x: () => target.current.x,
-        y: () => target.current.y,
-        duration: 1,
-        ease: "power3.out",
-      });
-
-      // Gentle float
-      gsap.to(group.current.position, {
-        y: `+=${Math.sin(Date.now() * 0.001) * 0.1}`,
-        x: `+=${Math.cos(Date.now() * 0.0008) * 0.05}`,
-        repeat: -1,
-        yoyo: true,
-        duration: 5,
-        ease: "sine.inOut",
-      });
-
-      // Parallax effect
-      if (mousePosition) {
-        gsap.to(group.current.position, {
-          x: `+=${mousePosition.x * 0.005}`,
-          y: `+=${mousePosition.y * 0.005}`,
-          duration: 0.5,
-          ease: "power2.out",
-        });
-      }
-    }, group);
-    return () => ctx.revert();
-  }, [target.current.x, target.current.y, mousePosition]);
-
-  useEffect(() => {
-    const targetZ = hovered || over ? -0.8 : 0;
-    const scale = hovered || over ? 1.08 : 1.0;
-    gsap.to(group.current.position, { z: targetZ, duration: 0.7, ease: "expo.out" });
-    gsap.to(group.current.scale, { x: scale, y: scale, z: scale, duration: 0.7, ease: "expo.out" });
-  }, [hovered, over]);
-
-  // Minimal orb set (premium, subtle)
-  const orbData = useMemo(
-    () => [
-      {
-        p: isMobile ? [0.8, 1.2, 0.4] : [5.2, 0.9, 0.6],
-        c: "#1E5AA5",
-        size: isMobile ? 0.1 : 0.14,
-        speed: 1.1,
-      },
-      {
-        p: isMobile ? [-0.9, 1.4, 0.2] : [3.6, -0.8, 0.5],
-        c: "#004492",
-        size: isMobile ? 0.09 : 0.12,
-        speed: 1.3,
-      },
-      {
-        p: isMobile ? [0.5, 2.0, -0.1] : [4.6, 2.0, -0.3],
-        c: "#60A5FA",
-        size: isMobile ? 0.12 : 0.16,
-        speed: 0.9,
-      },
-      // background
-      {
-        p: [-6, -2, -2],
-        c: "#004492",
-        size: isMobile ? 0.18 : 0.22,
-        speed: 0.5,
-      },
-      { p: [7, 3, -3], c: "#1E5AA5", size: isMobile ? 0.2 : 0.24, speed: 0.6 },
-    ],
-    [isMobile]
-  );
+  useFrame((state) => {
+    if (!group.current) return;
+    group.current.rotation.y +=
+      (target.current.x - group.current.rotation.y) * 0.1;
+    group.current.rotation.x +=
+      (target.current.y - group.current.rotation.x) * 0.1;
+    group.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.1;
+    const s = hovered ? 1.05 : 1.0;
+    group.current.scale.x += (s - group.current.scale.x) * 0.08;
+    group.current.scale.y = group.current.scale.x;
+    group.current.scale.z = group.current.scale.x;
+  });
 
   return (
     <>
       <ambientLight intensity={0.6} />
-      <directionalLight
-        position={[10, 10, 5]}
-        intensity={1.15}
-        color="#ffffff"
-      />
-      <directionalLight
-        position={[-10, -10, -5]}
-        intensity={0.6}
-        color="#E0F2FE"
-      />
-
-      <group ref={group}>
-        {/* Tooth PNG on the right */}
-        <Float speed={1.3} rotationIntensity={0.18} floatIntensity={0.35}>
-          <group
-            position={isMobile ? [0, 0.6, 0] : [4.0, 0.2, 0]}
-            scale={isMobile ? 0.8 : 1}
-          >
-            {/* Soft halo ring */}
-            <mesh 
-              rotation={[Math.PI / 2, 0, 0]} 
-              position={[0, 0, -0.12]}
-              onPointerOver={(e) => { e.stopPropagation(); setOver(true); }}
-              onPointerOut={(e) => { e.stopPropagation(); setOver(false); }}
-            >
-              <torusGeometry args={[isMobile ? 2.0 : 2.6, 0.02, 16, 120]} />
-              <meshStandardMaterial
-                color="#1E5AA5"
-                emissive="#1E5AA5"
-                emissiveIntensity={0.22}
-                transparent
-                opacity={0.45}
-              />
-            </mesh>
-
+      <directionalLight position={[3, 5, 5]} intensity={0.8} />
+      <group ref={group} position={[0, -0.15, 0]}>
+        <Float speed={2} rotationIntensity={0.3} floatIntensity={0.7}>
+          {/* Display hero.png from public as a floating card */}
+          <group position={[0, 0, 0]}>
             <Image
-              url={TOOTH_URL}
-              scale={isMobile ? [3.6, 3.6, 1] : [4.4, 4.4, 1]}
+              url="/tooth1.png"
+              scale={[3.1, 3.1, 1]}
               transparent
               toneMapped={false}
-              onPointerOver={(e) => {
-                e.stopPropagation();
-                setOver(true);
-              }}
-              onPointerOut={(e) => {
-                e.stopPropagation();
-                setOver(false);
-                target.current.x = 0;
-                target.current.y = 0;
-              }}
-              onPointerMove={(e) => {
-                e.stopPropagation();
-                const uv = e.uv;
-                if (uv) {
-                  // Map cursor within image to tilt direction (-1..1)
-                  const x = (uv.x - 0.5) * 2;
-                  const y = (uv.y - 0.5) * 2;
-                  target.current.x = y * 0.4; // Tilt back on Y axis
-                  target.current.y = -x * 0.4; // Tilt back on X axis
-                }
-              }}
             />
           </group>
         </Float>
-
-        {/* Subtle orbs */}
-        {orbData.map((orb, i) => (
+        {useMemo(
+          () => [
+            { p: [1.8, 0.2, 0], c: "#004492" },
+            { p: [-1.6, -0.3, 0.2], c: "#004492" },
+            { p: [0.6, 1.4, -0.2], c: "#004492" },
+          ],
+          []
+        ).map((s, i) => (
           <Float
             key={`orb-${i}`}
-            speed={orb.speed}
-            rotationIntensity={0.25}
+            speed={1.6 + i * 0.3}
+            rotationIntensity={0.2}
             floatIntensity={0.6}
           >
-            <mesh 
-              position={orb.p}
-              onPointerOver={(e) => { e.stopPropagation(); setOver(true); }}
-              onPointerOut={(e) => { e.stopPropagation(); setOver(false); }}
-            >
-              <sphereGeometry args={[orb.size, 32, 32]} />
+            <mesh position={s.p}>
+              <sphereGeometry args={[0.22, 32, 32]} />
               <meshStandardMaterial
-                color={orb.c}
-                emissive={orb.c}
-                emissiveIntensity={i < 3 ? 0.08 : 0.04}
-                metalness={0.5}
-                roughness={0.25}
-                transparent
-                opacity={i < 3 ? 0.85 : 0.5}
+                color={s.c}
+                metalness={0.4}
+                roughness={0.3}
               />
             </mesh>
           </Float>
         ))}
+        <mesh rotation={[Math.PI / 2.2, 0, 0]}>
+          <torusGeometry args={[1.85, 0.03, 16, 180]} />
+          <meshStandardMaterial
+            color="#004492"
+            metalness={0.5}
+            roughness={0.3}
+          />
+        </mesh>
       </group>
-
-      <Environment preset="city" />
+      <Environment preset="studio" />
     </>
   );
 }

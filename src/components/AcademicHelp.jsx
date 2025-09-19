@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   DocumentTextIcon,
   ShieldCheckIcon,
@@ -9,22 +9,28 @@ import {
   MagnifyingGlassIcon,
   ArrowRightIcon,
   DocumentDuplicateIcon,
-  PencilIcon
-} from '@heroicons/react/24/outline';
+  PencilIcon,
+} from "@heroicons/react/24/outline";
 
 const services = [
   {
     id: 1,
     title: "Plagiarism Check",
-    description: "Advanced AI-powered plagiarism detection with detailed similarity reports",
+    description:
+      "Advanced AI-powered plagiarism detection with detailed similarity reports",
     icon: MagnifyingGlassIcon,
     color: "from-green-500 to-emerald-600",
-    features: ["Complete similarity analysis", "Source identification", "Percentage breakdown"],
+    features: [
+      "Complete similarity analysis",
+      "Source identification",
+      "Percentage breakdown",
+    ],
   },
   {
     id: 2,
     title: "Proofreading",
-    description: "Professional proofreading for grammar, spelling, and formatting",
+    description:
+      "Professional proofreading for grammar, spelling, and formatting",
     icon: PencilIcon,
     color: "from-green-500 to-emerald-600",
     features: ["Grammar correction", "Spelling check", "Style improvements"],
@@ -35,7 +41,11 @@ const services = [
     description: "Expert review and feedback on research articles and papers",
     icon: DocumentTextIcon,
     color: "from-green-500 to-emerald-600",
-    features: ["Structure analysis", "Content evaluation", "Improvement suggestions"],
+    features: [
+      "Structure analysis",
+      "Content evaluation",
+      "Improvement suggestions",
+    ],
   },
   {
     id: 4,
@@ -56,23 +66,27 @@ const ServiceCard = ({ service }) => {
       transition={{ duration: 0.3 }}
       className="relative group"
     >
-      <div 
+      <div
         className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-all duration-500 blur-lg"
-        style={{ 
-          background: `linear-gradient(to right, ${service.color.split(' ')[1]}, ${service.color.split(' ')[3]})`,
+        style={{
+          background: `linear-gradient(to right, ${
+            service.color.split(" ")[1]
+          }, ${service.color.split(" ")[3]})`,
         }}
       />
-      
+
       <div className="relative bg-white p-6 rounded-2xl shadow-xl">
         <div className="flex items-center gap-4 mb-4">
           <div className={`p-3 rounded-xl bg-gradient-to-r ${service.color}`}>
             <service.icon className="w-6 h-6 text-white" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">{service.title}</h3>
+          <h3 className="text-xl font-semibold text-gray-900">
+            {service.title}
+          </h3>
         </div>
-        
+
         <p className="text-gray-600 mb-4">{service.description}</p>
-        
+
         <ul className="space-y-2 mb-4">
           {service.features.map((feature, index) => (
             <li key={index} className="flex items-center text-sm text-gray-600">
@@ -112,7 +126,7 @@ export default function AcademicHelp() {
             <DocumentDuplicateIcon className="w-5 h-5" />
             Academic Support Services
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -120,34 +134,27 @@ export default function AcademicHelp() {
           >
             Expert Academic Assistance
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="text-base md:text-xl text-gray-600 max-w-3xl mx-auto"
           >
-            Professional support for your academic journey with plagiarism checking, proofreading, and expert consultation services.
+            Professional support for your academic journey with plagiarism
+            checking, proofreading, and expert consultation services.
           </motion.p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
-          <StatsItem 
-            icon={ClockIcon}
-            value="24/7"
-            label="Support Available"
-          />
-          <StatsItem 
+          <StatsItem icon={ClockIcon} value="24/7" label="Support Available" />
+          <StatsItem
             icon={DocumentTextIcon}
             value="99.9%"
             label="Accuracy Rate"
           />
-          <StatsItem 
-            icon={ShieldCheckIcon}
-            value="100%"
-            label="Confidential"
-          />
-          <StatsItem 
+          <StatsItem icon={ShieldCheckIcon} value="100%" label="Confidential" />
+          <StatsItem
             icon={ChatBubbleLeftEllipsisIcon}
             value="2hr"
             label="Avg. Response Time"
@@ -174,11 +181,11 @@ export default function AcademicHelp() {
             Explore All Academic Services
             <motion.span
               animate={{ x: [0, 5, 0] }}
-              transition={{ 
-                duration: 1.5, 
-                repeat: Infinity, 
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
                 repeatType: "reverse",
-                ease: "easeInOut" 
+                ease: "easeInOut",
               }}
             >
               <ArrowRightIcon className="w-5 h-5" />

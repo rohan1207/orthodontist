@@ -6,7 +6,6 @@ import { AnimatePresence } from "framer-motion";
 import Home from "./pages/Home.jsx";
 import NewNavbar from "./components/NewNavbar.jsx";
 
-
 import BlogPage from "./pages/BlogPage.jsx";
 import Footer from "./components/Footer.jsx";
 import AcademicHelpPage from "./pages/AcademicHelpPage.jsx";
@@ -15,7 +14,6 @@ import TopBooksPage from "./pages/TopBooksPage.jsx";
 import ExamPreparationPage from "./pages/ExamPreparationPage.jsx";
 import TopicSummariesPage from "./pages/TopicSummariesPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
-
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -32,7 +30,7 @@ const AnimatedRoutes = () => {
           <Route path="/top-books" element={<TopBooksPage />} />
           <Route path="/exam-prep" element={<ExamPreparationPage />} />
           <Route path="/summaries" element={<TopicSummariesPage />} />
-          <Route path="/contact" element={<ContactPage/>} />
+          <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </AnimatePresence>
       <Footer />

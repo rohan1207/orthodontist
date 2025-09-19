@@ -48,7 +48,11 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-8 py-3">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Logo" className="h-12 w-12 md:h-12 md:w-12" />
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="h-12 w-12 md:h-12 md:w-12"
+            />
             <Link to="/">
               <span
                 className="text-lg font-normal tracking-wide"

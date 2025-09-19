@@ -1,20 +1,21 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { 
-  AcademicCapIcon, 
-  ClockIcon, 
+import React from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import {
+  AcademicCapIcon,
+  ClockIcon,
   DocumentTextIcon,
   UserGroupIcon,
   ChartBarIcon,
-  ArrowRightIcon
-} from '@heroicons/react/24/outline';
+  ArrowRightIcon,
+} from "@heroicons/react/24/outline";
 
 const examModules = [
   {
     id: 1,
     title: "NEET MDS Comprehensive",
-    description: "Complete preparation strategy with past papers, MCQs, and expert guidance.",
+    description:
+      "Complete preparation strategy with past papers, MCQs, and expert guidance.",
     duration: "6 months",
     students: "2.5k+",
     successRate: "92%",
@@ -26,7 +27,8 @@ const examModules = [
   {
     id: 2,
     title: "Quick Revision Series",
-    description: "Rapid review of high-yield topics with focused MCQ practice sessions.",
+    description:
+      "Rapid review of high-yield topics with focused MCQ practice sessions.",
     duration: "2 months",
     students: "1.8k+",
     successRate: "88%",
@@ -38,7 +40,8 @@ const examModules = [
   {
     id: 3,
     title: "Subject Wise Practice",
-    description: "In-depth practice sessions focusing on individual subjects with detailed explanations.",
+    description:
+      "In-depth practice sessions focusing on individual subjects with detailed explanations.",
     duration: "4 months",
     students: "3.2k+",
     successRate: "95%",
@@ -58,49 +61,70 @@ const ExamCard = ({ module }) => {
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
       className="relative group"
     >
-      <div className="absolute -inset-0.5 rounded-xl md:rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-           style={{ 
-             background: `linear-gradient(to right, ${module.color.split(' ')[1]}, ${module.color.split(' ')[3]})`,
-             filter: 'blur(8px)',
-             zIndex: 0 
-           }} 
+      <div
+        className="absolute -inset-0.5 rounded-xl md:rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: `linear-gradient(to right, ${
+            module.color.split(" ")[1]
+          }, ${module.color.split(" ")[3]})`,
+          filter: "blur(8px)",
+          zIndex: 0,
+        }}
       />
-      
+
       <div className="relative bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-shadow duration-500 min-h-[340px] md:min-h-[360px]">
         {/* Header */}
         <div className="flex items-start justify-between mb-4 md:mb-6">
-          <div className="p-2 md:p-3 rounded-lg md:rounded-xl bg-gradient-to-r opacity-90"
-               style={{ background: `linear-gradient(to right, ${module.color.split(' ')[1]}, ${module.color.split(' ')[3]})` }}>
+          <div
+            className="p-2 md:p-3 rounded-lg md:rounded-xl bg-gradient-to-r opacity-90"
+            style={{
+              background: `linear-gradient(to right, ${
+                module.color.split(" ")[1]
+              }, ${module.color.split(" ")[3]})`,
+            }}
+          >
             <module.icon className="w-5 h-5 md:w-6 md:h-6 text-white" />
           </div>
-          <motion.div 
+          <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="flex items-center gap-1"
           >
-            <span className="text-xl md:text-2xl font-bold text-green-600">{module.successRate}</span>
+            <span className="text-xl md:text-2xl font-bold text-green-600">
+              {module.successRate}
+            </span>
             <span className="text-sm text-gray-500">success</span>
           </motion.div>
         </div>
 
         {/* Content */}
-        <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-1 md:mb-2 line-clamp-1">{module.title}</h3>
-        <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6 line-clamp-2">{module.description}</p>
+        <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-1 md:mb-2 line-clamp-1">
+          {module.title}
+        </h3>
+        <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6 line-clamp-2">
+          {module.description}
+        </p>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-2 md:gap-4 mb-4 md:mb-6">
           <div className="text-center">
             <div className="text-sm text-gray-500">Duration</div>
-            <div className="text-sm md:text-base font-semibold text-gray-700">{module.duration}</div>
+            <div className="text-sm md:text-base font-semibold text-gray-700">
+              {module.duration}
+            </div>
           </div>
           <div className="text-center border-x border-gray-100">
             <div className="text-sm text-gray-500">Students</div>
-            <div className="text-sm md:text-base font-semibold text-gray-700">{module.students}</div>
+            <div className="text-sm md:text-base font-semibold text-gray-700">
+              {module.students}
+            </div>
           </div>
           <div className="text-center">
             <div className="text-sm text-gray-500">Subjects</div>
-            <div className="text-sm md:text-base font-semibold text-gray-700">{module.subjects}</div>
+            <div className="text-sm md:text-base font-semibold text-gray-700">
+              {module.subjects}
+            </div>
           </div>
         </div>
 
@@ -111,8 +135,10 @@ const ExamCard = ({ module }) => {
             whileInView={{ width: module.successRate }}
             transition={{ duration: 1, delay: 0.5 }}
             className="absolute h-full rounded-full"
-            style={{ 
-              background: `linear-gradient(to right, ${module.color.split(' ')[1]}, ${module.color.split(' ')[3]})`,
+            style={{
+              background: `linear-gradient(to right, ${
+                module.color.split(" ")[1]
+              }, ${module.color.split(" ")[3]})`,
             }}
           />
         </div>
@@ -121,8 +147,10 @@ const ExamCard = ({ module }) => {
         <Link
           to={`/exam-prep/${module.id}`}
           className="group relative w-full inline-flex items-center justify-center px-4 py-2 md:px-6 md:py-3 text-sm font-medium rounded-lg md:rounded-xl text-white transition-all duration-200"
-          style={{ 
-            background: `linear-gradient(to right, ${module.color.split(' ')[1]}, ${module.color.split(' ')[3]})`,
+          style={{
+            background: `linear-gradient(to right, ${
+              module.color.split(" ")[1]
+            }, ${module.color.split(" ")[3]})`,
           }}
         >
           Explore Module
@@ -142,9 +170,7 @@ const StatsCounter = ({ value, label, icon: Icon }) => {
       className="flex flex-col items-center p-4 bg-white rounded-2xl shadow-lg"
     >
       <Icon className="w-8 h-8 text-green-500 mb-2" />
-      <motion.span
-        className="text-3xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent"
-      >
+      <motion.span className="text-3xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">
         {value}
       </motion.span>
       <span className="text-sm text-gray-600">{label}</span>
@@ -167,7 +193,7 @@ export default function ExamPreparation() {
             <AcademicCapIcon className="w-5 h-5" />
             Exam Preparation
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -176,22 +202,31 @@ export default function ExamPreparation() {
           >
             Your Path to NEET MDS Success
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-base md:text-xl text-gray-600 max-w-3xl mx-auto"
           >
-            Structured preparation modules designed by top educators with proven success rates.
+            Structured preparation modules designed by top educators with proven
+            success rates.
           </motion.p>
         </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
-          <StatsCounter value="15k+" label="Active Students" icon={UserGroupIcon} />
+          <StatsCounter
+            value="15k+"
+            label="Active Students"
+            icon={UserGroupIcon}
+          />
           <StatsCounter value="92%" label="Success Rate" icon={ChartBarIcon} />
-          <StatsCounter value="50+" label="Mock Tests" icon={DocumentTextIcon} />
+          <StatsCounter
+            value="50+"
+            label="Mock Tests"
+            icon={DocumentTextIcon}
+          />
           <StatsCounter value="24/7" label="Expert Support" icon={ClockIcon} />
         </div>
 
@@ -216,11 +251,11 @@ export default function ExamPreparation() {
             View All Preparation Modules
             <motion.span
               animate={{ x: [0, 5, 0] }}
-              transition={{ 
-                duration: 1.5, 
-                repeat: Infinity, 
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
                 repeatType: "reverse",
-                ease: "easeInOut" 
+                ease: "easeInOut",
               }}
             >
               <ArrowRightIcon className="w-5 h-5" />

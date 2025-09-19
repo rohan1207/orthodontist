@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { 
-  BookOpenIcon, 
-  DocumentTextIcon, 
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
+import {
+  BookOpenIcon,
+  DocumentTextIcon,
   LightBulbIcon,
   CheckCircleIcon,
   ClockIcon,
   ChartBarIcon,
   ArrowRightIcon,
   DocumentDuplicateIcon,
-  AcademicCapIcon
-} from '@heroicons/react/24/outline';
+  AcademicCapIcon,
+} from "@heroicons/react/24/outline";
 
 const sampleTopics = [
   {
     id: 1,
     title: "Growth and Development",
-    sources: ["Contemporary Orthodontics", "Graber's Orthodontics", "Proffit's Orthodontics"],
+    sources: [
+      "Contemporary Orthodontics",
+      "Graber's Orthodontics",
+      "Proffit's Orthodontics",
+    ],
     keyPoints: 12,
     readTime: "15 mins",
     difficulty: "Medium",
@@ -32,22 +36,26 @@ const sampleTopics = [
   {
     id: 2,
     title: "Biomechanics in Orthodontics",
-    sources: ["Orthodontic Materials", "Clinical Orthodontics", "Biomechanics in Clinical Practice"],
+    sources: [
+      "Orthodontic Materials",
+      "Clinical Orthodontics",
+      "Biomechanics in Clinical Practice",
+    ],
     keyPoints: 15,
     readTime: "20 mins",
     difficulty: "Advanced",
     icon: ChartBarIcon,
     color: "from-green-500 to-emerald-600",
-    preview: [
-      "Force Systems",
-      "Center of Resistance",
-      "Moment to Force Ratio",
-    ],
+    preview: ["Force Systems", "Center of Resistance", "Moment to Force Ratio"],
   },
   {
     id: 3,
     title: "Diagnosis and Treatment Planning",
-    sources: ["Essential Orthodontics", "Clinical Diagnosis", "Treatment Strategies"],
+    sources: [
+      "Essential Orthodontics",
+      "Clinical Diagnosis",
+      "Treatment Strategies",
+    ],
     keyPoints: 18,
     readTime: "25 mins",
     difficulty: "Intermediate",
@@ -62,7 +70,11 @@ const sampleTopics = [
   {
     id: 4,
     title: "Orthodontic Appliances",
-    sources: ["Orthodontic Appliances", "Contemporary Orthodontics", "Appliance Design"],
+    sources: [
+      "Orthodontic Appliances",
+      "Contemporary Orthodontics",
+      "Appliance Design",
+    ],
     keyPoints: 10,
     readTime: "18 mins",
     difficulty: "Intermediate",
@@ -72,8 +84,8 @@ const sampleTopics = [
       "Fixed Appliances",
       "Removable Appliances",
       "Functional Appliances",
-    ],  
-  }
+    ],
+  },
 ];
 
 const TopicCard = ({ topic, isExpanded, onToggle }) => {
@@ -87,14 +99,17 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
       onClick={onToggle}
       className="relative cursor-pointer group"
     >
-      <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-           style={{ 
-             background: `linear-gradient(to right, ${topic.color.split(' ')[1]}, ${topic.color.split(' ')[3]})`,
-             filter: 'blur(8px)',
-             zIndex: 0 
-           }} 
+      <div
+        className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: `linear-gradient(to right, ${
+            topic.color.split(" ")[1]
+          }, ${topic.color.split(" ")[3]})`,
+          filter: "blur(8px)",
+          zIndex: 0,
+        }}
       />
-      
+
       <div className="relative bg-white rounded-2xl p-6 shadow-xl">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center space-x-4">
@@ -103,10 +118,12 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
             </div>
             <div>
               <h3 className="text-xl font-bold text-gray-900">{topic.title}</h3>
-              <p className="text-sm text-gray-500">{topic.sources.length} textbook sources</p>
+              <p className="text-sm text-gray-500">
+                {topic.sources.length} textbook sources
+              </p>
             </div>
           </div>
-          <motion.div 
+          <motion.div
             animate={{ rotate: isExpanded ? 90 : 0 }}
             className="text-gray-400 hover:text-gray-600"
           >
@@ -125,7 +142,9 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
           </div>
           <div className="text-center">
             <div className="text-sm text-gray-500">Difficulty</div>
-            <div className="font-semibold text-gray-700">{topic.difficulty}</div>
+            <div className="font-semibold text-gray-700">
+              {topic.difficulty}
+            </div>
           </div>
         </div>
 
@@ -139,7 +158,9 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
             >
               <div className="space-y-4">
                 <div className="border-t pt-4">
-                  <h4 className="font-semibold text-gray-900 mb-2">Key Topics Covered:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    Key Topics Covered:
+                  </h4>
                   <ul className="space-y-2">
                     {topic.preview.map((point, index) => (
                       <motion.li
@@ -155,9 +176,11 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
                     ))}
                   </ul>
                 </div>
-                
+
                 <div className="border-t pt-4">
-                  <h4 className="font-semibold text-gray-900 mb-2">Source Textbooks:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    Source Textbooks:
+                  </h4>
                   <div className="space-y-2">
                     {topic.sources.map((source, index) => (
                       <motion.div
@@ -185,8 +208,6 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
             </motion.div>
           )}
         </AnimatePresence>
-
-
       </div>
     </motion.div>
   );
@@ -213,7 +234,7 @@ export default function TopicSummaries() {
 
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <motion.div
@@ -224,7 +245,7 @@ export default function TopicSummaries() {
             <DocumentDuplicateIcon className="w-5 h-5" />
             Topic Summaries
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -232,13 +253,14 @@ export default function TopicSummaries() {
           >
             Master Complex Topics with Ease
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="text-base md:text-xl text-gray-600 max-w-3xl mx-auto"
           >
-            Comprehensive summaries curated from multiple textbooks, designed for quick understanding and effective revision.
+            Comprehensive summaries curated from multiple textbooks, designed
+            for quick understanding and effective revision.
           </motion.p>
         </div>
 
@@ -256,16 +278,24 @@ export default function TopicSummaries() {
             <motion.div
               key={topic.id}
               animate={{
-                opacity: expandedId === null || expandedId === topic.id ? 1 : 0.3,
-                scale: expandedId === topic.id ? 1 : expandedId === null ? 1 : 0.98,
+                opacity:
+                  expandedId === null || expandedId === topic.id ? 1 : 0.3,
+                scale:
+                  expandedId === topic.id ? 1 : expandedId === null ? 1 : 0.98,
               }}
               transition={{ duration: 0.3 }}
-              className={expandedId !== null && expandedId !== topic.id ? "pointer-events-none" : ""}
+              className={
+                expandedId !== null && expandedId !== topic.id
+                  ? "pointer-events-none"
+                  : ""
+              }
             >
               <TopicCard
                 topic={topic}
                 isExpanded={expandedId === topic.id}
-                onToggle={() => setExpandedId(expandedId === topic.id ? null : topic.id)}
+                onToggle={() =>
+                  setExpandedId(expandedId === topic.id ? null : topic.id)
+                }
               />
             </motion.div>
           ))}
@@ -284,11 +314,11 @@ export default function TopicSummaries() {
             Explore All Topic Summaries
             <motion.span
               animate={{ x: [0, 5, 0] }}
-              transition={{ 
-                duration: 1.5, 
-                repeat: Infinity, 
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
                 repeatType: "reverse",
-                ease: "easeInOut" 
+                ease: "easeInOut",
               }}
             >
               <ArrowRightIcon className="w-5 h-5" />

@@ -21,7 +21,7 @@ export default function Founder() {
   return (
     <section
       id="founder"
-      className="relative isolate overflow-hidden pt-6 pb-8 md:pt-12 md:pb-24 md:-mt-12"
+      className="relative isolate overflow-hidden pt-6 pb-8 md:pt-12 md:pb-24  mt-12"
     >
       <div className="mx-auto grid max-w-7xl items-start gap-8 md:gap-10 px-4 md:grid-cols-12 md:px-6">
         {/* Left: portrait / identity card */}
@@ -76,7 +76,8 @@ export default function Founder() {
 
             <div className="mt-6 rounded-2xl border border-stone-100 bg-white/80 p-3 md:p-4 text-[13px] md:text-sm text-stone-700">
               <p>
-                Completed BDS from a reputed institution (2014) and MDS in Orthodontics & Dentofacial Orthopedics (2017).
+                Completed BDS from a reputed institution (2014) and MDS in
+                Orthodontics & Dentofacial Orthopedics (2017).
               </p>
               <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-[11px] md:text-xs font-medium text-teal-800">
                 <AcademicCapIcon className="h-4 w-4" /> Credentials verified
@@ -97,8 +98,10 @@ export default function Founder() {
             </h2>
 
             <p className="mt-4 md:mt-5 text-[15px] leading-relaxed text-stone-700 sm:text-lg">
-              Dr. Shravani is an Orthodontist with 10 years of experience,
-              known for a patient-first approach and creating beautiful, healthy smiles. She specializes in modern orthodontic treatments that are comfortable and effective.
+              Dr. Shravani is an Orthodontist with 10 years of experience, known
+              for a patient-first approach and creating beautiful, healthy
+              smiles. She specializes in modern orthodontic treatments that are
+              comfortable and effective.
             </p>
 
             <div className="mt-5 md:mt-6 flex flex-wrap gap-3">

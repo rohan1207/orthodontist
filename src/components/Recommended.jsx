@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const recommendedArticles = [
   {
     id: 1,
     title: "Understanding Dental Anatomy",
-    description: "A comprehensive guide to dental structures, terminology, and basic concepts essential for dental students.",
+    description:
+      "A comprehensive guide to dental structures, terminology, and basic concepts essential for dental students.",
     image: "/article1.jpg",
     category: "Fundamentals",
     readTime: "12 min read",
@@ -14,7 +15,8 @@ const recommendedArticles = [
   {
     id: 2,
     title: "Clinical Case Studies in Orthodontics",
-    description: "Real-world orthodontic cases with detailed analysis and treatment approaches. Perfect for practical learning.",
+    description:
+      "Real-world orthodontic cases with detailed analysis and treatment approaches. Perfect for practical learning.",
     image: "/article2.jpg",
     category: "Clinical Practice",
     readTime: "15 min read",
@@ -22,7 +24,8 @@ const recommendedArticles = [
   {
     id: 3,
     title: "Exam Preparation Strategies",
-    description: "Expert tips and structured approaches to ace your dental exams with confidence and precision.",
+    description:
+      "Expert tips and structured approaches to ace your dental exams with confidence and precision.",
     image: "/article3.jpg",
     category: "Study Tips",
     readTime: "10 min read",
@@ -30,11 +33,12 @@ const recommendedArticles = [
   {
     id: 4,
     title: "Latest Orthodontic Technologies",
-    description: "Exploring cutting-edge technologies and innovations shaping the future of orthodontic practice.",
+    description:
+      "Exploring cutting-edge technologies and innovations shaping the future of orthodontic practice.",
     image: "/article4.jpg",
     category: "Technology",
     readTime: "8 min read",
-  }
+  },
 ];
 
 const RecommendedCard = ({ article }) => {
@@ -43,7 +47,7 @@ const RecommendedCard = ({ article }) => {
   return (
     <motion.div
       className="relative w-full aspect-[3/4] sm:aspect-[4/5] cursor-pointer"
-      style={{ perspective: '1000px' }}
+      style={{ perspective: "1000px" }}
       onHoverStart={() => setIsFlipped(true)}
       onHoverEnd={() => setIsFlipped(false)}
     >
@@ -51,12 +55,12 @@ const RecommendedCard = ({ article }) => {
         className="relative w-full h-full transform-gpu"
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.6, ease: "easeInOut" }}
-        style={{ transformStyle: 'preserve-3d' }}
+        style={{ transformStyle: "preserve-3d" }}
       >
         {/* Front of Card */}
         <div
           className="absolute w-full h-full bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100"
-          style={{ backfaceVisibility: 'hidden' }}
+          style={{ backfaceVisibility: "hidden" }}
         >
           <div className="relative h-2/3">
             <img
@@ -74,14 +78,16 @@ const RecommendedCard = ({ article }) => {
             <h3 className="text-base sm:text-lg font-medium text-gray-900 line-clamp-2">
               {article.title}
             </h3>
-            <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-500">{article.readTime}</p>
+            <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-500">
+              {article.readTime}
+            </p>
           </div>
         </div>
 
         {/* Back of Card */}
         <div
           className="absolute w-full h-full bg-white rounded-2xl p-4 sm:p-6 flex flex-col shadow-sm border border-gray-100"
-          style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
           <div className="flex-1">
             <span className="inline-block px-3 py-1 rounded-full bg-green-500/90 text-white text-xs font-medium">
@@ -95,7 +101,7 @@ const RecommendedCard = ({ article }) => {
             </p>
           </div>
           <div className="mt-3 sm:mt-4">
-            <Link 
+            <Link
               to={`/article/${article.id}`}
               className="inline-block w-full py-2.5 sm:py-3 text-center rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm font-medium transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
@@ -117,7 +123,8 @@ export default function Recommended() {
             Top Recommended Articles
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Curated content to enhance your dental knowledge and academic success. Discover our most impactful articles.
+            Curated content to enhance your dental knowledge and academic
+            success. Discover our most impactful articles.
           </p>
         </div>
 

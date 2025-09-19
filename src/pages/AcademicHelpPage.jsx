@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   DocumentTextIcon,
   ShieldCheckIcon,
@@ -12,14 +12,15 @@ import {
   PaperClipIcon,
   PencilIcon,
   AcademicCapIcon,
-  BookOpenIcon
-} from '@heroicons/react/24/outline';
+  BookOpenIcon,
+} from "@heroicons/react/24/outline";
 
 const services = [
   {
-    id: 'plagiarism',
+    id: "plagiarism",
     title: "Plagiarism Check",
-    description: "Get a comprehensive plagiarism report with source matching and similarity percentages.",
+    description:
+      "Get a comprehensive plagiarism report with source matching and similarity percentages.",
     icon: MagnifyingGlassIcon,
     color: "from-green-500 to-emerald-600",
     features: [
@@ -27,14 +28,15 @@ const services = [
       "Source identification and links",
       "Percentage breakdown by section",
       "Detailed similarity report",
-      "Suggestions for improvement"
+      "Suggestions for improvement",
     ],
-    pricing: "From  ₹1000 per document"
+    pricing: "From  ₹1000 per document",
   },
   {
-    id: 'proofreading',
+    id: "proofreading",
     title: "Professional Proofreading",
-    description: "Expert proofreading and editing services for academic documents.",
+    description:
+      "Expert proofreading and editing services for academic documents.",
     icon: PencilIcon,
     color: "from-green-500 to-emerald-600",
     features: [
@@ -42,14 +44,15 @@ const services = [
       "Style improvement suggestions",
       "Structure enhancement",
       "Citation format checking",
-      "24-48 hour turnaround"
+      "24-48 hour turnaround",
     ],
-    pricing: "From  ₹150 per 1000 words"
+    pricing: "From  ₹150 per 1000 words",
   },
   {
-    id: 'review',
+    id: "review",
     title: "Article Review",
-    description: "In-depth review and feedback on research articles and academic papers.",
+    description:
+      "In-depth review and feedback on research articles and academic papers.",
     icon: DocumentTextIcon,
     color: "from-green-500 to-emerald-600",
     features: [
@@ -57,14 +60,15 @@ const services = [
       "Methodology assessment",
       "Literature review feedback",
       "Structure analysis",
-      "Improvement recommendations"
+      "Improvement recommendations",
     ],
-    pricing: "From  ₹2500 per article"
+    pricing: "From  ₹2500 per article",
   },
   {
-    id: 'consultation',
+    id: "consultation",
     title: "Academic Consultation",
-    description: "One-on-one consultation with academic experts for guidance and support.",
+    description:
+      "One-on-one consultation with academic experts for guidance and support.",
     icon: ChatBubbleLeftEllipsisIcon,
     color: "from-green-500 to-emerald-600",
     features: [
@@ -72,10 +76,10 @@ const services = [
       "Topic selection guidance",
       "Research methodology help",
       "Writing structure advice",
-      "Citation assistance"
+      "Citation assistance",
     ],
-    pricing: "From  ₹3000 per hour"
-  }
+    pricing: "From  ₹3000 per hour",
+  },
 ];
 
 const FileUploadForm = ({ service }) => {
@@ -106,8 +110,12 @@ const FileUploadForm = ({ service }) => {
             {!file ? (
               <>
                 <CloudArrowUpIcon className="w-10 h-10 text-gray-400" />
-                <p className="text-sm text-gray-600">Drop your file here or click to upload</p>
-                <p className="text-xs text-gray-500">PDF, DOC, DOCX up to 10MB</p>
+                <p className="text-sm text-gray-600">
+                  Drop your file here or click to upload
+                </p>
+                <p className="text-xs text-gray-500">
+                  PDF, DOC, DOCX up to 10MB
+                </p>
               </>
             ) : (
               <>
@@ -158,7 +166,9 @@ const FileUploadForm = ({ service }) => {
           >
             <div className="flex items-center">
               <CheckCircleIcon className="w-5 h-5 text-green-500 mr-2" />
-              <span className="text-green-700">Document submitted successfully!</span>
+              <span className="text-green-700">
+                Document submitted successfully!
+              </span>
             </div>
           </motion.div>
         )}
@@ -182,7 +192,9 @@ const ServiceDetails = ({ service }) => {
 
       <div className="grid md:grid-cols-2 gap-8">
         <div>
-          <h4 className="font-semibold text-gray-900 mb-4">Features & Benefits</h4>
+          <h4 className="font-semibold text-gray-900 mb-4">
+            Features & Benefits
+          </h4>
           <ul className="space-y-3">
             {service.features.map((feature, index) => (
               <li key={index} className="flex items-start">
@@ -191,10 +203,14 @@ const ServiceDetails = ({ service }) => {
               </li>
             ))}
           </ul>
-          
+
           <div className="mt-6">
-            <div className="text-2xl font-bold text-gray-900 mb-2">{service.pricing}</div>
-            <p className="text-gray-600">Includes detailed report and recommendations</p>
+            <div className="text-2xl font-bold text-gray-900 mb-2">
+              {service.pricing}
+            </div>
+            <p className="text-gray-600">
+              Includes detailed report and recommendations
+            </p>
           </div>
         </div>
 
@@ -223,7 +239,7 @@ export default function AcademicHelpPage() {
             <AcademicCapIcon className="w-5 h-5" />
             Academic Support Center
           </motion.div>
-          
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -231,13 +247,14 @@ export default function AcademicHelpPage() {
           >
             Professional Academic Services
           </motion.h1>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-xl text-gray-600 max-w-3xl mx-auto"
           >
-            Get expert assistance with plagiarism checking, proofreading, article reviews, and academic consultations.
+            Get expert assistance with plagiarism checking, proofreading,
+            article reviews, and academic consultations.
           </motion.p>
         </div>
 
@@ -271,7 +288,9 @@ export default function AcademicHelpPage() {
 
         {/* Why Choose Us */}
         <div className="mt-20">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Why Choose Our Services?</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+            Why Choose Our Services?
+          </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -279,8 +298,13 @@ export default function AcademicHelpPage() {
               className="bg-white p-6 rounded-xl shadow-lg"
             >
               <ShieldCheckIcon className="w-12 h-12 text-green-500 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">100% Confidential</h3>
-              <p className="text-gray-600">Your documents and personal information are completely secure and private.</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                100% Confidential
+              </h3>
+              <p className="text-gray-600">
+                Your documents and personal information are completely secure
+                and private.
+              </p>
             </motion.div>
 
             <motion.div
@@ -289,8 +313,13 @@ export default function AcademicHelpPage() {
               className="bg-white p-6 rounded-xl shadow-lg"
             >
               <ClockIcon className="w-12 h-12 text-green-500 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Fast Turnaround</h3>
-              <p className="text-gray-600">Quick processing times with most services completed within 24-48 hours.</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Fast Turnaround
+              </h3>
+              <p className="text-gray-600">
+                Quick processing times with most services completed within 24-48
+                hours.
+              </p>
             </motion.div>
 
             <motion.div
@@ -299,8 +328,13 @@ export default function AcademicHelpPage() {
               className="bg-white p-6 rounded-xl shadow-lg"
             >
               <BookOpenIcon className="w-12 h-12 text-green-500 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Expert Team</h3>
-              <p className="text-gray-600">Access to experienced academics and professionals in various fields.</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Expert Team
+              </h3>
+              <p className="text-gray-600">
+                Access to experienced academics and professionals in various
+                fields.
+              </p>
             </motion.div>
           </div>
         </div>

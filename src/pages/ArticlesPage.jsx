@@ -1,101 +1,111 @@
-import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MagnifyingGlassIcon,
   FunnelIcon,
   Squares2X2Icon,
   Bars3BottomLeftIcon,
-  ArrowRightIcon
-} from '@heroicons/react/24/outline';
+  ArrowRightIcon,
+} from "@heroicons/react/24/outline";
 
 // Sample data (can be replaced with API later)
 const ALL_ARTICLES = [
   {
     id: 1,
-    title: 'Understanding Dental Anatomy',
+    title: "Understanding Dental Anatomy",
     description:
-      'A comprehensive guide to dental structures, terminology, and basic concepts essential for dental students.',
-    image: '/article1.jpg',
-    category: 'Fundamentals',
+      "A comprehensive guide to dental structures, terminology, and basic concepts essential for dental students.",
+    image: "/article1.jpg",
+    category: "Fundamentals",
     readTimeMin: 12,
-    date: '2025-07-01'
+    date: "2025-07-01",
   },
   {
     id: 2,
-    title: 'Clinical Case Studies in Orthodontics',
+    title: "Clinical Case Studies in Orthodontics",
     description:
-      'Real-world orthodontic cases with detailed analysis and treatment approaches. Perfect for practical learning.',
-    image: '/article2.jpg',
-    category: 'Clinical Practice',
+      "Real-world orthodontic cases with detailed analysis and treatment approaches. Perfect for practical learning.",
+    image: "/article2.jpg",
+    category: "Clinical Practice",
     readTimeMin: 15,
-    date: '2025-06-20'
+    date: "2025-06-20",
   },
   {
     id: 3,
-    title: 'Exam Preparation Strategies',
+    title: "Exam Preparation Strategies",
     description:
-      'Expert tips and structured approaches to ace your dental exams with confidence and precision.',
-    image: '/article3.jpg',
-    category: 'Study Tips',
+      "Expert tips and structured approaches to ace your dental exams with confidence and precision.",
+    image: "/article3.jpg",
+    category: "Study Tips",
     readTimeMin: 10,
-    date: '2025-06-05'
+    date: "2025-06-05",
   },
   {
     id: 4,
-    title: 'Latest Orthodontic Technologies',
+    title: "Latest Orthodontic Technologies",
     description:
-      'Exploring cutting-edge technologies and innovations shaping the future of orthodontic practice.',
-    image: '/article4.jpg',
-    category: 'Technology',
+      "Exploring cutting-edge technologies and innovations shaping the future of orthodontic practice.",
+    image: "/article4.jpg",
+    category: "Technology",
     readTimeMin: 8,
-    date: '2025-05-28'
+    date: "2025-05-28",
   },
   // Extras for the page
   {
     id: 5,
-    title: 'Cephalometrics Made Simple',
-    description: 'A friendly walkthrough of cephalometric landmarks and interpretation for beginners.',
-    image: '/article1.jpg',
-    category: 'Fundamentals',
+    title: "Cephalometrics Made Simple",
+    description:
+      "A friendly walkthrough of cephalometric landmarks and interpretation for beginners.",
+    image: "/article1.jpg",
+    category: "Fundamentals",
     readTimeMin: 9,
-    date: '2025-05-15'
+    date: "2025-05-15",
   },
   {
     id: 6,
-    title: 'Managing Class II Malocclusion',
-    description: 'Decision pathways and appliances selection based on growth potential and patient profile.',
-    image: '/article2.jpg',
-    category: 'Clinical Practice',
+    title: "Managing Class II Malocclusion",
+    description:
+      "Decision pathways and appliances selection based on growth potential and patient profile.",
+    image: "/article2.jpg",
+    category: "Clinical Practice",
     readTimeMin: 14,
-    date: '2025-05-01'
+    date: "2025-05-01",
   },
   {
     id: 7,
-    title: 'High-Yield Topics Before Exams',
-    description: 'Last-week checklist covering high-yield topics and common pitfalls to avoid.',
-    image: '/article3.jpg',
-    category: 'Study Tips',
+    title: "High-Yield Topics Before Exams",
+    description:
+      "Last-week checklist covering high-yield topics and common pitfalls to avoid.",
+    image: "/article3.jpg",
+    category: "Study Tips",
     readTimeMin: 7,
-    date: '2025-04-22'
+    date: "2025-04-22",
   },
   {
     id: 8,
-    title: 'Digital Workflow in Orthodontics',
-    description: 'From intraoral scanning to aligner planning—building a modern digital workflow.',
-    image: '/article4.jpg',
-    category: 'Technology',
+    title: "Digital Workflow in Orthodontics",
+    description:
+      "From intraoral scanning to aligner planning—building a modern digital workflow.",
+    image: "/article4.jpg",
+    category: "Technology",
     readTimeMin: 11,
-    date: '2025-04-10'
-  }
+    date: "2025-04-10",
+  },
 ];
 
-const CATEGORIES = ['All', 'Fundamentals', 'Clinical Practice', 'Study Tips', 'Technology'];
+const CATEGORIES = [
+  "All",
+  "Fundamentals",
+  "Clinical Practice",
+  "Study Tips",
+  "Technology",
+];
 const SORT_OPTIONS = [
-  { id: 'newest', label: 'Newest' },
-  { id: 'oldest', label: 'Oldest' },
-  { id: 'time-asc', label: 'Read time • Low to High' },
-  { id: 'time-desc', label: 'Read time • High to Low' }
+  { id: "newest", label: "Newest" },
+  { id: "oldest", label: "Oldest" },
+  { id: "time-asc", label: "Read time • Low to High" },
+  { id: "time-desc", label: "Read time • High to Low" },
 ];
 
 // Grid Card (matches the look from Recommended.jsx)
@@ -109,7 +119,11 @@ function GridCard({ article }) {
     >
       <div className="absolute w-full h-full bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
         <div className="relative h-2/3">
-          <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+          <img
+            src={article.image}
+            alt={article.title}
+            className="w-full h-full object-cover"
+          />
           <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
             <span className="inline-block px-3 py-1 rounded-full bg-green-500/90 text-white text-xs font-medium">
               {article.category}
@@ -117,8 +131,12 @@ function GridCard({ article }) {
           </div>
         </div>
         <div className="p-4">
-          <h3 className="text-lg font-medium text-gray-900 line-clamp-2">{article.title}</h3>
-          <p className="mt-2 text-sm text-gray-500">{article.readTimeMin} min read</p>
+          <h3 className="text-lg font-medium text-gray-900 line-clamp-2">
+            {article.title}
+          </h3>
+          <p className="mt-2 text-sm text-gray-500">
+            {article.readTimeMin} min read
+          </p>
           <div className="mt-4">
             <Link
               to={`/article/${article.id}`}
@@ -144,7 +162,11 @@ function ListCard({ article }) {
     >
       <div className="grid grid-cols-1 md:grid-cols-[220px_1fr]">
         <div className="relative h-44 md:h-full">
-          <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+          <img
+            src={article.image}
+            alt={article.title}
+            className="w-full h-full object-cover"
+          />
           <div className="absolute top-3 left-3">
             <span className="inline-block px-3 py-1 rounded-full bg-green-500/90 text-white text-xs font-medium">
               {article.category}
@@ -157,8 +179,12 @@ function ListCard({ article }) {
             <span className="h-1 w-1 rounded-full bg-gray-300" />
             <span>{article.readTimeMin} min read</span>
           </div>
-          <h3 className="mt-2 text-lg md:text-xl font-semibold text-gray-900">{article.title}</h3>
-          <p className="mt-2 text-sm md:text-base text-gray-600 line-clamp-2 md:line-clamp-3">{article.description}</p>
+          <h3 className="mt-2 text-lg md:text-xl font-semibold text-gray-900">
+            {article.title}
+          </h3>
+          <p className="mt-2 text-sm md:text-base text-gray-600 line-clamp-2 md:line-clamp-3">
+            {article.description}
+          </p>
           <div className="mt-4">
             <Link
               to={`/article/${article.id}`}
@@ -175,17 +201,17 @@ function ListCard({ article }) {
 }
 
 export default function ArticlesPage() {
-  const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('All');
-  const [sortBy, setSortBy] = useState('newest');
-  const [view, setView] = useState('grid'); // 'grid' | 'list'
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("newest");
+  const [view, setView] = useState("grid"); // 'grid' | 'list'
   const [visible, setVisible] = useState(8);
 
   const filtered = useMemo(() => {
     let list = [...ALL_ARTICLES];
 
     // Category filter
-    if (category !== 'All') {
+    if (category !== "All") {
       list = list.filter((a) => a.category === category);
     }
 
@@ -193,22 +219,24 @@ export default function ArticlesPage() {
     const q = query.trim().toLowerCase();
     if (q) {
       list = list.filter(
-        (a) => a.title.toLowerCase().includes(q) || a.description.toLowerCase().includes(q)
+        (a) =>
+          a.title.toLowerCase().includes(q) ||
+          a.description.toLowerCase().includes(q)
       );
     }
 
     // Sort
     switch (sortBy) {
-      case 'newest':
+      case "newest":
         list.sort((a, b) => new Date(b.date) - new Date(a.date));
         break;
-      case 'oldest':
+      case "oldest":
         list.sort((a, b) => new Date(a.date) - new Date(b.date));
         break;
-      case 'time-asc':
+      case "time-asc":
         list.sort((a, b) => a.readTimeMin - b.readTimeMin);
         break;
-      case 'time-desc':
+      case "time-desc":
         list.sort((a, b) => b.readTimeMin - a.readTimeMin);
         break;
       default:
@@ -226,9 +254,12 @@ export default function ArticlesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-10 md:mb-14">
-          <h1 className="text-3xl md:text-4xl font-medium text-gray-900 mb-3">All Articles</h1>
+          <h1 className="text-3xl md:text-4xl font-medium text-gray-900 mb-3">
+            All Articles
+          </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Browse all our curated content. Use search, filters, and view options to find exactly what you need.
+            Browse all our curated content. Use search, filters, and view
+            options to find exactly what you need.
           </p>
         </div>
 
@@ -256,8 +287,8 @@ export default function ArticlesPage() {
                   onClick={() => setCategory(c)}
                   className={`px-3 py-1.5 rounded-full text-sm border transition-all ${
                     category === c
-                      ? 'bg-green-50 text-green-700 border-green-200'
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
+                      ? "bg-green-50 text-green-700 border-green-200"
+                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   {c}
@@ -284,15 +315,23 @@ export default function ArticlesPage() {
             {/* View Toggle */}
             <div className="inline-flex rounded-xl overflow-hidden border border-gray-200">
               <button
-                className={`px-3 py-2 text-sm ${view === 'grid' ? 'bg-green-50 text-green-700' : 'bg-white text-gray-600'}`}
-                onClick={() => setView('grid')}
+                className={`px-3 py-2 text-sm ${
+                  view === "grid"
+                    ? "bg-green-50 text-green-700"
+                    : "bg-white text-gray-600"
+                }`}
+                onClick={() => setView("grid")}
                 aria-label="Grid view"
               >
                 <Squares2X2Icon className="w-5 h-5" />
               </button>
               <button
-                className={`px-3 py-2 text-sm border-l border-gray-200 ${view === 'list' ? 'bg-green-50 text-green-700' : 'bg-white text-gray-600'}`}
-                onClick={() => setView('list')}
+                className={`px-3 py-2 text-sm border-l border-gray-200 ${
+                  view === "list"
+                    ? "bg-green-50 text-green-700"
+                    : "bg-white text-gray-600"
+                }`}
+                onClick={() => setView("list")}
                 aria-label="List view"
               >
                 <Bars3BottomLeftIcon className="w-5 h-5" />
@@ -303,9 +342,9 @@ export default function ArticlesPage() {
             <button
               className="px-3 py-2 text-sm rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
               onClick={() => {
-                setQuery('');
-                setCategory('All');
-                setSortBy('newest');
+                setQuery("");
+                setCategory("All");
+                setSortBy("newest");
               }}
             >
               Reset
@@ -314,10 +353,12 @@ export default function ArticlesPage() {
         </div>
 
         {/* Results */}
-        <div className="mb-6 text-sm text-gray-500">{filtered.length} articles</div>
+        <div className="mb-6 text-sm text-gray-500">
+          {filtered.length} articles
+        </div>
 
         <AnimatePresence mode="popLayout">
-          {view === 'grid' ? (
+          {view === "grid" ? (
             <motion.div
               key="grid"
               initial={{ opacity: 0 }}
@@ -347,7 +388,10 @@ export default function ArticlesPage() {
         {/* Empty state */}
         {filtered.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-gray-600">No articles match your filters. Try adjusting your search or category.</p>
+            <p className="text-gray-600">
+              No articles match your filters. Try adjusting your search or
+              category.
+            </p>
           </div>
         )}
 

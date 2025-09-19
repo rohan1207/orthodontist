@@ -14,11 +14,11 @@ export default function NewHero() {
 
   return (
     <section
-      className="relative min-h-screen overflow-visible bg-[#D1E7FF] mt-16"
+      className="relative min-h-screen overflow-visible bg-white mt-16"
       style={{ fontFamily: HERO_FONT }}
     >
   {/* Subtle blue wash */}
-  <div className="absolute inset-0 bg-gradient-to-br from-[#004492]/5 via-[#1E5AA5]/5 to-[#60A5FA]/5" />
+  <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-emerald-500/5 to-teal-500/5" />
 
       {/* Minimal floating specks */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -91,7 +91,7 @@ export default function NewHero() {
                 </p>
 
                 <p className="text-xs md:text-base text-transparent bg-gradient-to-r from-[#004492] to-[#1E5AA5] bg-clip-text font-medium">
-                  Your academic anchor 🦷
+                  Your academic anchor from braces 🦷
                 </p>
               </div>
 
@@ -267,9 +267,11 @@ function HeroScene({ hovered, target }) {
         </Float>
         {useMemo(
           () => [
-            { p: [1.8, 0.2, 0], c: "#004492" },
-            { p: [-1.6, -0.3, 0.2], c: "#004492" },
-            { p: [0.6, 1.4, -0.2], c: "#004492" },
+            // Tailwind token names like 'green-100' are not valid CSS colors in three.js;
+            // use the actual hex value for a very light green (#dcfce7 is Tailwind's green-100)
+            { p: [1.8, 0.2, 0], c: "#62ca87" },
+            { p: [-1.6, -0.3, 0.2], c: "#62ca87" },
+            { p: [0.6, 1.4, -0.2], c: "#62ca87" },
           ],
           []
         ).map((s, i) => (
@@ -283,8 +285,8 @@ function HeroScene({ hovered, target }) {
               <sphereGeometry args={[0.22, 32, 32]} />
               <meshStandardMaterial
                 color={s.c}
-                metalness={0.4}
-                roughness={0.3}
+                metalness={0.1}
+                roughness={0.75}
               />
             </mesh>
           </Float>
@@ -292,7 +294,7 @@ function HeroScene({ hovered, target }) {
         <mesh rotation={[Math.PI / 2.2, 0, 0]}>
           <torusGeometry args={[1.85, 0.03, 16, 180]} />
           <meshStandardMaterial
-            color="#004492"
+            color="#62ca87"
             metalness={0.5}
             roughness={0.3}
           />

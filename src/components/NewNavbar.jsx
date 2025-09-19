@@ -52,7 +52,7 @@ export default function Navbar() {
             <img
               src="/logo.png"
               alt="Logo"
-              className="h-12 w-12 md:h-16 md:w-16"
+              className="h-10 w-10 md:h-14 md:w-14"
             />
             <Link to="/">
               <span

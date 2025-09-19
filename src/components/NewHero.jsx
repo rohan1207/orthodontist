@@ -90,8 +90,8 @@ export default function NewHero() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button
-                  className="group relative flex items-center justify-center bg-gradient-to-r from-[#16A34A] to-[#22C55E] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                 <button
+                  className="group relative flex items-center justify-center bg-white/80 backdrop-blur-md text-slate-700 font-semibold border border-slate-200/50 shadow-lg hover:shadow-xl hover:bg-white/90 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
                   style={{
                     width: "300px",
                     height: "79px",
@@ -114,14 +114,16 @@ export default function NewHero() {
                   </span>
                 </button>
 
-                <button
-                  className="group relative flex items-center justify-center bg-white/80 backdrop-blur-md text-slate-700 font-semibold border border-slate-200/50 shadow-lg hover:shadow-xl hover:bg-white/90 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                
+                 <button
+                  className="group relative flex items-center justify-center bg-gradient-to-r from-[#16A34A] to-[#22C55E] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
                   style={{
                     width: "300px",
                     height: "79px",
                     borderRadius: "50px",
                   }}
                 >
+               
                   {/* Flower enters from behind to top-right and spins while hovered */}
                   <div
                     className="pointer-events-none absolute top-2 right-2 z-[1] transform translate-x-6 -translate-y-6 opacity-0 scale-75 transition-all duration-500 ease-out group-hover:translate-x-0 group-hover:-translate-y-0 group-hover:opacity-100 group-hover:scale-100"

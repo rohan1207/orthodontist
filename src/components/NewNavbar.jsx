@@ -50,7 +50,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <img
-              src="/logo.png"
+              src="/logo1.png"
               alt="Logo"
               className="h-10 w-10 md:h-14 md:w-14"
             />
@@ -65,7 +65,7 @@ export default function Navbar() {
                 className="text-sm font-light block text-gray-600"
                 style={{ letterSpacing: "0.1em", marginTop: "-4px" }}
               >
-                Your Dental Companion
+                From Braces To Breakthroughs
               </span>
             </Link>
           </div>
@@ -99,7 +99,7 @@ export default function Navbar() {
               style={{
                 width: "184px",
                 height: "46px",
-                background: "#C0DDFF",
+                background: "#86efac",
                 borderRadius: "25px",
                 fontFamily: MENU_FONT,
                 fontWeight: 400,

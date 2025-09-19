@@ -17,7 +17,7 @@ export default function NewHero() {
       className="relative min-h-screen overflow-visible bg-white mt-16"
       style={{ fontFamily: HERO_FONT }}
     >
-  {/* Subtle blue wash */}
+  {/* Subtle green wash */}
   <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-emerald-500/5 to-teal-500/5" />
 
       {/* Minimal floating specks */}
@@ -27,7 +27,7 @@ export default function NewHero() {
             key={i}
             className="absolute w-1 h-1 rounded-full animate-pulse"
             style={{
-              backgroundColor: "rgba(0, 68, 146, 0.25)",
+              backgroundColor: "rgba(34, 197, 94, 0.25)",
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 3}s`,
@@ -46,14 +46,7 @@ export default function NewHero() {
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             {/* Left Content */}
-            <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-white/85 backdrop-blur-md border border-[#004492]/30 rounded-full px-5 py-2.5 md:px-6 md:py-3 shadow-lg">
-                <div className="w-2 h-2 bg-[#004492] rounded-full animate-pulse" />
-                <span className="text-xs md:text-sm font-medium text-slate-700">
-                Trusted Orthodontic Resources
-                </span>
-              </div>
+            <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8 relative pb-16">
 
               {/* Main Heading */}
               <div className="space-y-4">
@@ -63,17 +56,17 @@ export default function NewHero() {
                     // Smaller minimum on phones, unchanged on larger screens
                     fontSize: "clamp(1.8rem, 8vw, 5rem)",
                     background:
-                      "linear-gradient(135deg, #004492 0%, #1E5AA5 50%, #60A5FA 100%)",
+                      "linear-gradient(135deg, #16A34A 0%, #22C55E 50%, #34D399 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
-                    filter: "drop-shadow(0 4px 20px rgba(0, 68, 146, 0.15))",
+                    filter: "drop-shadow(0 4px 20px rgba(34, 197, 94, 0.15))",
                   }}
                 >
                   OrthoChronicles
                 </h1>
 
-                <div className="h-1 w-24 bg-gradient-to-r from-[#004492] to-[#60A5FA] rounded-full mx-auto lg:mx-0 shadow-lg" />
+                <div className="h-1 w-24 bg-gradient-to-r from-[#16A34A] to-[#22C55E] rounded-full mx-auto lg:mx-0 shadow-lg" />
               </div>
 
               {/* Subtitle */}
@@ -90,7 +83,7 @@ export default function NewHero() {
                   summaries, reviews, strategies & trusted resources.
                 </p>
 
-                <p className="text-xs md:text-base text-transparent bg-gradient-to-r from-[#004492] to-[#1E5AA5] bg-clip-text font-medium">
+                <p className="text-xs md:text-base text-transparent bg-gradient-to-r from-[#16A34A] to-[#22C55E] bg-clip-text font-medium">
                   Your academic anchor from braces 🦷
                 </p>
               </div>
@@ -98,14 +91,14 @@ export default function NewHero() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <button
-                  className="group relative flex items-center justify-center bg-gradient-to-r from-[#1E5AA5] to-[#004492] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                  className="group relative flex items-center justify-center bg-gradient-to-r from-[#16A34A] to-[#22C55E] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
                   style={{
                     width: "300px",
                     height: "79px",
                     borderRadius: "50px",
                   }}
                 >
-                  <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#004492] to-[#00306A] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#22C55E] to-[#16A34A] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   {/* Flower enters from behind to top-right and spins while hovered */}
                   <div
                     className="pointer-events-none absolute top-2 right-2 z-[1] transform translate-x-6 -translate-y-6 opacity-0 scale-75 transition-all duration-500 ease-out group-hover:translate-x-0 group-hover:-translate-y-0 group-hover:opacity-100 group-hover:scale-100"
@@ -144,13 +137,13 @@ export default function NewHero() {
               </div>
 
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center lg:justify-start gap-8 pt-8 opacity-70">
+              <div className="flex items-center justify-start gap-8 pt-8 opacity-70 w-full">
                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
                     {[1, 2, 3].map((i) => (
                       <div
                         key={i}
-                        className="w-8 h-8 bg-gradient-to-br from-[#60A5FA] to-[#1E5AA5] rounded-full border-2 border-white"
+                        className="w-8 h-8 bg-gradient-to-br from-[#86EFAC] to-[#22C55E] rounded-full border-2 border-white"
                       />
                     ))}
                   </div>
@@ -169,6 +162,12 @@ export default function NewHero() {
                   <span className="text-sm text-slate-600 ml-1">4.9/5</span>
                 </div>
               </div>
+
+              {/* Badge anchored to bottom-right of the left content */}
+              <div className="absolute right-[-760px] bottom-[65px] inline-flex items-center gap-2 bg-white/85 backdrop-blur-md border border-[#22C55E]/30 rounded-full px-5 py-2.5 md:px-6 md:py-3 shadow-lg">
+                <div className="w-2 h-2 bg-[#22C55E] rounded-full animate-pulse" />
+                <span className="text-xs md:text-sm font-medium text-slate-700">Trusted Orthodontic Resources</span>
+              </div>
             </div>
 
             {/* Right Visual Space - 3D Canvas embedded (receives hover events) */}
@@ -182,11 +181,11 @@ export default function NewHero() {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
-        <div className="w-8 h-12 border-2 rounded-full flex justify-center"
-             style={{ borderColor: "#60A5FA" }}>
-          <div className="w-1 h-3 rounded-full mt-2 animate-pulse"
-               style={{ backgroundColor: "#004492" }} />
+   <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
+     <div className="w-8 h-12 border-2 rounded-full flex justify-center"
+       style={{ borderColor: "#86EFAC" }}>
+    <div className="w-1 h-3 rounded-full mt-2 animate-pulse"
+      style={{ backgroundColor: "#22C55E" }} />
         </div>
       </div>
     </section>

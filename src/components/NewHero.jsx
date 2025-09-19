@@ -56,7 +56,7 @@ export default function NewHero() {
                     // Smaller minimum on phones, unchanged on larger screens
                     fontSize: "clamp(1.8rem, 8vw, 5rem)",
                     background:
-                      "linear-gradient(135deg, #16A34A 0%, #22C55E 50%, #34D399 100%)",
+                      "linear-gradient(135deg, #62d08a 0%, #61ae7d 50%, #61ae7d 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -91,23 +91,16 @@ export default function NewHero() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                  <button
-                  className="group relative flex items-center justify-center bg-white/80 backdrop-blur-md text-slate-700 font-semibold border border-slate-200/50 shadow-lg hover:shadow-xl hover:bg-white/90 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                  className="group relative flex items-center justify-center bg-white/80 backdrop-blur-md text-slate-700 font-semibold border border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
                   style={{
                     width: "300px",
                     height: "79px",
                     borderRadius: "50px",
                   }}
                 >
-                  <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#22C55E] to-[#16A34A] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  {/* Flower enters from behind to top-right and spins while hovered */}
-                  <div
-                    className="pointer-events-none absolute top-2 right-2 z-[1] transform translate-x-6 -translate-y-6 opacity-0 scale-75 transition-all duration-500 ease-out group-hover:translate-x-0 group-hover:-translate-y-0 group-hover:opacity-100 group-hover:scale-100"
-                  >
-                    <img
-                      src="/flower.png"
-                      alt=""
-                      className="w-14 h-14 group-hover:animate-[spin_6s_linear_infinite]"
-                    />
+                  {/* Tooth peeks from top center on hover/click */}
+                  <div className="pointer-events-none absolute left-1/2 top-0 z-[3] -translate-x-1/2 -translate-y-2 opacity-0 scale-90 transition-all duration-300 ease-out group-hover:-translate-y-8 group-hover:opacity-100 group-hover:scale-100 group-active:-translate-y-10">
+                    <img src="/tooth_peak.png" alt="" className="w-16 h-16 drop-shadow-lg" />
                   </div>
                   <span className="relative z-[2] flex items-center gap-2">
                     Explore
@@ -116,23 +109,16 @@ export default function NewHero() {
 
                 
                  <button
-                  className="group relative flex items-center justify-center bg-gradient-to-r from-[#16A34A] to-[#22C55E] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                  className="group relative flex items-center justify-center bg-gradient-to-r from-[#62d08a] to-[#5eeb92] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
                   style={{
                     width: "300px",
                     height: "79px",
                     borderRadius: "50px",
                   }}
                 >
-               
-                  {/* Flower enters from behind to top-right and spins while hovered */}
-                  <div
-                    className="pointer-events-none absolute top-2 right-2 z-[1] transform translate-x-6 -translate-y-6 opacity-0 scale-75 transition-all duration-500 ease-out group-hover:translate-x-0 group-hover:-translate-y-0 group-hover:opacity-100 group-hover:scale-100"
-                  >
-                    <img
-                      src="/flower2.png"
-                      alt=""
-                      className="w-14 h-14 group-hover:animate-[spin_6s_linear_infinite]"
-                    />
+                  {/* Tooth peeks from top center on hover/click */}
+                  <div className="pointer-events-none absolute left-1/2 top-0 z-[3] -translate-x-1/2 -translate-y-2 opacity-0 scale-90 transition-all duration-300 ease-out group-hover:-translate-y-8 group-hover:opacity-100 group-hover:scale-100 group-active:-translate-y-10">
+                    <img src="/tooth_peak.png" alt="" className="w-16 h-16 drop-shadow-lg" />
                   </div>
                   <span className="relative z-[2]">Start Learning</span>
                 </button>

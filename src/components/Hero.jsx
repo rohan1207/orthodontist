@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { gsap } from "gsap";
+import React, { useMemo, useRef, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Float, Environment, Image } from "@react-three/drei";
 
-// Import the font from Google Fonts (Montserrat)
+// Import font (e.g., 'Inter', 'Montserrat', or 'Helvetica Neue')
 const fontUrl =
-  "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap";
+  "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap";
 if (typeof window !== "undefined") {
   const link = document.createElement("link");
   link.href = fontUrl;
@@ -12,131 +12,174 @@ if (typeof window !== "undefined") {
   document.head.appendChild(link);
 }
 
-const HERO_BG = "#6ee7ef"; // Exact color from image (sampled)
-const HEADLINE_FONT = "Montserrat, Arial, Helvetica, sans-serif";
+const HERO_FONT = "Inter, Helvetica Neue, Arial, sans-serif";
 
-const Hero = () => {
-  const leftElementRef = useRef(null);
-  const rightElementRef = useRef(null);
-
-  useEffect(() => {
-    // Scroll-based animation for decorative elements
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const scrollProgress = Math.min(scrollY / window.innerHeight, 1);
-      // Left element moves right, right element moves left
-      if (leftElementRef.current) {
-        gsap.to(leftElementRef.current, {
-          x: scrollProgress * 220,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      }
-      if (rightElementRef.current) {
-        gsap.to(rightElementRef.current, {
-          x: -scrollProgress * 220,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
+export default function NewHero() {
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden mt-16"
-      style={{ backgroundColor: HERO_BG }}
+      className="relative min-h-screen bg-white flex flex-col justify-center items-center px-4 md:px-8"
+      style={{ fontFamily: HERO_FONT }}
     >
-      {/* Decorative Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Top Left Rounded Button-like Element */}
-        <div
-          ref={leftElementRef}
-          className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full flex items-center justify-center shadow-2xl"
-          style={{
-            background: "rgba(255,255,255,0.85)",
-            borderRadius: "50%",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
-            border: "2px solid #e0f7fa",
-          }}
-        >
-          <span
-            className="text-3xl font-bold text-teal-500"
-            style={{ fontFamily: HEADLINE_FONT }}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0" />
+      <div className="relative z-10 w-full flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto pt-32 md:pt-0">
+        <div className="w-full md:w-1/2 flex flex-col items-center md:items-start mb-12 md:mb-0">
+          <h1
+            className="text-black font-[400] tracking-tight mb-8 text-center md:text-left"
+            style={{
+              fontFamily: HERO_FONT,
+              fontWeight: 400,
+              fontSize: "clamp(3rem, 8vw, 6rem)",
+              lineHeight: 1.05,
+              letterSpacing: "-0.04em",
+            }}
           >
-            OD
-          </span>
+            OrthoChronicles
+          </h1>
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
+            <div className="flex-shrink-0">
+              <div className="w-16 md:w-24 h-16 md:h-24 flex items-center justify-center">
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 80 80"
+                  fill="none"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="40" y1="10" x2="40" y2="70" />
+                  <line x1="10" y1="40" x2="70" y2="40" />
+                </svg>
+              </div>
+            </div>
+            <div className="max-w-xl text-black text-base md:text-lg font-normal leading-relaxed text-center md:text-left">
+              <p>
+                Smiles, Simplified
+                <br className="hidden md:block" />
+                Your trusted source for orthodontic education, tips, and expert
+                insights.
+                <br className="hidden md:block" />
+                Explore credible resources, actionable dental solutions, and
+                expert-curated blogs designed to help you make informed choices
+                for your smile.
+              </p>
+            </div>
+          </div>
         </div>
-        {/* Bottom Right Rounded Button-like Element */}
-        <div
-          ref={rightElementRef}
-          className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full flex items-center justify-center shadow-2xl"
-          style={{
-            background: "rgba(13,148,136,0.15)",
-            borderRadius: "50%",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
-            border: "2px solid #b2f5ea",
-          }}
-        >
-          <span
-            className="text-3xl font-bold text-white"
-            style={{ fontFamily: HEADLINE_FONT }}
-          >
-            Smile
-          </span>
+        <div className="w-full md:w-1/2 flex justify-center md:justify-end">
+          <div className="w-72 h-72 md:w-96 md:h-96 relative rounded-2xl overflow-hidden">
+            {/* Subtle gradient fallback behind the canvas */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,#f3f4f6,transparent_40%),radial-gradient(circle_at_70%_70%,#e5e7eb,transparent_40%)]" />
+            <HeroInteractive />
+          </div>
         </div>
-        {/* Small Dot */}
-        <div
-          className="absolute bottom-32 right-1/2 w-5 h-5 rounded-full"
-          style={{ backgroundColor: "#0D9488", opacity: 0.7 }}
-        />
-      </div>
-
-      {/* Main Content */}
-      <div className="relative z-10 text-center px-6 lg:px-8 max-w-6xl mx-auto">
-        {/* Main Headline */}
-        <h1
-          className="mb-8 tracking-tight"
-          style={{
-            fontFamily: HEADLINE_FONT,
-            fontWeight: 900,
-            fontSize: "6rem", // ~96px
-            color: "#18344A",
-            letterSpacing: "-0.04em",
-            lineHeight: "0.95",
-            textShadow: "0 2px 12px rgba(0,0,0,0.04)",
-          }}
-        >
-          Credible Ortho & Dental
-          <br />
-          <span style={{ color: "#fff", fontWeight: 900 }}>Education</span>
-        </h1>
-
-        {/* Subtitle */}
-        <p
-          className="text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed font-normal"
-          style={{
-            fontFamily: HEADLINE_FONT,
-            color: "#18344A",
-            fontWeight: 400,
-            fontSize: "1.25rem",
-          }}
-        >
-          Trusted insights, modern solutions, and beautiful smiles.
-        </p>
-
-        {/* CTA Button */}
-        <button
-          className="bg-[#18344A] hover:bg-[#0D9488] text-white px-8 py-3 rounded-full text-base font-semibold shadow-lg transition-all duration-300"
-          style={{ fontFamily: HEADLINE_FONT, fontWeight: 700 }}
-        >
-          Start Learning
-        </button>
       </div>
     </section>
   );
-};
+}
 
-export default Hero;
+// === Interactive 3D cluster (hover/touch reactive) ===
+function HeroInteractive() {
+  const [hovered, setHovered] = useState(false);
+  const target = useRef({ x: 0, y: 0 });
+
+  const onMove = (e) => {
+    const rect = e.target?.getBoundingClientRect
+      ? e.target.getBoundingClientRect()
+      : { left: 0, top: 0, width: 1, height: 1 };
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    target.current.x = x * 0.8;
+    target.current.y = -y * 0.6;
+  };
+
+  return (
+    <Canvas
+      className="absolute inset-0"
+      dpr={[1, 2]}
+      camera={{ position: [0, 0, 4.5], fov: 50 }}
+      onPointerMove={onMove}
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => {
+        setHovered(false);
+        target.current.x = 0;
+        target.current.y = 0;
+      }}
+      onPointerDown={() => setHovered(true)}
+      onPointerUp={() => setHovered(false)}
+    >
+      <HeroScene hovered={hovered} target={target} />
+    </Canvas>
+  );
+}
+
+function HeroScene({ hovered, target }) {
+  const group = useRef();
+
+  useFrame((state) => {
+    if (!group.current) return;
+    group.current.rotation.y +=
+      (target.current.x - group.current.rotation.y) * 0.1;
+    group.current.rotation.x +=
+      (target.current.y - group.current.rotation.x) * 0.1;
+    group.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.1;
+    const s = hovered ? 1.05 : 1.0;
+    group.current.scale.x += (s - group.current.scale.x) * 0.08;
+    group.current.scale.y = group.current.scale.x;
+    group.current.scale.z = group.current.scale.x;
+  });
+
+  return (
+    <>
+      <ambientLight intensity={0.6} />
+      <directionalLight position={[3, 5, 5]} intensity={0.8} />
+      <group ref={group}>
+        <Float speed={2} rotationIntensity={0.3} floatIntensity={0.7}>
+          {/* Display hero.png from public as a floating card */}
+          <group position={[0, 0, 0]}>
+            <Image
+              url="/hero.png"
+              scale={[3.1, 3.1, 1]}
+              transparent
+              toneMapped={false}
+            />
+          </group>
+        </Float>
+        {useMemo(
+          () => [
+            { p: [1.8, 0.2, 0], c: "#2563eb" },
+            { p: [-1.6, -0.3, 0.2], c: "#10b981" },
+            { p: [0.6, 1.4, -0.2], c: "#f59e0b" },
+          ],
+          []
+        ).map((s, i) => (
+          <Float
+            key={`orb-${i}`}
+            speed={1.6 + i * 0.3}
+            rotationIntensity={0.2}
+            floatIntensity={0.6}
+          >
+            <mesh position={s.p}>
+              <sphereGeometry args={[0.22, 32, 32]} />
+              <meshStandardMaterial
+                color={s.c}
+                metalness={0.4}
+                roughness={0.3}
+              />
+            </mesh>
+          </Float>
+        ))}
+        <mesh rotation={[Math.PI / 2.2, 0, 0]}>
+          <torusGeometry args={[1.7, 0.03, 16, 180]} />
+          <meshStandardMaterial
+            color="#6b7280"
+            metalness={0.5}
+            roughness={0.3}
+          />
+        </mesh>
+      </group>
+      <Environment preset="studio" />
+    </>
+  );
+}

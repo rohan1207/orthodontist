@@ -5,26 +5,25 @@ import { Link } from "react-router-dom";
 // Import font (e.g., 'Inter', 'Montserrat', or 'Helvetica Neue')
 const fontUrl =
   "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap";
+const poppinsUrl =
+  "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap";
 if (typeof window !== "undefined") {
   const link = document.createElement("link");
   link.href = fontUrl;
   link.rel = "stylesheet";
   document.head.appendChild(link);
+
+  const link2 = document.createElement("link");
+  link2.href = poppinsUrl;
+  link2.rel = "stylesheet";
+  document.head.appendChild(link2);
 }
 
 const NAV_FONT = "Inter, Helvetica Neue, Arial, sans-serif";
+const MENU_FONT = "Poppins, Inter, Helvetica Neue, Arial, sans-serif";
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const menuItems = [
     { name: "Home", href: "/" },
@@ -38,20 +37,22 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-          scrolled
-            ? "bg-white/95 shadow-sm border-b border-gray-200 backdrop-blur-sm"
-            : "bg-transparent"
-        }`}
-        style={{ fontFamily: NAV_FONT }}
+        className={
+          "fixed top-0 left-1/2 transform -translate-x-1/2 z-50 rounded-b-[20px] bg-white/95 shadow-sm border-b border-gray-200 backdrop-blur-sm"
+        }
+        style={{
+          fontFamily: NAV_FONT,
+          width: "min(1728px, 100%)",
+          height: "101px",
+        }}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-8 py-3">
+        <div className="w-full h-full mx-auto flex items-center justify-between px-6 md:px-[28px]">
           {/* Logo */}
           <div className="flex items-center gap-3">
             <img
               src="/logo.png"
               alt="Logo"
-              className="h-12 w-12 md:h-12 md:w-12"
+              className="h-12 w-12 md:h-16 md:w-16"
             />
             <Link to="/">
               <span
@@ -70,12 +71,20 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-8">
             {menuItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-gray-700 hover:text-gray-900 transition-colors duration-300 text-sm font-medium"
+                className="text-gray-700 hover:text-gray-900 transition-colors duration-300"
+                style={{
+                  fontFamily: MENU_FONT,
+                  fontWeight: 400,
+                  fontStyle: "normal",
+                  fontSize: "16px",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                }}
               >
                 {item.name}
               </Link>
@@ -86,7 +95,20 @@ export default function Navbar() {
           <div className="flex items-center gap-2 md:gap-4">
             <Link
               to="/contact"
-              className="hidden md:block px-5 py-2.5 rounded-full border border-gray-300 bg-white hover:bg-gray-50 transition-all text-sm font-medium text-gray-800"
+              className="hidden md:flex items-center justify-center text-gray-900"
+              style={{
+                width: "184px",
+                height: "46px",
+                background: "#C0DDFF",
+                borderRadius: "25px",
+                fontFamily: MENU_FONT,
+                fontWeight: 400,
+                fontStyle: "normal",
+                fontSize: "16px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                opacity: 1,
+              }}
             >
               Contact Us
             </Link>
@@ -128,8 +150,15 @@ export default function Navbar() {
                   key={item.name}
                   href={item.href}
                   whileHover={{ scale: 1.05, x: 6 }}
-                  className="text-2xl md:text-3xl font-normal text-gray-900 px-6 py-2 rounded transition-all duration-200"
-                  style={{ letterSpacing: "0.04em" }}
+                  className="text-gray-900 px-6 py-2 rounded transition-all duration-200"
+                  style={{
+                    fontFamily: MENU_FONT,
+                    fontWeight: 400,
+                    fontStyle: "normal",
+                    fontSize: "16px",
+                    lineHeight: "100%",
+                    letterSpacing: "0%",
+                  }}
                   onClick={() => setMenuOpen(false)}
                 >
                   {item.name}

@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Environment, Image } from "@react-three/drei";
+import gsap from "gsap";
 
 const HERO_FONT = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 const TOOTH_URL = "/tooth1.png"; // main right-side PNG
@@ -21,20 +22,21 @@ export default function NewHero() {
 
   return (
     <section
-      className="relative min-h-screen overflow-hidden bg-white mt-16"
+      className="relative min-h-screen overflow-hidden bg-[#D1E7FF] mt-16"
       onMouseMove={handleMouseMove}
       style={{ fontFamily: HERO_FONT }}
     >
-      {/* Subtle green wash */}
-      <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-emerald-500/5 to-teal-500/5" />
+  {/* Subtle blue wash */}
+  <div className="absolute inset-0 bg-gradient-to-br from-[#004492]/5 via-[#1E5AA5]/5 to-[#60A5FA]/5" />
 
       {/* Minimal floating specks */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {Array.from({ length: 8 }).map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-green-400/25 rounded-full animate-pulse"
+            className="absolute w-1 h-1 rounded-full animate-pulse"
             style={{
+              backgroundColor: "rgba(0, 68, 146, 0.25)",
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 3}s`,
@@ -63,10 +65,10 @@ export default function NewHero() {
             {/* Left Content */}
             <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-white/85 backdrop-blur-md border border-green-200/50 rounded-full px-5 py-2.5 md:px-6 md:py-3 shadow-lg">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              <div className="inline-flex items-center gap-2 bg-white/85 backdrop-blur-md border border-[#004492]/30 rounded-full px-5 py-2.5 md:px-6 md:py-3 shadow-lg">
+                <div className="w-2 h-2 bg-[#004492] rounded-full animate-pulse" />
                 <span className="text-xs md:text-sm font-medium text-slate-700">
-                  ✨ Trusted Orthodontic Resources
+                Trusted Orthodontic Resources
                 </span>
               </div>
 
@@ -78,17 +80,17 @@ export default function NewHero() {
                     // Smaller minimum on phones, unchanged on larger screens
                     fontSize: "clamp(1.8rem, 8vw, 5rem)",
                     background:
-                      "linear-gradient(135deg, #10b981 0%, #22c55e 50%, #84cc16 100%)",
+                      "linear-gradient(135deg, #004492 0%, #1E5AA5 50%, #60A5FA 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
-                    filter: "drop-shadow(0 4px 20px rgba(34, 197, 94, 0.15))",
+                    filter: "drop-shadow(0 4px 20px rgba(0, 68, 146, 0.15))",
                   }}
                 >
                   OrthoChronicles
                 </h1>
 
-                <div className="h-1 w-24 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mx-auto lg:mx-0 shadow-lg" />
+                <div className="h-1 w-24 bg-gradient-to-r from-[#004492] to-[#60A5FA] rounded-full mx-auto lg:mx-0 shadow-lg" />
               </div>
 
               {/* Subtitle */}
@@ -97,7 +99,7 @@ export default function NewHero() {
                   <span className="font-semibold text-black">
                     Cracked NEET MDS?
                   </span>{" "}
-                  Your orthodontic journey starts here! ✨
+                  Your orthodontic journey starts here! 
                 </p>
 
                 <p className="text-sm md:text-lg text-slate-500 leading-relaxed max-w-xl mx-auto lg:mx-0">
@@ -105,35 +107,56 @@ export default function NewHero() {
                   summaries, reviews, strategies & trusted resources.
                 </p>
 
-                <p className="text-xs md:text-base text-transparent bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text font-medium">
+                <p className="text-xs md:text-base text-transparent bg-gradient-to-r from-[#004492] to-[#1E5AA5] bg-clip-text font-medium">
                   Your academic anchor, from Braces to Breakthroughs. 🦷
                 </p>
               </div>
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button className="group relative px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <span className="relative flex items-center gap-2">
-                    Start Learning ✨
-                    <svg
-                      className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                      />
-                    </svg>
+                <button
+                  className="group relative flex items-center justify-center bg-gradient-to-r from-[#1E5AA5] to-[#004492] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                  style={{
+                    width: "300px",
+                    height: "79px",
+                    borderRadius: "50px",
+                  }}
+                >
+                  <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#004492] to-[#00306A] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {/* Flower enters from behind to top-right and spins while hovered */}
+                  <div
+                    className="pointer-events-none absolute top-2 right-2 z-[1] transform translate-x-6 -translate-y-6 opacity-0 scale-75 transition-all duration-500 ease-out group-hover:translate-x-0 group-hover:-translate-y-0 group-hover:opacity-100 group-hover:scale-100"
+                  >
+                    <img
+                      src="/flower.png"
+                      alt=""
+                      className="w-12 h-12 group-hover:animate-[spin_6s_linear_infinite]"
+                    />
+                  </div>
+                  <span className="relative z-[2] flex items-center gap-2">
+                    Explore
                   </span>
                 </button>
 
-                <button className="px-6 py-3 md:px-8 md:py-4 bg-white/80 backdrop-blur-md text-slate-700 font-semibold rounded-2xl border border-slate-200/50 shadow-lg hover:shadow-xl hover:bg-white/90 transition-all duration-300 hover:-translate-y-1">
-                  Explore Resources 📚
+                <button
+                  className="group relative flex items-center justify-center bg-white/80 backdrop-blur-md text-slate-700 font-semibold border border-slate-200/50 shadow-lg hover:shadow-xl hover:bg-white/90 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                  style={{
+                    width: "300px",
+                    height: "79px",
+                    borderRadius: "50px",
+                  }}
+                >
+                  {/* Flower enters from behind to top-right and spins while hovered */}
+                  <div
+                    className="pointer-events-none absolute top-2 right-2 z-[1] transform translate-x-6 -translate-y-6 opacity-0 scale-75 transition-all duration-500 ease-out group-hover:translate-x-0 group-hover:-translate-y-0 group-hover:opacity-100 group-hover:scale-100"
+                  >
+                    <img
+                      src="/flower.png"
+                      alt=""
+                      className="w-12 h-12 group-hover:animate-[spin_6s_linear_infinite]"
+                    />
+                  </div>
+                  <span className="relative z-[2]">Start Learning</span>
                 </button>
               </div>
 
@@ -144,7 +167,7 @@ export default function NewHero() {
                     {[1, 2, 3].map((i) => (
                       <div
                         key={i}
-                        className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full border-2 border-white"
+                        className="w-8 h-8 bg-gradient-to-br from-[#60A5FA] to-[#1E5AA5] rounded-full border-2 border-white"
                       />
                     ))}
                   </div>
@@ -175,8 +198,10 @@ export default function NewHero() {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
-        <div className="w-8 h-12 border-2 border-green-300 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-green-400 rounded-full mt-2 animate-pulse" />
+        <div className="w-8 h-12 border-2 rounded-full flex justify-center"
+             style={{ borderColor: "#60A5FA" }}>
+          <div className="w-1 h-3 rounded-full mt-2 animate-pulse"
+               style={{ backgroundColor: "#004492" }} />
         </div>
       </div>
     </section>
@@ -222,65 +247,77 @@ function HeroInteractive({ mousePosition }) {
 function HeroScene({ hovered, target, mousePosition }) {
   const group = useRef();
   const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
-  const base = useRef({ x: 0.12, y: -0.35 }); // pleasant angled view
   const [over, setOver] = useState(false); // direct hover over tooth
 
-  useFrame((state) => {
-    if (!group.current) return;
-    const desiredY = base.current.y + target.current.x * 0.8;
-    const desiredX = base.current.x + target.current.y * 0.8;
-    group.current.rotation.y += (desiredY - group.current.rotation.y) * 0.08;
-    group.current.rotation.x += (desiredX - group.current.rotation.x) * 0.08;
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Smooth rotation
+      gsap.to(group.current.rotation, {
+        x: () => target.current.x,
+        y: () => target.current.y,
+        duration: 1,
+        ease: "power3.out",
+      });
 
-    // Gentle float + parallax
-    group.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
-    group.current.position.x = Math.cos(state.clock.elapsedTime * 0.35) * 0.12;
+      // Gentle float
+      gsap.to(group.current.position, {
+        y: `+=${Math.sin(Date.now() * 0.001) * 0.1}`,
+        x: `+=${Math.cos(Date.now() * 0.0008) * 0.05}`,
+        repeat: -1,
+        yoyo: true,
+        duration: 5,
+        ease: "sine.inOut",
+      });
 
-    // Slight push-back on hover (depth)
+      // Parallax effect
+      if (mousePosition) {
+        gsap.to(group.current.position, {
+          x: `+=${mousePosition.x * 0.005}`,
+          y: `+=${mousePosition.y * 0.005}`,
+          duration: 0.5,
+          ease: "power2.out",
+        });
+      }
+    }, group);
+    return () => ctx.revert();
+  }, [target.current.x, target.current.y, mousePosition]);
+
+  useEffect(() => {
     const targetZ = hovered || over ? -0.8 : 0;
-    group.current.position.z += (targetZ - group.current.position.z) * 0.08;
-
-    // Micro scale reaction
-    const s = hovered || over ? 1.06 : 1.0;
-    group.current.scale.x += (s - group.current.scale.x) * 0.06;
-    group.current.scale.y = group.current.scale.x;
-    group.current.scale.z = group.current.scale.x;
-
-    if (mousePosition) {
-      group.current.position.x += mousePosition.x * 0.001;
-      group.current.position.y += mousePosition.y * 0.001;
-    }
-  });
+    const scale = hovered || over ? 1.08 : 1.0;
+    gsap.to(group.current.position, { z: targetZ, duration: 0.7, ease: "expo.out" });
+    gsap.to(group.current.scale, { x: scale, y: scale, z: scale, duration: 0.7, ease: "expo.out" });
+  }, [hovered, over]);
 
   // Minimal orb set (premium, subtle)
   const orbData = useMemo(
     () => [
       {
         p: isMobile ? [0.8, 1.2, 0.4] : [5.2, 0.9, 0.6],
-        c: "#22c55e",
+        c: "#1E5AA5",
         size: isMobile ? 0.1 : 0.14,
         speed: 1.1,
       },
       {
         p: isMobile ? [-0.9, 1.4, 0.2] : [3.6, -0.8, 0.5],
-        c: "#10b981",
+        c: "#004492",
         size: isMobile ? 0.09 : 0.12,
         speed: 1.3,
       },
       {
         p: isMobile ? [0.5, 2.0, -0.1] : [4.6, 2.0, -0.3],
-        c: "#84cc16",
+        c: "#60A5FA",
         size: isMobile ? 0.12 : 0.16,
         speed: 0.9,
       },
       // background
       {
         p: [-6, -2, -2],
-        c: "#10b981",
+        c: "#004492",
         size: isMobile ? 0.18 : 0.22,
         speed: 0.5,
       },
-      { p: [7, 3, -3], c: "#22c55e", size: isMobile ? 0.2 : 0.24, speed: 0.6 },
+      { p: [7, 3, -3], c: "#1E5AA5", size: isMobile ? 0.2 : 0.24, speed: 0.6 },
     ],
     [isMobile]
   );
@@ -296,7 +333,7 @@ function HeroScene({ hovered, target, mousePosition }) {
       <directionalLight
         position={[-10, -10, -5]}
         intensity={0.6}
-        color="#f0fdf4"
+        color="#E0F2FE"
       />
 
       <group ref={group}>
@@ -307,11 +344,16 @@ function HeroScene({ hovered, target, mousePosition }) {
             scale={isMobile ? 0.8 : 1}
           >
             {/* Soft halo ring */}
-            <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, -0.12]}>
+            <mesh 
+              rotation={[Math.PI / 2, 0, 0]} 
+              position={[0, 0, -0.12]}
+              onPointerOver={(e) => { e.stopPropagation(); setOver(true); }}
+              onPointerOut={(e) => { e.stopPropagation(); setOver(false); }}
+            >
               <torusGeometry args={[isMobile ? 2.0 : 2.6, 0.02, 16, 120]} />
               <meshStandardMaterial
-                color="#22c55e"
-                emissive="#22c55e"
+                color="#1E5AA5"
+                emissive="#1E5AA5"
                 emissiveIntensity={0.22}
                 transparent
                 opacity={0.45}
@@ -340,8 +382,8 @@ function HeroScene({ hovered, target, mousePosition }) {
                   // Map cursor within image to tilt direction (-1..1)
                   const x = (uv.x - 0.5) * 2;
                   const y = (uv.y - 0.5) * 2;
-                  target.current.x = Math.max(-1, Math.min(1, x));
-                  target.current.y = Math.max(-1, Math.min(1, -y));
+                  target.current.x = y * 0.4; // Tilt back on Y axis
+                  target.current.y = -x * 0.4; // Tilt back on X axis
                 }
               }}
             />
@@ -356,7 +398,11 @@ function HeroScene({ hovered, target, mousePosition }) {
             rotationIntensity={0.25}
             floatIntensity={0.6}
           >
-            <mesh position={orb.p}>
+            <mesh 
+              position={orb.p}
+              onPointerOver={(e) => { e.stopPropagation(); setOver(true); }}
+              onPointerOut={(e) => { e.stopPropagation(); setOver(false); }}
+            >
               <sphereGeometry args={[orb.size, 32, 32]} />
               <meshStandardMaterial
                 color={orb.c}

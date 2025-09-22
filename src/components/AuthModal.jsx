@@ -94,9 +94,13 @@ const AuthModal = ({ show, onClose, onAuthSuccess }) => {
               >
                 {isLogin ? (
                   <form onSubmit={handleLogin} className="space-y-4">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Welcome Back!</h2>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                      Welcome Back!
+                    </h2>
                     <div>
-                      <label className="text-sm font-medium text-gray-600">Email</label>
+                      <label className="text-sm font-medium text-gray-600">
+                        Email
+                      </label>
                       <input
                         type="email"
                         value={email}
@@ -106,7 +110,9 @@ const AuthModal = ({ show, onClose, onAuthSuccess }) => {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600">Password</label>
+                      <label className="text-sm font-medium text-gray-600">
+                        Password
+                      </label>
                       <input
                         type="password"
                         value={password}
@@ -116,31 +122,67 @@ const AuthModal = ({ show, onClose, onAuthSuccess }) => {
                       />
                     </div>
                     {error && <p className="text-sm text-red-500">{error}</p>}
-                    <button type="submit" className="w-full bg-[#006D5B] text-white py-3 rounded-lg font-semibold hover:bg-[#005c4d] transition-colors">
+                    <button
+                      type="submit"
+                      className="w-full bg-[#006D5B] text-white py-3 rounded-lg font-semibold hover:bg-[#005c4d] transition-colors"
+                    >
                       Login
                     </button>
                   </form>
                 ) : (
                   <form onSubmit={handleSignup} className="space-y-4">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Create Your Account</h2>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                      Create Your Account
+                    </h2>
                     <div>
-                      <label className="text-sm font-medium text-gray-600">Full Name</label>
-                      <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006D5B] focus:border-transparent" />
-                    </div>
-                     <div>
-                      <label className="text-sm font-medium text-gray-600">Phone Number</label>
-                      <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006D5B] focus:border-transparent" />
+                      <label className="text-sm font-medium text-gray-600">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006D5B] focus:border-transparent"
+                      />
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600">Email</label>
-                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006D5B] focus:border-transparent" />
+                      <label className="text-sm font-medium text-gray-600">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006D5B] focus:border-transparent"
+                      />
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-600">Password</label>
-                      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006D5B] focus:border-transparent" />
+                      <label className="text-sm font-medium text-gray-600">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006D5B] focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006D5B] focus:border-transparent"
+                      />
                     </div>
                     {error && <p className="text-sm text-red-500">{error}</p>}
-                    <button type="submit" className="w-full bg-[#006D5B] text-white py-3 rounded-lg font-semibold hover:bg-[#005c4d] transition-colors">
+                    <button
+                      type="submit"
+                      className="w-full bg-[#006D5B] text-white py-3 rounded-lg font-semibold hover:bg-[#005c4d] transition-colors"
+                    >
                       Create Account
                     </button>
                   </form>

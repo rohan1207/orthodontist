@@ -99,8 +99,7 @@ export default function Founder() {
             <h2
               className="font-display text-[28px] leading-[1.15] sm:text-[38px] md:text-[56px] font-bold tracking-tight"
               style={{
-                background:
-                  "linear-gradient(135deg, #006D5B 0%, #004B3F 100%)",
+                background: "linear-gradient(135deg, #006D5B 0%, #004B3F 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",

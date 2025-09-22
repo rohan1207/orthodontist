@@ -14,11 +14,11 @@ export default function NewHero() {
 
   return (
     <section
-      className="relative min-h-screen overflow-visible bg-[#DCE6D5] mt-16"
+      className="relative min-h-screen overflow-hidden bg-[#DCE6D5] mt-16"
       style={{ fontFamily: HERO_FONT }}
     >
-  {/* Subtle green wash */}
-  <div className="absolute inset-0 bg-gradient-to-br from-[#006D5B]/5 via-[#4B4B4B]/5 to-[#B6E2D3]/5" />
+      {/* Subtle green wash */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#006D5B]/5 via-[#4B4B4B]/5 to-[#B6E2D3]/5" />
 
       {/* Minimal floating specks */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -39,22 +39,20 @@ export default function NewHero() {
 
       {/* Main Content */}
       <div
-        className={`relative z-10 min-h-screen flex flex-col justify-center px-4 md:px-8 transition-all duration-1000 ${
+        className={`relative z-10 min-h-screen flex flex-col justify-center px-4 sm:px-6 md:px-8 transition-all duration-1000 ${
           isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
       >
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-            {/* Left Content */}
-            <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8 relative pb-16">
-
-              {/* Main Heading */}
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 lg:pt-0">
+            {/* === Left: Text Content === */}
+            <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8 relative">
+              {/* Title */}
               <div className="space-y-4">
                 <h1
-                  className="font-bold tracking-tight leading-[0.95]"
+                  className="font-bold tracking-tight leading-[1.1]"
                   style={{
-                    // Smaller minimum on phones, unchanged on larger screens
-                    fontSize: "clamp(1.8rem, 8vw, 5rem)",
+                    fontSize: "clamp(2.5rem, 10vw, 5rem)",
                     background:
                       "linear-gradient(135deg, #006D5B 0%, #004B3F 100%)",
                     WebkitBackgroundClip: "text",
@@ -69,63 +67,44 @@ export default function NewHero() {
                 <div className="h-1 w-24 bg-gradient-to-r from-[#006D5B] to-[#B6E2D3] rounded-full mx-auto lg:mx-0 shadow-lg" />
               </div>
 
-              {/* Subtitle */}
-              <div className="space-y-6">
-                <p className="text-base md:text-xl text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  <span className="font-semibold text-black">
+              {/* Sub-text */}
+              <div className="space-y-5">
+                <p className="text-lg md:text-xl text-slate-700 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                  <span className="font-semibold text-[#004B3F]">
                     Cracked NEET MDS?
                   </span>{" "}
-                  Your orthodontic journey starts here! 
+                  Your orthodontic journey starts here!
                 </p>
 
-                <p className="text-sm md:text-lg text-slate-500 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                <p className="text-base md:text-lg text-slate-500 leading-relaxed max-w-xl mx-auto lg:mx-0">
                   From clinics to exams—we make the tough stuff simple. Get
                   summaries, reviews, strategies & trusted resources.
                 </p>
 
-                <p className="text-xs md:text-base text-transparent bg-gradient-to-r from-black to-black bg-clip-text font-medium">
+                <p className="text-sm md:text-base text-transparent bg-gradient-to-r from-black to-black bg-clip-text font-medium">
                   Your academic anchor from braces 🦷
                 </p>
               </div>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                 <button
-                  className="group relative flex items-center justify-center bg-[#DCE6D5] text-[#006D5B] font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
-                  style={{
-                    width: "300px",
-                    height: "79px",
-                    borderRadius: "50px",
-                  }}
+              {/* Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+                <button
+                  className="group relative flex items-center justify-center bg-[#DCE6D5] text-[#006D5B] font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 w-full sm:w-[240px] h-[60px] sm:h-[70px] rounded-full text-base"
                 >
-                  {/* Tooth peeks from top center on hover/click */}
-                  <div className="pointer-events-none absolute left-1/2 top-0 z-[3] -translate-x-1/2 -translate-y-2 opacity-0 scale-90 transition-all duration-300 ease-out group-hover:-translate-y-8 group-hover:opacity-100 group-hover:scale-100 group-active:-translate-y-10">
-                    <img src="/tooth_peak.png" alt="" className="w-16 h-16 drop-shadow-lg" />
-                  </div>
                   <span className="relative z-[2] flex items-center gap-2">
                     Explore
                   </span>
                 </button>
 
-                
-                 <button
-                  className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-visible hover:bg-[#004B3F]"
-                  style={{
-                    width: "300px",
-                    height: "79px",
-                    borderRadius: "50px",
-                  }}
+                <button
+                  className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 w-full sm:w-[240px] h-[60px] sm:h-[70px] rounded-full text-base hover:bg-[#004B3F]"
                 >
-                  {/* Tooth peeks from top center on hover/click */}
-                  <div className="pointer-events-none absolute left-1/2 top-0 z-[3] -translate-x-1/2 -translate-y-2 opacity-0 scale-90 transition-all duration-300 ease-out group-hover:-translate-y-8 group-hover:opacity-100 group-hover:scale-100 group-active:-translate-y-10">
-                    <img src="/tooth_peak.png" alt="" className="w-16 h-16 drop-shadow-lg" />
-                  </div>
                   <span className="relative z-[2]">Start Learning</span>
                 </button>
               </div>
 
-              {/* Trust Indicators */}
-              <div className="flex items-center justify-start gap-8 pt-8 opacity-70 w-full">
+              {/* Stats */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 pt-6 opacity-80 w-full">
                 <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
                     {[1, 2, 3].map((i) => (
@@ -135,7 +114,7 @@ export default function NewHero() {
                       />
                     ))}
                   </div>
-                  <span className="text-sm text-slate-600">1000+ Students</span>
+                  <span className="text-sm font-medium text-slate-600">1000+ Students</span>
                 </div>
                 <div className="flex items-center gap-1">
                   {[1, 2, 3, 4, 5].map((i) => (
@@ -147,19 +126,14 @@ export default function NewHero() {
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
-                  <span className="text-sm text-slate-600 ml-1">4.9/5</span>
+                  <span className="text-sm font-medium text-slate-600 ml-1">4.9/5</span>
                 </div>
               </div>
-
-              {/* Badge anchored to bottom-right of the left content */}
-              <div className="absolute right-[-760px] bottom-[65px] inline-flex items-center gap-2 bg-[#DCE6D5]/90 backdrop-blur-md border border-[#006D5B]/20 rounded-full px-5 py-2.5 md:px-6 md:py-3 shadow-lg">
-                <div className="w-2 h-2 bg-[#006D5B] rounded-full animate-pulse" />
-                <span className="text-xs md:text-sm font-medium text-[#006D5B]">Trusted Orthodontic Resources</span>
-              </div>
+              
             </div>
 
-            {/* Right Visual Space - 3D Canvas embedded (receives hover events) */}
-            <div className="flex-1 relative h-68 md:h-95 lg:h-[550px]">
+            {/* === Right: Interactive Visual === */}
+            <div className="flex-1 w-full h-[350px] sm:h-[400px] lg:h-[550px] relative mt-8 lg:mt-0">
               <div className="absolute inset-0 rounded-2xl overflow-visible">
                 <HeroInteractive />
               </div>
@@ -168,12 +142,16 @@ export default function NewHero() {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-   <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
-     <div className="w-8 h-12 border-2 rounded-full flex justify-center"
-       style={{ borderColor: "#006D5B" }}>
-    <div className="w-1 h-3 rounded-full mt-2 animate-pulse"
-      style={{ backgroundColor: "#006D5B" }} />
+      {/* Scroll Down Indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce hidden md:block">
+        <div
+          className="w-8 h-12 border-2 rounded-full flex justify-center"
+          style={{ borderColor: "#006D5B" }}
+        >
+          <div
+            className="w-1 h-3 rounded-full mt-2 animate-pulse"
+            style={{ backgroundColor: "#006D5B" }}
+          />
         </div>
       </div>
     </section>
@@ -258,7 +236,7 @@ function HeroScene({ hovered, target }) {
             // use our new color palette
             { p: [1.8, 0.2, 0], c: "#006D5B" },
             { p: [-1.6, -0.3, 0.2], c: "#006D5B" },
-            { p: [0.6, 1.4, -0.2], c: "#B6E2D3" },
+            { p: [0.6, 1.4, -0.2], c: "#006D5B" },
           ],
           []
         ).map((s, i) => (

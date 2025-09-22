@@ -450,8 +450,10 @@ export default function TopBooksPage() {
     const searchTerms = query.trim().toLowerCase().split(/\s+/);
     if (searchTerms[0]) {
       list = list.filter((book) => {
-        const content = `${book.title} ${book.author} ${book.description} ${book.recommendedFor.join(" ")}`.toLowerCase();
-        return searchTerms.every(term => content.includes(term));
+        const content = `${book.title} ${book.author} ${
+          book.description
+        } ${book.recommendedFor.join(" ")}`.toLowerCase();
+        return searchTerms.every((term) => content.includes(term));
       });
     }
 
@@ -486,7 +488,7 @@ export default function TopBooksPage() {
   };
 
   return (
-    <div className="py-16 md:py-24 bg-[#DCE6D5]/30">
+    <div className="py-16 md:py-24 bg-[#DCE6D5]/30 mt-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
@@ -503,12 +505,13 @@ export default function TopBooksPage() {
             transition={{ delay: 0.1 }}
             className="text-lg md:text-xl text-[#4B4B4B]"
           >
-            Explore our curated library of essential orthodontic literature. Find your next read with powerful search and filtering tools.
+            Explore our curated library of essential orthodontic literature.
+            Find your next read with powerful search and filtering tools.
           </motion.p>
         </div>
 
         {/* Controls */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -525,7 +528,7 @@ export default function TopBooksPage() {
               className="w-full pl-12 pr-4 py-4 rounded-xl border border-[#006D5B]/20 bg-white text-[#4B4B4B] placeholder-[#4B4B4B]/60 focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 shadow-sm"
             />
           </div>
-          
+
           {/* Filter/Sort Dropdowns */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <select
@@ -533,7 +536,11 @@ export default function TopBooksPage() {
               onChange={(e) => setAuthor(e.target.value)}
               className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
             >
-              {authors.map((a) => <option key={a} value={a}>{a === 'All' ? 'All Authors' : a}</option>)}
+              {authors.map((a) => (
+                <option key={a} value={a}>
+                  {a === "All" ? "All Authors" : a}
+                </option>
+              ))}
             </select>
 
             <select
@@ -541,9 +548,13 @@ export default function TopBooksPage() {
               onChange={(e) => setSortBy(e.target.value)}
               className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
             >
-              {SORTS.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+              {SORTS.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.label}
+                </option>
+              ))}
             </select>
-            
+
             <button
               onClick={resetFilters}
               className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] hover:bg-[#006D5B]/5 transition-colors w-full sm:w-auto"
@@ -555,7 +566,11 @@ export default function TopBooksPage() {
 
         {/* Result count */}
         <div className="mb-8 text-center sm:text-left text-[#4B4B4B]">
-          Showing <span className="font-semibold text-[#006D5B]">{filtered.length}</span> of {BOOKS.length} books
+          Showing{" "}
+          <span className="font-semibold text-[#006D5B]">
+            {filtered.length}
+          </span>{" "}
+          of {BOOKS.length} books
         </div>
 
         <AnimatePresence mode="popLayout">
@@ -580,22 +595,25 @@ export default function TopBooksPage() {
 
         {/* Empty state */}
         {filtered.length === 0 && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-20"
           >
             <BookOpenIcon className="w-24 h-24 mx-auto text-[#006D5B]/20 mb-4" />
-            <h3 className="text-xl font-semibold text-[#006D5B] mb-2">No Books Found</h3>
+            <h3 className="text-xl font-semibold text-[#006D5B] mb-2">
+              No Books Found
+            </h3>
             <p className="text-[#4B4B4B] max-w-md mx-auto">
-              Your search returned no results. Try adjusting your keywords or resetting the filters.
+              Your search returned no results. Try adjusting your keywords or
+              resetting the filters.
             </p>
           </motion.div>
         )}
 
         {/* Load more */}
         {canLoadMore && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

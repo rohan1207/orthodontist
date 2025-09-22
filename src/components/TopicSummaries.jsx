@@ -94,10 +94,10 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
       layout
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.3 }}
       onClick={onToggle}
-      className="relative cursor-pointer group"
+      className="relative cursor-pointer group w-full"
     >
       <div
         className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -110,17 +110,19 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
         }}
       />
 
-      <div className="relative bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10">
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center space-x-4">
-            <div className="p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
-              <topic.icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
+      <div className="relative bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10">
+        <div className="flex items-start justify-between mb-4 sm:mb-6">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="p-2 sm:p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
+              <topic.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
             </div>
             <div>
-              <h3 className="text-xl md:text-2xl font-bold text-[#006D5B] mb-1">{topic.title}</h3>
-              <div className="flex items-center gap-2">
-                <BookOpenIcon className="w-4 h-4 text-[#006D5B]/70" />
-                <p className="text-sm text-[#4B4B4B]">
+              <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#006D5B] mb-1">
+                {topic.title}
+              </h3>
+              <div className="flex items-center gap-1 sm:gap-2">
+                <BookOpenIcon className="w-3 h-3 sm:w-4 sm:h-4 text-[#006D5B]/70" />
+                <p className="text-xs sm:text-sm text-[#4B4B4B]">
                   {topic.sources.length} textbook sources
                 </p>
               </div>
@@ -134,10 +136,12 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-6 bg-[#DCE6D5]/30 p-4 rounded-xl">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6 bg-[#DCE6D5]/30 p-3 sm:p-4 rounded-xl">
           <div className="text-center">
-            <div className="text-sm text-[#4B4B4B] mb-1">Key Points</div>
-            <div className="font-semibold text-[#006D5B]">{topic.keyPoints}</div>
+            <div className="text-xs sm:text-sm text-[#4B4B4B] mb-0.5 sm:mb-1">Key Points</div>
+            <div className="font-semibold text-[#006D5B] text-sm sm:text-base">
+              {topic.keyPoints}
+            </div>
           </div>
           <div className="text-center border-x border-[#006D5B]/10">
             <div className="text-sm text-[#4B4B4B] mb-1">Read Time</div>
@@ -224,19 +228,19 @@ const StatBox = ({ icon: Icon, value, label }) => (
   <motion.div
     initial={{ scale: 0.5, opacity: 0 }}
     whileInView={{ scale: 1, opacity: 1 }}
-    className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-[#006D5B]/10 hover:shadow-xl transition-shadow duration-300"
+    className="bg-white p-3 sm:p-6 md:p-8 rounded-2xl shadow-lg border border-[#006D5B]/10 hover:shadow-xl transition-shadow duration-300"
   >
     <div className="flex items-center justify-center mb-3">
-      <div className="p-3 rounded-xl bg-[#DCE6D5]/50">
-        <Icon className="w-8 h-8 text-[#006D5B]" />
+      <div className="p-2 sm:p-3 rounded-xl bg-[#DCE6D5]/50">
+        <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-[#006D5B]" />
       </div>
     </div>
     <div className="text-center">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="text-3xl font-bold text-[#006D5B] mb-1"
+        className="text-xl sm:text-2xl md:text-3xl font-bold text-[#006D5B] mb-0.5 sm:mb-1"
       >
         {value}
       </motion.div>
@@ -249,10 +253,10 @@ export default function TopicSummaries() {
   const [expandedId, setExpandedId] = useState(null);
 
   return (
-    <section className="py-16 md:py-24 bg-[#DCE6D5]/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-10 sm:py-16 md:py-24 bg-[#DCE6D5]/30">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -265,7 +269,7 @@ export default function TopicSummaries() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-5xl font-bold text-[#006D5B] mb-4 md:mb-6"
+            className="text-2xl sm:text-3xl md:text-5xl font-bold text-[#006D5B] mb-3 sm:mb-4 md:mb-6"
           >
             Master Complex Topics with Ease
           </motion.h2>
@@ -273,7 +277,7 @@ export default function TopicSummaries() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-base md:text-xl text-[#4B4B4B] max-w-3xl mx-auto"
+            className="text-sm sm:text-base md:text-xl text-[#4B4B4B] max-w-3xl mx-auto px-2 sm:px-0"
           >
             Comprehensive summaries curated from multiple textbooks, designed
             for quick understanding and effective revision.
@@ -281,7 +285,7 @@ export default function TopicSummaries() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 md:gap-6 mb-8 sm:mb-12 md:mb-16">
           <StatBox icon={DocumentTextIcon} value="50+" label="Topics Covered" />
           <StatBox icon={BookOpenIcon} value="15+" label="Textbook Sources" />
           <StatBox icon={ClockIcon} value="2-3x" label="Faster Learning" />
@@ -289,7 +293,7 @@ export default function TopicSummaries() {
         </div>
 
         {/* Topics Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-12 md:mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-8 sm:mb-12 md:mb-16">
           {sampleTopics.map((topic) => (
             <motion.div
               key={topic.id}
@@ -350,9 +354,12 @@ export default function TopicSummaries() {
           viewport={{ once: true }}
           className="mt-24 text-center bg-[#006D5B] text-white py-12 md:py-16 px-4 rounded-2xl shadow-lg"
         >
-          <h3 className="text-2xl md:text-3xl font-bold mb-4">Need Help Understanding a Topic?</h3>
+          <h3 className="text-2xl md:text-3xl font-bold mb-4">
+            Need Help Understanding a Topic?
+          </h3>
           <p className="text-base md:text-lg mb-8 text-white/90 max-w-2xl mx-auto">
-            Our expert educators are here to help you master any dental topic. Get personalized guidance and support.
+            Our expert educators are here to help you master any dental topic.
+            Get personalized guidance and support.
           </p>
           <Link
             to="/contact"

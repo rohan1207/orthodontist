@@ -46,23 +46,24 @@ const RecommendedCard = ({ article }) => {
 
   return (
     <motion.div
-      className="relative w-full aspect-[3/4] sm:aspect-[4/5] cursor-pointer"
+      className="relative w-full aspect-[3/4] cursor-pointer"
       style={{ perspective: "2000px" }}
       onHoverStart={() => setIsFlipped(true)}
       onHoverEnd={() => setIsFlipped(false)}
+      onClick={() => setIsFlipped(!isFlipped)}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.3 }}
     >
       <motion.div
         className="relative w-full h-full transform-gpu"
-        animate={{ 
+        animate={{
           rotateY: isFlipped ? 180 : 0,
-          z: isFlipped ? 50 : 0
+          z: isFlipped ? 50 : 0,
         }}
-        transition={{ 
-          duration: 0.7, 
+        transition={{
+          duration: 0.7,
           ease: [0.23, 1, 0.32, 1],
-          z: { duration: 0.3 }
+          z: { duration: 0.3 },
         }}
         style={{ transformStyle: "preserve-3d" }}
       >
@@ -83,13 +84,23 @@ const RecommendedCard = ({ article }) => {
               </span>
             </div>
           </div>
-          <div className="p-4 sm:p-5">
-            <h3 className="text-base sm:text-lg font-medium text-[#006D5B] line-clamp-2 leading-snug">
+          <div className="p-2.5 sm:p-5">
+            <h3 className="text-xs sm:text-lg font-medium text-[#006D5B] line-clamp-2 leading-tight sm:leading-snug">
               {article.title}
             </h3>
-            <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-[#4B4B4B]/80 flex items-center gap-2">
-              <svg className="w-4 h-4 text-[#006D5B]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <p className="mt-1.5 sm:mt-3 text-[10px] sm:text-sm text-[#4B4B4B]/80 flex items-center gap-1.5 sm:gap-2">
+              <svg
+                className="w-4 h-4 text-[#006D5B]/60"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               {article.readTime}
             </p>
@@ -109,19 +120,29 @@ const RecommendedCard = ({ article }) => {
               {article.title}
             </h3>
             <div className="w-12 h-0.5 bg-[#006D5B]/20 my-3"></div>
-            <p className="mt-2 sm:mt-3 text-sm sm:text-base text-[#4B4B4B] line-clamp-3 sm:line-clamp-4 leading-relaxed">
+            <p className="mt-2 sm:mt-3 text-xs sm:text-base text-[#4B4B4B] line-clamp-2 sm:line-clamp-4 leading-tight sm:leading-relaxed">
               {article.description}
             </p>
           </div>
-          <div className="mt-4 sm:mt-5">
+          <div className="mt-3 sm:mt-5">
             <Link
               to={`/article/${article.id}`}
               className="group relative inline-block w-full py-3 sm:py-3.5 text-center rounded-xl bg-[#006D5B] text-white text-sm font-medium transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
             >
-              <span className="relative z-10 flex items-center justify-center gap-2">
+              <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-base">
                 Read Article
-                <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                <svg
+                  className="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
                 </svg>
               </span>
               <div className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-xl"></div>
@@ -135,31 +156,31 @@ const RecommendedCard = ({ article }) => {
 
 export default function Recommended() {
   return (
-    <section className="py-16 md:py-24 bg-[#DCE6D5]/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <span className="inline-block px-4 py-1 rounded-full bg-[#006D5B]/10 text-[#006D5B] text-sm font-medium mb-4">
+    <section className="py-10 md:py-24 bg-[#DCE6D5]/30">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div className="text-center mb-6 sm:mb-12">
+          <span className="inline-block px-3 sm:px-4 py-1 rounded-full bg-[#006D5B]/10 text-[#006D5B] text-xs sm:text-sm font-medium mb-3 sm:mb-4">
             Featured Content
           </span>
-          <h2 className="text-3xl md:text-4xl font-medium text-[#006D5B] mb-4">
+          <h2 className="text-xl sm:text-3xl md:text-4xl font-medium text-[#006D5B] mb-2 sm:mb-4">
             Top Recommended Articles
           </h2>
-          <p className="text-[#4B4B4B] max-w-2xl mx-auto text-base md:text-lg">
+          <p className="text-[#4B4B4B] max-w-2xl mx-auto text-xs sm:text-base md:text-lg px-2">
             Curated content to enhance your dental knowledge and academic
             success. Discover our most impactful articles.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 md:gap-8 lg:gap-10">
           {recommendedArticles.map((article) => (
             <RecommendedCard key={article.id} article={article} />
           ))}
         </div>
 
-        <div className="mt-16 text-center">
+        <div className="mt-10 sm:mt-16 text-center">
           <Link
             to="/articles"
-            className="inline-flex items-center gap-2 px-6 py-3 text-[#006D5B] hover:text-[#004B3F] font-medium transition-all duration-300 rounded-full border-2 border-[#006D5B]/10 hover:border-[#006D5B]/20 bg-white/50 hover:bg-white/80 hover:shadow-md"
+            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base text-[#006D5B] hover:text-[#004B3F] font-medium transition-all duration-300 rounded-full border-2 border-[#006D5B]/10 hover:border-[#006D5B]/20 bg-white/50 hover:bg-white/80 hover:shadow-md"
           >
             View All Articles
             <svg

@@ -103,8 +103,8 @@ const CATEGORIES = [
 ];
 // Helper function to format dates
 function formatDate(dateString) {
-  const options = { month: 'long', day: 'numeric', year: 'numeric' };
-  return new Date(dateString).toLocaleDateString('en-US', options);
+  const options = { month: "long", day: "numeric", year: "numeric" };
+  return new Date(dateString).toLocaleDateString("en-US", options);
 }
 
 // Article Card Component
@@ -173,14 +173,15 @@ export default function ArticlesPage() {
     const searchTerms = query.trim().toLowerCase().split(/\s+/);
     if (searchTerms[0]) {
       list = list.filter((article) => {
-        const content = `${article.title} ${article.description} ${article.category}`.toLowerCase();
-        return searchTerms.every(term => content.includes(term));
+        const content =
+          `${article.title} ${article.description} ${article.category}`.toLowerCase();
+        return searchTerms.every((term) => content.includes(term));
       });
     }
 
     // Apply sorting
-    list.sort((a, b) => 
-      sortBy === "oldest" 
+    list.sort((a, b) =>
+      sortBy === "oldest"
         ? new Date(a.date) - new Date(b.date)
         : new Date(b.date) - new Date(a.date)
     );
@@ -192,7 +193,7 @@ export default function ArticlesPage() {
   const canLoadMore = visible < filtered.length;
 
   return (
-    <div className="py-16 md:py-24 bg-[#DCE6D5]/30">
+    <div className="py-16 md:py-24 bg-[#DCE6D5]/30 mt-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
@@ -209,7 +210,8 @@ export default function ArticlesPage() {
             transition={{ delay: 0.1 }}
             className="text-lg md:text-xl text-[#4B4B4B] mb-8"
           >
-            Discover in-depth articles on orthodontics, from fundamentals to advanced clinical practices.
+            Discover in-depth articles on orthodontics, from fundamentals to
+            advanced clinical practices.
           </motion.p>
 
           {/* Search Bar */}
@@ -255,9 +257,13 @@ export default function ArticlesPage() {
         {/* Results Section */}
         <div className="mb-8 flex items-center justify-between">
           <div className="text-[#4B4B4B]">
-            Found <span className="text-[#006D5B] font-semibold">{filtered.length}</span> articles
+            Found{" "}
+            <span className="text-[#006D5B] font-semibold">
+              {filtered.length}
+            </span>{" "}
+            articles
           </div>
-          
+
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
@@ -284,26 +290,29 @@ export default function ArticlesPage() {
 
         {/* Empty state */}
         {filtered.length === 0 && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-20"
           >
-            <img 
-              src="/article1.jpg" 
-              alt="No results" 
+            <img
+              src="/article1.jpg"
+              alt="No results"
               className="w-48 h-48 mx-auto mb-6 rounded-full object-cover opacity-50"
             />
-            <h3 className="text-xl font-semibold text-[#006D5B] mb-2">No Articles Found</h3>
+            <h3 className="text-xl font-semibold text-[#006D5B] mb-2">
+              No Articles Found
+            </h3>
             <p className="text-[#4B4B4B]">
-              Try adjusting your search or category to find what you're looking for.
+              Try adjusting your search or category to find what you're looking
+              for.
             </p>
           </motion.div>
         )}
 
         {/* Load more */}
         {canLoadMore && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

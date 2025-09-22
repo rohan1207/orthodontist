@@ -90,7 +90,8 @@ const FileUploadForm = ({ service }) => {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) { // 10MB limit
+    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
+      // 10MB limit
       setError("File size must be less than 10MB.");
       setFile(null);
     } else {
@@ -107,7 +108,7 @@ const FileUploadForm = ({ service }) => {
     setLoading(true);
     setError("");
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     setLoading(false);
     setSuccess(true);
     setFile(null); // Reset after successful submission
@@ -115,19 +116,32 @@ const FileUploadForm = ({ service }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <label className={`flex flex-col items-center justify-center w-full h-40 px-4 transition-all duration-300 border-2 border-dashed rounded-2xl cursor-pointer ${file ? 'border-[#006D5B]' : 'border-[#006D5B]/20'} bg-[#DCE6D5]/20 hover:bg-[#DCE6D5]/40`}>
+      <label
+        className={`flex flex-col items-center justify-center w-full h-40 px-4 transition-all duration-300 border-2 border-dashed rounded-2xl cursor-pointer ${
+          file ? "border-[#006D5B]" : "border-[#006D5B]/20"
+        } bg-[#DCE6D5]/20 hover:bg-[#DCE6D5]/40`}
+      >
         <div className="flex flex-col items-center justify-center text-center">
           {file ? (
             <>
               <CheckCircleIcon className="w-10 h-10 text-[#006D5B]" />
-              <p className="text-sm font-medium text-[#006D5B] mt-2">{file.name}</p>
+              <p className="text-sm font-medium text-[#006D5B] mt-2">
+                {file.name}
+              </p>
               <p className="text-xs text-[#4B4B4B]/70">Ready to submit!</p>
             </>
           ) : (
             <>
               <CloudArrowUpIcon className="w-10 h-10 text-[#006D5B]/50" />
-              <p className="text-sm text-[#4B4B4B] mt-2">Drop your file here or <span className="font-semibold text-[#006D5B]">click to upload</span></p>
-              <p className="text-xs text-[#4B4B4B]/60">PDF, DOC, DOCX (max 10MB)</p>
+              <p className="text-sm text-[#4B4B4B] mt-2">
+                Drop your file here or{" "}
+                <span className="font-semibold text-[#006D5B]">
+                  click to upload
+                </span>
+              </p>
+              <p className="text-xs text-[#4B4B4B]/60">
+                PDF, DOC, DOCX (max 10MB)
+              </p>
             </>
           )}
         </div>
@@ -150,7 +164,7 @@ const FileUploadForm = ({ service }) => {
         type="submit"
         disabled={!file || loading || success}
         className="w-full flex items-center justify-center px-6 py-3.5 text-base font-semibold text-white rounded-xl transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ background: success ? '#10B981' : '#006D5B' }}
+        style={{ background: success ? "#10B981" : "#006D5B" }}
         whileHover={{ scale: !file || loading || success ? 1 : 1.02 }}
         whileTap={{ scale: !file || loading || success ? 1 : 0.98 }}
       >
@@ -169,7 +183,7 @@ const FileUploadForm = ({ service }) => {
             Submitted Successfully!
           </>
         ) : (
-          'Submit Document'
+          "Submit Document"
         )}
       </motion.button>
     </form>
@@ -254,15 +268,22 @@ export default function AcademicHelpPage() {
             transition={{ delay: 0.2 }}
             className="text-lg md:text-xl text-[#4B4B4B] max-w-3xl mx-auto"
           >
-            Elevate your work with expert assistance in plagiarism checking, proofreading, article reviews, and academic consultations.
+            Elevate your work with expert assistance in plagiarism checking,
+            proofreading, article reviews, and academic consultations.
           </motion.p>
         </div>
 
         {/* Main Content Layout */}
         <div className="grid lg:grid-cols-[300px_1fr] gap-12">
           {/* Service Navigation */}
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
-            <h3 className="text-lg font-semibold text-[#4B4B4B] mb-4 px-4">Our Services</h3>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h3 className="text-lg font-semibold text-[#4B4B4B] mb-4 px-4">
+              Our Services
+            </h3>
             <div className="space-y-2">
               {services.map((service) => (
                 <button
@@ -270,11 +291,17 @@ export default function AcademicHelpPage() {
                   onClick={() => setSelectedService(service)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left font-medium transition-all duration-300 ${
                     selectedService.id === service.id
-                      ? 'bg-[#006D5B] text-white shadow-lg'
-                      : 'bg-transparent text-[#4B4B4B] hover:bg-[#006D5B]/5 hover:text-[#006D5B]'
+                      ? "bg-[#006D5B] text-white shadow-lg"
+                      : "bg-transparent text-[#4B4B4B] hover:bg-[#006D5B]/5 hover:text-[#006D5B]"
                   }`}
                 >
-                  <service.icon className={`w-6 h-6 ${selectedService.id === service.id ? 'text-white' : 'text-[#006D5B]'}`} />
+                  <service.icon
+                    className={`w-6 h-6 ${
+                      selectedService.id === service.id
+                        ? "text-white"
+                        : "text-[#006D5B]"
+                    }`}
+                  />
                   <span>{service.title}</span>
                 </button>
               ))}
@@ -286,7 +313,7 @@ export default function AcademicHelpPage() {
             key={selectedService.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
           >
             <ServiceDetails service={selectedService} />
           </motion.div>
@@ -310,7 +337,8 @@ export default function AcademicHelpPage() {
                 100% Confidential
               </h3>
               <p className="text-[#4B4B4B]/80">
-                Your documents and personal information are kept completely secure and private.
+                Your documents and personal information are kept completely
+                secure and private.
               </p>
             </motion.div>
 
@@ -326,7 +354,8 @@ export default function AcademicHelpPage() {
                 Fast Turnaround
               </h3>
               <p className="text-[#4B4B4B]/80">
-                Receive quick processing, with most services completed within 24-48 hours.
+                Receive quick processing, with most services completed within
+                24-48 hours.
               </p>
             </motion.div>
 
@@ -342,7 +371,8 @@ export default function AcademicHelpPage() {
                 Expert Team
               </h3>
               <p className="text-[#4B4B4B]/80">
-                Our team consists of experienced academics and professionals in the orthodontic field.
+                Our team consists of experienced academics and professionals in
+                the orthodontic field.
               </p>
             </motion.div>
           </div>

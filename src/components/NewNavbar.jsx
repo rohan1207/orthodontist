@@ -114,21 +114,37 @@ export default function Navbar() {
               Contact Us
             </Link>
             <button
-              className="lg:hidden p-2 rounded focus:outline-none"
+              className="lg:hidden p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006D5B] transition-all"
               onClick={() => setMenuOpen(true)}
             >
               <svg
-                width="28"
-                height="28"
-                viewBox="0 0 32 32"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
                 fill="none"
-                stroke="black"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <line x1="8" y1="16" x2="24" y2="16" />
-                <line x1="8" y1="24" x2="16" y2="24" />
+                <path
+                  d="M4 6H20"
+                  stroke="#006D5B"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M4 12H20"
+                  stroke="#006D5B"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M4 18H20"
+                  stroke="#006D5B"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
           </div>
@@ -138,49 +154,84 @@ export default function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 w-full h-full z-[60] bg-[#DCE6D5]/98 backdrop-blur-lg"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+            className="fixed inset-0 w-full h-full z-[60] bg-[#DCE6D5]"
             style={{ fontFamily: NAV_FONT }}
           >
-            <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-full gap-4">
-              {menuItems.map((item) => (
-                <motion.a
-                  key={item.name}
-                  href={item.href}
-                  whileHover={{ scale: 1.05, x: 6 }}
-                  className="text-gray-900 px-6 py-2 rounded transition-all duration-200"
-                  style={{
-                    fontFamily: MENU_FONT,
-                    fontWeight: 400,
-                    fontStyle: "normal",
-                    fontSize: "16px",
-                    lineHeight: "100%",
-                    letterSpacing: "0%",
-                  }}
+            <div className="w-full h-full flex flex-col">
+              <div className="flex items-center justify-between p-6 border-b border-[#006D5B]/10">
+                <div className="flex items-center gap-3">
+                  <img src="/logo2.png" alt="Logo" className="h-12 w-12" />
+                  <div>
+                    <span
+                      className="text-lg font-normal tracking-wide text-[#006D5B]"
+                      style={{ letterSpacing: "0.08em" }}
+                    >
+                      OrthoChronicles
+                    </span>
+                    <span
+                      className="text-sm font-light block text-slate-500"
+                      style={{
+                        letterSpacing: "0.1em",
+                        marginTop: "-4px",
+                      }}
+                    >
+                      From Braces To Breakthroughs
+                    </span>
+                  </div>
+                </div>
+                <button
+                  className="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-[#006D5B]"
                   onClick={() => setMenuOpen(false)}
                 >
-                  {item.name}
-                </motion.a>
-              ))}
-              <button
-                className="absolute top-6 right-6 p-2"
-                onClick={() => setMenuOpen(false)}
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M18 6L6 18"
+                      stroke="#006D5B"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M6 6L18 18"
+                      stroke="#006D5B"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="flex flex-col items-center justify-center h-full gap-6 -mt-16">
+                {menuItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className="text-2xl text-[#005c4d] hover:text-[#004B3F] transition-colors duration-300"
+                    style={{ fontFamily: MENU_FONT }}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+                <Link
+                  to="/contact"
+                  className="mt-6 flex items-center justify-center text-white text-lg font-medium w-4/5 max-w-xs py-4 bg-[#006D5B] rounded-full shadow-lg hover:bg-[#005c4d] transition-colors"
+                  onClick={() => setMenuOpen(false)}
                 >
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
+                  Contact Us
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}

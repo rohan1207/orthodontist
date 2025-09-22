@@ -81,10 +81,10 @@ const ServiceCard = ({ service }) => {
             <service.icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
           </div>
           <div>
-            <h3 className="text-xl md:text-2xl font-bold text-[#006D5B] mb-2">
+            <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#006D5B] mb-1 sm:mb-2">
               {service.title}
             </h3>
-            <p className="text-[#4B4B4B]">{service.description}</p>
+            <p className="text-sm sm:text-base text-[#4B4B4B]">{service.description}</p>
           </div>
         </div>
 
@@ -108,7 +108,7 @@ const ServiceCard = ({ service }) => {
           </ul>
         </div>
 
-        <motion.div 
+        <motion.div
           className="mt-6 flex justify-end"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -136,7 +136,7 @@ const StatsItem = ({ icon: Icon, value, label }) => (
     <div className="p-3 rounded-xl bg-[#DCE6D5]/50 mb-4">
       <Icon className="w-8 h-8 text-[#006D5B]" />
     </div>
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
@@ -150,10 +150,10 @@ const StatsItem = ({ icon: Icon, value, label }) => (
 
 export default function AcademicHelp() {
   return (
-    <section className="py-16 md:py-24 bg-[#DCE6D5]/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-10 sm:py-16 md:py-24 bg-[#DCE6D5]/30">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12 md:mb-16">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -166,7 +166,7 @@ export default function AcademicHelp() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-5xl font-bold text-[#006D5B] mb-4 md:mb-6"
+            className="text-2xl sm:text-3xl md:text-5xl font-bold text-[#006D5B] mb-3 sm:mb-4 md:mb-6"
           >
             Expert Academic Assistance
           </motion.h2>
@@ -174,7 +174,7 @@ export default function AcademicHelp() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-base md:text-xl text-[#4B4B4B] max-w-3xl mx-auto"
+            className="text-sm sm:text-base md:text-xl text-[#4B4B4B] max-w-3xl mx-auto px-2 sm:px-0"
           >
             Professional support for your academic journey with plagiarism
             checking, proofreading, and expert consultation services.
@@ -182,7 +182,7 @@ export default function AcademicHelp() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 md:gap-6 mb-8 sm:mb-12 md:mb-16">
           <StatsItem icon={ClockIcon} value="24/7" label="Support Available" />
           <StatsItem
             icon={DocumentTextIcon}
@@ -198,7 +198,7 @@ export default function AcademicHelp() {
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-12 md:mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-8 sm:mb-12 md:mb-16">
           {services.map((service) => (
             <ServiceCard key={service.id} service={service} />
           ))}
@@ -237,9 +237,12 @@ export default function AcademicHelp() {
           viewport={{ once: true }}
           className="text-center bg-[#006D5B] text-white py-12 md:py-16 px-4 rounded-2xl shadow-lg"
         >
-          <h3 className="text-2xl md:text-3xl font-bold mb-4">Need Immediate Academic Support?</h3>
+          <h3 className="text-2xl md:text-3xl font-bold mb-4">
+            Need Immediate Academic Support?
+          </h3>
           <p className="text-base md:text-lg mb-8 text-white/90 max-w-2xl mx-auto">
-            Our expert team is available 24/7 to help you with your academic needs. Get started with a free consultation.
+            Our expert team is available 24/7 to help you with your academic
+            needs. Get started with a free consultation.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
             <Link

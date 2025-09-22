@@ -189,12 +189,12 @@ const ExamPreparationPage = () => {
   const uniqueTypes = ["all", ...new Set(examModules.map((m) => m.type))];
 
   return (
-    <div className="bg-[#F9F9F9] min-h-screen">
+    <div className="bg-[#F9F9F9] min-h-screen mt-16">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="container mx-auto px-4 py-12"
+        className="container mx-auto px-4 py-12 "
       >
         <header className="text-center mb-12">
           <h1 className="text-5xl font-bold text-[#006D5B] mb-3">

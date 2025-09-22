@@ -75,9 +75,7 @@ const ExamCard = ({ module }) => {
       <div className="relative bg-white rounded-xl md:rounded-2xl p-5 md:p-7 shadow-lg hover:shadow-xl transition-all duration-500 min-h-[340px] md:min-h-[360px] border border-[#006D5B]/10">
         {/* Header */}
         <div className="flex items-start justify-between mb-4 md:mb-6">
-          <div
-            className="p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#006D5B] shadow-lg"
-          >
+          <div className="p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#006D5B] shadow-lg">
             <module.icon className="w-5 h-5 md:w-6 md:h-6 text-white" />
           </div>
           <motion.div
@@ -155,7 +153,7 @@ const StatsCounter = ({ value, label, icon: Icon }) => {
       className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-lg border border-[#006D5B]/10 hover:shadow-xl transition-shadow duration-300"
     >
       <Icon className="w-8 h-8 text-[#006D5B] mb-3" />
-      <motion.span 
+      <motion.span
         className="text-3xl font-bold text-[#006D5B]"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -259,8 +257,13 @@ export default function ExamPreparation() {
           viewport={{ once: true }}
           className="mt-16 text-center bg-[#006D5B] text-white py-12 px-4 rounded-2xl shadow-lg"
         >
-          <h3 className="text-2xl md:text-3xl font-bold mb-4">Ready to Start Your NEET MDS Journey?</h3>
-          <p className="text-base md:text-lg mb-6 text-white/90">Join thousands of successful candidates who trusted our preparation modules.</p>
+          <h3 className="text-2xl md:text-3xl font-bold mb-4">
+            Ready to Start Your NEET MDS Journey?
+          </h3>
+          <p className="text-base md:text-lg mb-6 text-white/90">
+            Join thousands of successful candidates who trusted our preparation
+            modules.
+          </p>
           <Link
             to="/contact"
             className="inline-flex items-center justify-center px-6 py-3 text-[#006D5B] bg-white rounded-xl font-semibold hover:bg-[#DCE6D5] transition-all duration-300"

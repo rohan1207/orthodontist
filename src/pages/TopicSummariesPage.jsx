@@ -82,10 +82,10 @@ const SORTS = [
 
 function TopicCard({ topic }) {
   const difficultyColors = {
-    "Beginner": "bg-green-100 text-green-800",
-    "Intermediate": "bg-blue-100 text-blue-800",
-    "Medium": "bg-yellow-100 text-yellow-800",
-    "Advanced": "bg-red-100 text-red-800",
+    Beginner: "bg-green-100 text-green-800",
+    Intermediate: "bg-blue-100 text-blue-800",
+    Medium: "bg-yellow-100 text-yellow-800",
+    Advanced: "bg-red-100 text-red-800",
   };
 
   return (
@@ -101,31 +101,39 @@ function TopicCard({ topic }) {
           <div className="p-3 rounded-lg bg-[#006D5B]/10">
             <DocumentTextIcon className="w-6 h-6 text-[#006D5B]" />
           </div>
-          <span className={`px-3 py-1 text-xs font-semibold rounded-full ${difficultyColors[topic.difficulty] || 'bg-gray-100 text-gray-800'}`}>
+          <span
+            className={`px-3 py-1 text-xs font-semibold rounded-full ${
+              difficultyColors[topic.difficulty] || "bg-gray-100 text-gray-800"
+            }`}
+          >
             {topic.difficulty}
           </span>
         </div>
-        
+
         <h3 className="text-xl font-semibold text-[#006D5B] line-clamp-2 mb-2 flex-grow min-h-[3.5rem]">
           {topic.title}
         </h3>
-        
+
         <p className="text-sm text-[#4B4B4B]/70 mb-6 line-clamp-1">
           Sources: {topic.sources.join(", ")}
         </p>
 
         <div className="grid grid-cols-2 gap-4 text-center border-t border-dashed border-[#006D5B]/10 pt-4">
           <div>
-            <div className="text-2xl font-bold text-[#4B4B4B]">{topic.keyPoints}</div>
+            <div className="text-2xl font-bold text-[#4B4B4B]">
+              {topic.keyPoints}
+            </div>
             <div className="text-xs text-[#4B4B4B]/70">Key Points</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-[#4B4B4B]">{topic.readTimeMin}</div>
+            <div className="text-2xl font-bold text-[#4B4B4B]">
+              {topic.readTimeMin}
+            </div>
             <div className="text-xs text-[#4B4B4B]/70">Mins Read</div>
           </div>
         </div>
       </div>
-      
+
       <Link
         to={`/summaries/${topic.id}`}
         className="block bg-[#006D5B] text-white text-center font-medium py-4 hover:bg-[#005c4d] transition-colors duration-300"
@@ -152,8 +160,10 @@ export default function TopicSummariesPage() {
     const searchTerms = query.trim().toLowerCase().split(/\s+/);
     if (searchTerms[0]) {
       list = list.filter((topic) => {
-        const content = `${topic.title} ${topic.sources.join(" ")}`.toLowerCase();
-        return searchTerms.every(term => content.includes(term));
+        const content = `${topic.title} ${topic.sources.join(
+          " "
+        )}`.toLowerCase();
+        return searchTerms.every((term) => content.includes(term));
       });
     }
 
@@ -190,7 +200,7 @@ export default function TopicSummariesPage() {
   };
 
   return (
-    <div className="py-16 md:py-24 bg-[#DCE6D5]/30">
+    <div className="py-16 md:py-24 bg-[#DCE6D5]/30 mt-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
@@ -207,12 +217,13 @@ export default function TopicSummariesPage() {
             transition={{ delay: 0.1 }}
             className="text-lg md:text-xl text-[#4B4B4B]"
           >
-            High-yield summaries of key orthodontic topics, distilled from trusted sources to accelerate your learning.
+            High-yield summaries of key orthodontic topics, distilled from
+            trusted sources to accelerate your learning.
           </motion.p>
         </div>
 
         {/* Controls */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -228,14 +239,18 @@ export default function TopicSummariesPage() {
               className="w-full pl-12 pr-4 py-4 rounded-xl border border-[#006D5B]/20 bg-white text-[#4B4B4B] placeholder-[#4B4B4B]/60 focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 shadow-sm"
             />
           </div>
-          
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <select
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value)}
               className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
             >
-              {DIFFICULTIES.map((d) => <option key={d} value={d}>{d === 'All' ? 'All Levels' : d}</option>)}
+              {DIFFICULTIES.map((d) => (
+                <option key={d} value={d}>
+                  {d === "All" ? "All Levels" : d}
+                </option>
+              ))}
             </select>
 
             <select
@@ -243,9 +258,13 @@ export default function TopicSummariesPage() {
               onChange={(e) => setSortBy(e.target.value)}
               className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
             >
-              {SORTS.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+              {SORTS.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.label}
+                </option>
+              ))}
             </select>
-            
+
             <button
               onClick={resetFilters}
               className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] hover:bg-[#006D5B]/5 transition-colors w-full sm:w-auto"
@@ -256,7 +275,9 @@ export default function TopicSummariesPage() {
         </motion.div>
 
         <div className="mb-8 text-center sm:text-left text-[#4B4B4B]">
-          Displaying <span className="font-semibold text-[#006D5B]">{topics.length}</span> summaries
+          Displaying{" "}
+          <span className="font-semibold text-[#006D5B]">{topics.length}</span>{" "}
+          summaries
         </div>
 
         <AnimatePresence>
@@ -274,21 +295,24 @@ export default function TopicSummariesPage() {
         </AnimatePresence>
 
         {topics.length === 0 && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-20"
           >
             <DocumentDuplicateIcon className="w-24 h-24 mx-auto text-[#006D5B]/20 mb-4" />
-            <h3 className="text-xl font-semibold text-[#006D5B] mb-2">No Summaries Found</h3>
+            <h3 className="text-xl font-semibold text-[#006D5B] mb-2">
+              No Summaries Found
+            </h3>
             <p className="text-[#4B4B4B] max-w-md mx-auto">
-              Your search returned no results. Please try different keywords or adjust the filters.
+              Your search returned no results. Please try different keywords or
+              adjust the filters.
             </p>
           </motion.div>
         )}
 
         {canLoadMore && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

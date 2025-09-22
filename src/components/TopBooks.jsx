@@ -38,22 +38,29 @@ const topBooksData = [
   },
 ];
 
-const BookCard = ({ book }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const BookCard = ({ book, isOpen, onToggle }) => {
   return (
     <motion.div
       className="relative w-full cursor-pointer"
       style={{
         perspective: "2000px",
         aspectRatio: "3/4",
-        containIntrinsicSize: "300px 400px",
       }}
       initial={false}
       animate={isOpen ? "open" : "closed"}
-      onHoverStart={() => setIsOpen(true)}
-      onHoverEnd={() => setIsOpen(false)}
-      onClick={() => setIsOpen((v) => !v)}
+      onClick={onToggle}
+      onHoverStart={() => {
+        // Only trigger hover on desktop/laptop devices
+        if (window.matchMedia('(hover: hover)').matches) {
+          onToggle();
+        }
+      }}
+      onHoverEnd={() => {
+        // Only trigger hover on desktop/laptop devices
+        if (window.matchMedia('(hover: hover)').matches) {
+          onToggle();
+        }
+      }}
     >
       <div
         className="absolute inset-0"
@@ -75,11 +82,13 @@ const BookCard = ({ book }) => {
           }}
         >
           {/* Spine texture */}
-          <div className="absolute inset-0 opacity-10" 
-               style={{
-                 backgroundImage: "linear-gradient(90deg, white 1px, transparent 1px)",
-                 backgroundSize: "4px 100%"
-               }} 
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage:
+                "linear-gradient(90deg, white 1px, transparent 1px)",
+              backgroundSize: "4px 100%",
+            }}
           />
         </motion.div>
 
@@ -94,11 +103,13 @@ const BookCard = ({ book }) => {
           }}
         >
           {/* Page texture */}
-          <div className="absolute inset-0 opacity-5"
-               style={{
-                 backgroundImage: "linear-gradient(0deg, #000 1px, transparent 1px)",
-                 backgroundSize: "100% 4px"
-               }}
+          <div
+            className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage:
+                "linear-gradient(0deg, #000 1px, transparent 1px)",
+              backgroundSize: "100% 4px",
+            }}
           />
         </div>
 
@@ -116,24 +127,26 @@ const BookCard = ({ book }) => {
             },
           }}
         >
-          <div className="h-full flex flex-col p-6 md:p-8 bg-gradient-to-br from-[#DCE6D5]/40 to-white">
-            <div className="flex-1">
-              <h3 className="text-lg md:text-xl font-bold text-[#006D5B]">
+          <div className="h-full flex flex-col p-4 sm:p-6 bg-gradient-to-br from-[#DCE6D5]/40 to-white">
+            <div className="flex-1 overflow-y-auto">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#006D5B]">
                 {book.title}
               </h3>
-              <p className="mt-1 text-sm text-[#4B4B4B]/80">by {book.author}</p>
-              <div className="w-16 h-0.5 bg-[#006D5B] my-4 opacity-50"></div>
-              <p className="text-[#4B4B4B] text-sm md:text-base leading-relaxed">
+              <p className="mt-1 text-xs sm:text-sm text-[#4B4B4B]/80">
+                by {book.author}
+              </p>
+              <div className="w-12 h-0.5 bg-[#006D5B] my-2 sm:my-3 opacity-50"></div>
+              <p className="text-[#4B4B4B] text-xs sm:text-sm leading-relaxed">
                 {book.description}
               </p>
             </div>
             <Link
               to={`/book-summary/${book.id}`}
-              className="group relative mt-4 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#006D5B] text-white font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
+              className="group relative mt-4 inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#006D5B] text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
             >
               <span className="relative z-10 flex items-center gap-2">
                 Read Book
-                <ArrowRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
               </span>
               <div className="absolute inset-0 rounded-full bg-[#006D5B] opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-xl"></div>
             </Link>
@@ -236,6 +249,12 @@ const BookCard = ({ book }) => {
 };
 
 export default function TopBooks() {
+  const [openBookId, setOpenBookId] = useState(null);
+
+  const handleToggle = (bookId) => {
+    setOpenBookId((prevId) => (prevId === bookId ? null : bookId));
+  };
+
   return (
     <section className="py-16 md:py-24 bg-[#DCE6D5]/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -251,22 +270,24 @@ export default function TopBooks() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10 lg:gap-12">
-          <div className="contents" style={{ contain: "paint style layout" }}>
-            {topBooksData.map((book) => (
-              <div
-                key={book.id}
-                className="relative w-full min-h-[280px] sm:min-h-[360px] md:min-h-[440px] pb-3 md:pb-6"
-              >
-                <BookCard book={book} />
-              </div>
-            ))}
-          </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-10 md:gap-y-12 lg:gap-x-12">
+          {topBooksData.map((book) => (
+            <div
+              key={book.id}
+              className="relative w-full min-h-[280px] sm:min-h-[360px] md:min-h-[440px]"
+            >
+              <BookCard
+                book={book}
+                isOpen={openBookId === book.id}
+                onToggle={() => handleToggle(book.id)}
+              />
+            </div>
+          ))}
         </div>
       </div>
-      <div className="mt-12 text-center">
+      <div className="mt-16 text-center">
         <Link
-          to="/books"
+          to="/top-books"
           className="inline-flex items-center gap-2 px-6 py-2 text-[#006D5B] hover:text-[#004B3F] font-medium transition-colors duration-300 rounded-full border-2 border-[#006D5B]/10 hover:border-[#006D5B]/20 bg-white/50 hover:bg-white/80"
         >
           View All Books

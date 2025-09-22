@@ -14,11 +14,11 @@ export default function NewHero() {
 
   return (
     <section
-      className="relative min-h-screen overflow-visible bg-white mt-16"
+      className="relative min-h-screen overflow-visible bg-[#DCE6D5] mt-16"
       style={{ fontFamily: HERO_FONT }}
     >
   {/* Subtle green wash */}
-  <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-emerald-500/5 to-teal-500/5" />
+  <div className="absolute inset-0 bg-gradient-to-br from-[#006D5B]/5 via-[#4B4B4B]/5 to-[#B6E2D3]/5" />
 
       {/* Minimal floating specks */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -56,17 +56,17 @@ export default function NewHero() {
                     // Smaller minimum on phones, unchanged on larger screens
                     fontSize: "clamp(1.8rem, 8vw, 5rem)",
                     background:
-                      "linear-gradient(135deg, #62d08a 0%, #61ae7d 50%, #61ae7d 100%)",
+                      "linear-gradient(135deg, #006D5B 0%, #004B3F 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
-                    filter: "drop-shadow(0 4px 20px rgba(34, 197, 94, 0.15))",
+                    filter: "drop-shadow(0 4px 20px rgba(0, 109, 91, 0.15))",
                   }}
                 >
                   OrthoChronicles
                 </h1>
 
-                <div className="h-1 w-24 bg-gradient-to-r from-[#16A34A] to-[#22C55E] rounded-full mx-auto lg:mx-0 shadow-lg" />
+                <div className="h-1 w-24 bg-gradient-to-r from-[#006D5B] to-[#B6E2D3] rounded-full mx-auto lg:mx-0 shadow-lg" />
               </div>
 
               {/* Subtitle */}
@@ -83,7 +83,7 @@ export default function NewHero() {
                   summaries, reviews, strategies & trusted resources.
                 </p>
 
-                <p className="text-xs md:text-base text-transparent bg-gradient-to-r from-[#16A34A] to-[#22C55E] bg-clip-text font-medium">
+                <p className="text-xs md:text-base text-transparent bg-gradient-to-r from-black to-black bg-clip-text font-medium">
                   Your academic anchor from braces 🦷
                 </p>
               </div>
@@ -91,7 +91,7 @@ export default function NewHero() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                  <button
-                  className="group relative flex items-center justify-center bg-white/80 backdrop-blur-md text-slate-700 font-semibold border border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
+                  className="group relative flex items-center justify-center bg-[#DCE6D5] text-[#006D5B] font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
                   style={{
                     width: "300px",
                     height: "79px",
@@ -109,7 +109,7 @@ export default function NewHero() {
 
                 
                  <button
-                  className="group relative flex items-center justify-center bg-gradient-to-r from-[#62d08a] to-[#5eeb92] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
+                  className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-visible hover:bg-[#004B3F]"
                   style={{
                     width: "300px",
                     height: "79px",
@@ -131,7 +131,7 @@ export default function NewHero() {
                     {[1, 2, 3].map((i) => (
                       <div
                         key={i}
-                        className="w-8 h-8 bg-gradient-to-br from-[#86EFAC] to-[#22C55E] rounded-full border-2 border-white"
+                        className="w-8 h-8 bg-gradient-to-br from-[#B6E2D3] to-[#006D5B] rounded-full border-2 border-[#DCE6D5]"
                       />
                     ))}
                   </div>
@@ -152,9 +152,9 @@ export default function NewHero() {
               </div>
 
               {/* Badge anchored to bottom-right of the left content */}
-              <div className="absolute right-[-760px] bottom-[65px] inline-flex items-center gap-2 bg-white/85 backdrop-blur-md border border-[#22C55E]/30 rounded-full px-5 py-2.5 md:px-6 md:py-3 shadow-lg">
-                <div className="w-2 h-2 bg-[#22C55E] rounded-full animate-pulse" />
-                <span className="text-xs md:text-sm font-medium text-slate-700">Trusted Orthodontic Resources</span>
+              <div className="absolute right-[-760px] bottom-[65px] inline-flex items-center gap-2 bg-[#DCE6D5]/90 backdrop-blur-md border border-[#006D5B]/20 rounded-full px-5 py-2.5 md:px-6 md:py-3 shadow-lg">
+                <div className="w-2 h-2 bg-[#006D5B] rounded-full animate-pulse" />
+                <span className="text-xs md:text-sm font-medium text-[#006D5B]">Trusted Orthodontic Resources</span>
               </div>
             </div>
 
@@ -171,9 +171,9 @@ export default function NewHero() {
       {/* Scroll Indicator */}
    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
      <div className="w-8 h-12 border-2 rounded-full flex justify-center"
-       style={{ borderColor: "#86EFAC" }}>
+       style={{ borderColor: "#006D5B" }}>
     <div className="w-1 h-3 rounded-full mt-2 animate-pulse"
-      style={{ backgroundColor: "#22C55E" }} />
+      style={{ backgroundColor: "#006D5B" }} />
         </div>
       </div>
     </section>
@@ -255,10 +255,10 @@ function HeroScene({ hovered, target }) {
         {useMemo(
           () => [
             // Tailwind token names like 'green-100' are not valid CSS colors in three.js;
-            // use the actual hex value for a very light green (#dcfce7 is Tailwind's green-100)
-            { p: [1.8, 0.2, 0], c: "#62ca87" },
-            { p: [-1.6, -0.3, 0.2], c: "#62ca87" },
-            { p: [0.6, 1.4, -0.2], c: "#62ca87" },
+            // use our new color palette
+            { p: [1.8, 0.2, 0], c: "#006D5B" },
+            { p: [-1.6, -0.3, 0.2], c: "#006D5B" },
+            { p: [0.6, 1.4, -0.2], c: "#B6E2D3" },
           ],
           []
         ).map((s, i) => (
@@ -281,7 +281,7 @@ function HeroScene({ hovered, target }) {
         <mesh rotation={[Math.PI / 2.2, 0, 0]}>
           <torusGeometry args={[1.85, 0.03, 16, 180]} />
           <meshStandardMaterial
-            color="#62ca87"
+            color="#006D5B"
             metalness={0.5}
             roughness={0.3}
           />

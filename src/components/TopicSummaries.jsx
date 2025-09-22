@@ -110,39 +110,42 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
         }}
       />
 
-      <div className="relative bg-white rounded-2xl p-6 shadow-xl">
-        <div className="flex items-start justify-between mb-4">
+      <div className="relative bg-white rounded-2xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10">
+        <div className="flex items-start justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <div className={`p-3 rounded-xl bg-gradient-to-r ${topic.color}`}>
-              <topic.icon className="w-6 h-6 text-white" />
+            <div className="p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
+              <topic.icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-900">{topic.title}</h3>
-              <p className="text-sm text-gray-500">
-                {topic.sources.length} textbook sources
-              </p>
+              <h3 className="text-xl md:text-2xl font-bold text-[#006D5B] mb-1">{topic.title}</h3>
+              <div className="flex items-center gap-2">
+                <BookOpenIcon className="w-4 h-4 text-[#006D5B]/70" />
+                <p className="text-sm text-[#4B4B4B]">
+                  {topic.sources.length} textbook sources
+                </p>
+              </div>
             </div>
           </div>
           <motion.div
             animate={{ rotate: isExpanded ? 90 : 0 }}
-            className="text-gray-400 hover:text-gray-600"
+            className="p-2 rounded-full bg-[#DCE6D5]/50 text-[#006D5B] hover:bg-[#DCE6D5]/70 transition-colors duration-200"
           >
             <ArrowRightIcon className="w-5 h-5" />
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-4">
+        <div className="grid grid-cols-3 gap-4 mb-6 bg-[#DCE6D5]/30 p-4 rounded-xl">
           <div className="text-center">
-            <div className="text-sm text-gray-500">Key Points</div>
-            <div className="font-semibold text-gray-700">{topic.keyPoints}</div>
+            <div className="text-sm text-[#4B4B4B] mb-1">Key Points</div>
+            <div className="font-semibold text-[#006D5B]">{topic.keyPoints}</div>
           </div>
-          <div className="text-center border-x border-gray-100">
-            <div className="text-sm text-gray-500">Read Time</div>
-            <div className="font-semibold text-gray-700">{topic.readTime}</div>
+          <div className="text-center border-x border-[#006D5B]/10">
+            <div className="text-sm text-[#4B4B4B] mb-1">Read Time</div>
+            <div className="font-semibold text-[#006D5B]">{topic.readTime}</div>
           </div>
           <div className="text-center">
-            <div className="text-sm text-gray-500">Difficulty</div>
-            <div className="font-semibold text-gray-700">
+            <div className="text-sm text-[#4B4B4B] mb-1">Difficulty</div>
+            <div className="font-semibold text-[#006D5B]">
               {topic.difficulty}
             </div>
           </div>
@@ -156,42 +159,46 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
               exit={{ opacity: 0, height: 0 }}
               className="mt-4"
             >
-              <div className="space-y-4">
-                <div className="border-t pt-4">
-                  <h4 className="font-semibold text-gray-900 mb-2">
+              <div className="space-y-6">
+                <div className="border-t border-[#006D5B]/10 pt-6">
+                  <h4 className="font-semibold text-[#006D5B] mb-4 text-lg">
                     Key Topics Covered:
                   </h4>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3 bg-[#DCE6D5]/20 p-4 rounded-xl">
                     {topic.preview.map((point, index) => (
                       <motion.li
                         key={index}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="flex items-center space-x-2 text-gray-600"
+                        className="flex items-center space-x-3 text-[#4B4B4B]"
                       >
-                        <CheckCircleIcon className="w-5 h-5 text-green-500" />
-                        <span>{point}</span>
+                        <div className="p-1 rounded-full bg-[#006D5B]/10">
+                          <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" />
+                        </div>
+                        <span className="text-base">{point}</span>
                       </motion.li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="border-t pt-4">
-                  <h4 className="font-semibold text-gray-900 mb-2">
+                <div className="border-t border-[#006D5B]/10 pt-6">
+                  <h4 className="font-semibold text-[#006D5B] mb-4 text-lg">
                     Source Textbooks:
                   </h4>
-                  <div className="space-y-2">
+                  <div className="space-y-3 bg-[#DCE6D5]/20 p-4 rounded-xl">
                     {topic.sources.map((source, index) => (
                       <motion.div
                         key={index}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.3 + index * 0.1 }}
-                        className="flex items-center space-x-2 text-gray-600"
+                        className="flex items-center space-x-3 text-[#4B4B4B]"
                       >
-                        <BookOpenIcon className="w-5 h-5 text-blue-500" />
-                        <span>{source}</span>
+                        <div className="p-1 rounded-full bg-[#006D5B]/10">
+                          <BookOpenIcon className="w-5 h-5 text-[#006D5B]" />
+                        </div>
+                        <span className="text-base">{source}</span>
                       </motion.div>
                     ))}
                   </div>
@@ -199,10 +206,10 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
 
                 <Link
                   to={`/summaries/${topic.id}`}
-                  className={`mt-4 w-full inline-flex items-center justify-center px-6 py-3 rounded-xl text-white bg-gradient-to-r ${topic.color} hover:opacity-90 transition-opacity duration-200`}
+                  className="mt-6 w-full inline-flex items-center justify-center px-6 py-4 rounded-xl text-white bg-[#006D5B] hover:bg-[#006D5B]/90 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Read Full Summary
-                  <ArrowRightIcon className="w-5 h-5 ml-2" />
+                  <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </div>
             </motion.div>
@@ -217,14 +224,23 @@ const StatBox = ({ icon: Icon, value, label }) => (
   <motion.div
     initial={{ scale: 0.5, opacity: 0 }}
     whileInView={{ scale: 1, opacity: 1 }}
-    className="bg-white p-6 rounded-2xl shadow-lg"
+    className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-[#006D5B]/10 hover:shadow-xl transition-shadow duration-300"
   >
-    <div className="flex items-center justify-center mb-2">
-      <Icon className="w-8 h-8 text-green-500" />
+    <div className="flex items-center justify-center mb-3">
+      <div className="p-3 rounded-xl bg-[#DCE6D5]/50">
+        <Icon className="w-8 h-8 text-[#006D5B]" />
+      </div>
     </div>
     <div className="text-center">
-      <div className="text-2xl font-bold text-gray-900">{value}</div>
-      <div className="text-sm text-gray-500">{label}</div>
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="text-3xl font-bold text-[#006D5B] mb-1"
+      >
+        {value}
+      </motion.div>
+      <div className="text-sm text-[#4B4B4B]">{label}</div>
     </div>
   </motion.div>
 );
@@ -233,14 +249,14 @@ export default function TopicSummaries() {
   const [expandedId, setExpandedId] = useState(null);
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-16 md:py-24 bg-[#DCE6D5]/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-50 text-green-700 text-sm font-medium mb-4"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#006D5B]/10 text-[#006D5B] text-sm font-medium mb-4 border border-[#006D5B]/10"
           >
             <DocumentDuplicateIcon className="w-5 h-5" />
             Topic Summaries
@@ -249,7 +265,7 @@ export default function TopicSummaries() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4"
+            className="text-3xl md:text-5xl font-bold text-[#006D5B] mb-4 md:mb-6"
           >
             Master Complex Topics with Ease
           </motion.h2>
@@ -257,7 +273,7 @@ export default function TopicSummaries() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-base md:text-xl text-gray-600 max-w-3xl mx-auto"
+            className="text-base md:text-xl text-[#4B4B4B] max-w-3xl mx-auto"
           >
             Comprehensive summaries curated from multiple textbooks, designed
             for quick understanding and effective revision.
@@ -309,7 +325,7 @@ export default function TopicSummaries() {
         >
           <Link
             to="/summaries"
-            className="group inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold text-base md:text-lg hover:opacity-90 transition-opacity duration-200"
+            className="group inline-flex items-center gap-3 px-8 py-4 md:px-10 md:py-5 bg-[#006D5B] text-white rounded-xl font-semibold text-lg md:text-xl hover:bg-[#006D5B]/90 transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Explore All Topic Summaries
             <motion.span
@@ -320,9 +336,30 @@ export default function TopicSummaries() {
                 repeatType: "reverse",
                 ease: "easeInOut",
               }}
+              className="bg-white/20 rounded-full p-1"
             >
-              <ArrowRightIcon className="w-5 h-5" />
+              <ArrowRightIcon className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" />
             </motion.span>
+          </Link>
+        </motion.div>
+
+        {/* Additional CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-24 text-center bg-[#006D5B] text-white py-12 md:py-16 px-4 rounded-2xl shadow-lg"
+        >
+          <h3 className="text-2xl md:text-3xl font-bold mb-4">Need Help Understanding a Topic?</h3>
+          <p className="text-base md:text-lg mb-8 text-white/90 max-w-2xl mx-auto">
+            Our expert educators are here to help you master any dental topic. Get personalized guidance and support.
+          </p>
+          <Link
+            to="/contact"
+            className="inline-flex items-center justify-center px-8 py-4 text-[#006D5B] bg-white rounded-xl font-semibold hover:bg-[#DCE6D5] transition-all duration-300"
+          >
+            Get Expert Help
+            <ArrowRightIcon className="w-5 h-5 ml-2" />
           </Link>
         </motion.div>
       </div>

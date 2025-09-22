@@ -80,133 +80,83 @@ const SORTS = [
   { id: "points-desc", label: "Key points • High → Low" },
 ];
 
-function GridCard({ t }) {
+function TopicCard({ topic }) {
+  const difficultyColors = {
+    "Beginner": "bg-green-100 text-green-800",
+    "Intermediate": "bg-blue-100 text-blue-800",
+    "Medium": "bg-yellow-100 text-yellow-800",
+    "Advanced": "bg-red-100 text-red-800",
+  };
+
   return (
     <motion.div
-      className="relative w-full"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#006D5B]/10 flex flex-col"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -5 }}
     >
-      <div className="relative bg-white rounded-lg md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-100 h-full flex flex-col min-h-[320px] md:min-h-[340px]">
-        <div className="flex items-start justify-between mb-3 md:mb-4">
-          <div
-            className={`p-2 md:p-3 rounded-lg md:rounded-xl bg-gradient-to-r ${t.color}`}
-          >
-            <DocumentDuplicateIcon className="w-5 h-5 md:w-6 md:h-6 text-white" />
+      <div className="p-6 flex-grow flex flex-col">
+        <div className="flex items-start justify-between mb-4">
+          <div className="p-3 rounded-lg bg-[#006D5B]/10">
+            <DocumentTextIcon className="w-6 h-6 text-[#006D5B]" />
           </div>
-          <div className="text-xs md:text-sm text-gray-500">
-            {t.readTimeMin} mins
-          </div>
+          <span className={`px-3 py-1 text-xs font-semibold rounded-full ${difficultyColors[topic.difficulty] || 'bg-gray-100 text-gray-800'}`}>
+            {topic.difficulty}
+          </span>
         </div>
-        <h3 className="text-base md:text-lg font-semibold text-gray-900 line-clamp-1">
-          {t.title}
+        
+        <h3 className="text-xl font-semibold text-[#006D5B] line-clamp-2 mb-2 flex-grow min-h-[3.5rem]">
+          {topic.title}
         </h3>
-        <p className="text-xs md:text-sm text-gray-500 mt-1">
-          {t.sources.length} textbook sources
+        
+        <p className="text-sm text-[#4B4B4B]/70 mb-6 line-clamp-1">
+          Sources: {topic.sources.join(", ")}
         </p>
 
-        <div className="grid grid-cols-3 gap-2 md:gap-4 my-4 md:my-6 flex-1">
-          <div className="text-center">
-            <div className="text-xs md:text-sm text-gray-500">Key Points</div>
-            <div className="text-sm md:text-base font-semibold text-gray-700">
-              {t.keyPoints}
-            </div>
+        <div className="grid grid-cols-2 gap-4 text-center border-t border-dashed border-[#006D5B]/10 pt-4">
+          <div>
+            <div className="text-2xl font-bold text-[#4B4B4B]">{topic.keyPoints}</div>
+            <div className="text-xs text-[#4B4B4B]/70">Key Points</div>
           </div>
-          <div className="text-center border-x border-gray-100">
-            <div className="text-xs md:text-sm text-gray-500">Read Time</div>
-            <div className="text-sm md:text-base font-semibold text-gray-700">
-              {t.readTimeMin} min
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-xs md:text-sm text-gray-500">Level</div>
-            <div className="text-sm md:text-base font-semibold text-gray-700">
-              {t.difficulty}
-            </div>
+          <div>
+            <div className="text-2xl font-bold text-[#4B4B4B]">{topic.readTimeMin}</div>
+            <div className="text-xs text-[#4B4B4B]/70">Mins Read</div>
           </div>
         </div>
-
-        <Link
-          to={`/summaries/${t.id}`}
-          className={`group w-full inline-flex items-center justify-center px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm font-medium rounded-lg md:rounded-xl text-white bg-gradient-to-r ${t.color}`}
-        >
-          Read Full Summary
-          <ArrowRightIcon className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-        </Link>
       </div>
-    </motion.div>
-  );
-}
-
-function ListCard({ t }) {
-  return (
-    <motion.div
-      className="w-full bg-white rounded-lg md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-100"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-5">
-        <div className="flex items-start gap-3 md:gap-4">
-          <div
-            className={`p-2 md:p-3 rounded-lg md:rounded-xl bg-gradient-to-r ${t.color} flex-shrink-0`}
-          >
-            <DocumentDuplicateIcon className="w-5 h-5 md:w-6 md:h-6 text-white" />
-          </div>
-          <div className="min-w-0">
-            <h3 className="text-base md:text-lg font-semibold text-gray-900 line-clamp-1">
-              {t.title}
-            </h3>
-            <p className="text-xs md:text-sm text-gray-500 line-clamp-1">
-              {t.sources.length} textbook sources • {t.readTimeMin} min •{" "}
-              {t.difficulty}
-            </p>
-            <div className="mt-2 md:mt-3 grid grid-cols-3 gap-2 md:gap-4 text-xs md:text-sm text-gray-600">
-              <div className="inline-flex items-center gap-1 truncate">
-                <BookOpenIcon className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />{" "}
-                {t.sources[0]}
-              </div>
-              <div className="inline-flex items-center gap-1 truncate">
-                <ChartBarIcon className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />{" "}
-                {t.keyPoints} key points
-              </div>
-              <div className="inline-flex items-center gap-1 truncate">
-                <ClockIcon className="w-3.5 h-3.5 md:w-4 md:h-4 flex-shrink-0" />{" "}
-                {t.readTimeMin} min
-              </div>
-            </div>
-          </div>
-        </div>
-        <Link
-          to={`/summaries/${t.id}`}
-          className="inline-flex items-center gap-1.5 md:gap-2 text-green-600 hover:text-green-700 font-medium text-sm md:text-base"
-        >
-          Read Summary <ArrowRightIcon className="w-3.5 h-3.5 md:w-4 md:h-4" />
-        </Link>
-      </div>
+      
+      <Link
+        to={`/summaries/${topic.id}`}
+        className="block bg-[#006D5B] text-white text-center font-medium py-4 hover:bg-[#005c4d] transition-colors duration-300"
+      >
+        View Summary
+      </Link>
     </motion.div>
   );
 }
 
 export default function TopicSummariesPage() {
-  const [q, setQ] = useState("");
+  const [query, setQuery] = useState("");
   const [difficulty, setDifficulty] = useState("All");
   const [sortBy, setSortBy] = useState("title-asc");
-  const [view, setView] = useState("grid");
   const [visible, setVisible] = useState(12);
 
   const topics = useMemo(() => {
     let list = [...TOPICS];
-    if (difficulty !== "All")
+
+    if (difficulty !== "All") {
       list = list.filter((t) => t.difficulty === difficulty);
-    const s = q.trim().toLowerCase();
-    if (s)
-      list = list.filter(
-        (t) =>
-          t.title.toLowerCase().includes(s) ||
-          t.sources.some((src) => src.toLowerCase().includes(s))
-      );
+    }
+
+    const searchTerms = query.trim().toLowerCase().split(/\s+/);
+    if (searchTerms[0]) {
+      list = list.filter((topic) => {
+        const content = `${topic.title} ${topic.sources.join(" ")}`.toLowerCase();
+        return searchTerms.every(term => content.includes(term));
+      });
+    }
+
     switch (sortBy) {
       case "title-asc":
         list.sort((a, b) => a.title.localeCompare(b.title));
@@ -227,159 +177,131 @@ export default function TopicSummariesPage() {
         break;
     }
     return list;
-  }, [q, difficulty, sortBy]);
+  }, [query, difficulty, sortBy]);
 
   const visibleList = topics.slice(0, visible);
   const canLoadMore = visible < topics.length;
 
+  const resetFilters = () => {
+    setQuery("");
+    setDifficulty("All");
+    setSortBy("title-asc");
+    setVisible(12);
+  };
+
   return (
-    <div className="py-16 md:py-24 bg-gray-50/50">
+    <div className="py-16 md:py-24 bg-[#DCE6D5]/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 md:mb-14">
-          <h1 className="text-2xl md:text-4xl font-medium text-gray-900 mb-2 md:mb-3">
-            All Topic Summaries
-          </h1>
-          <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
-            Search summaries, filter by difficulty, sort by time or key points,
-            and switch views to study your way.
-          </p>
+        {/* Header */}
+        <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-5xl font-bold text-[#006D5B] mb-6 flex items-center justify-center gap-3"
+          >
+            <DocumentDuplicateIcon className="w-10 h-10" /> Topic Summaries
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-lg md:text-xl text-[#4B4B4B]"
+          >
+            High-yield summaries of key orthodontic topics, distilled from trusted sources to accelerate your learning.
+          </motion.p>
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col gap-3 md:gap-4 md:flex-row md:items-center md:justify-between mb-6 md:mb-8">
-          <div className="w-full md:flex-1">
-            <div className="relative">
-              <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Search topics or sources..."
-                className="w-full pl-10 pr-4 py-2.5 md:py-3 text-sm md:text-base rounded-lg md:rounded-xl border border-gray-200 bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-10"
+        >
+          <div className="relative max-w-3xl mx-auto mb-6">
+            <MagnifyingGlassIcon className="w-6 h-6 text-[#006D5B] absolute left-4 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search topics or sources (e.g., 'growth proffit')..."
+              className="w-full pl-12 pr-4 py-4 rounded-xl border border-[#006D5B]/20 bg-white text-[#4B4B4B] placeholder-[#4B4B4B]/60 focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 shadow-sm"
+            />
           </div>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <select
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+              className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
+            >
+              {DIFFICULTIES.map((d) => <option key={d} value={d}>{d === 'All' ? 'All Levels' : d}</option>)}
+            </select>
 
-          <div className="flex flex-col md:flex-row gap-3">
-            {/* Difficulty filter */}
-            <div className="flex flex-wrap gap-1.5 md:gap-2">
-              {DIFFICULTIES.map((d) => (
-                <button
-                  key={d}
-                  onClick={() => setDifficulty(d)}
-                  className={`px-2.5 md:px-3 py-1.5 rounded-lg md:rounded-full text-xs md:text-sm border transition-all ${
-                    difficulty === d
-                      ? "bg-green-50 text-green-700 border-green-200"
-                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  {d}
-                </button>
-              ))}
-            </div>
-
-            {/* Sort */}
-            <div className="relative flex-shrink-0">
-              <FunnelIcon className="w-4 h-4 md:w-5 md:h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none w-full md:w-auto pl-9 md:pl-10 pr-8 py-2 text-sm rounded-lg md:rounded-xl border border-gray-200 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                {SORTS.map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* View toggle */}
-            <div className="inline-flex rounded-xl overflow-hidden border border-gray-200">
-              <button
-                className={`px-3 py-2 text-sm ${
-                  view === "grid"
-                    ? "bg-green-50 text-green-700"
-                    : "bg-white text-gray-600"
-                }`}
-                onClick={() => setView("grid")}
-                aria-label="Grid view"
-              >
-                <Squares2X2Icon className="w-5 h-5" />
-              </button>
-              <button
-                className={`px-3 py-2 text-sm border-l border-gray-200 ${
-                  view === "list"
-                    ? "bg-green-50 text-green-700"
-                    : "bg-white text-gray-600"
-                }`}
-                onClick={() => setView("list")}
-                aria-label="List view"
-              >
-                <Bars3BottomLeftIcon className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Reset */}
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
+            >
+              {SORTS.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+            </select>
+            
             <button
-              className="px-3 py-2 text-sm rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
-              onClick={() => {
-                setQ("");
-                setDifficulty("All");
-                setSortBy("title-asc");
-              }}
+              onClick={resetFilters}
+              className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] hover:bg-[#006D5B]/5 transition-colors w-full sm:w-auto"
             >
               Reset
             </button>
           </div>
+        </motion.div>
+
+        <div className="mb-8 text-center sm:text-left text-[#4B4B4B]">
+          Displaying <span className="font-semibold text-[#006D5B]">{topics.length}</span> summaries
         </div>
 
-        <div className="mb-6 text-sm text-gray-500">{topics.length} topics</div>
-
-        <AnimatePresence mode="popLayout">
-          {view === "grid" ? (
-            <motion.div
-              key="grid"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-            >
-              {visibleList.map((t) => (
-                <GridCard key={t.id} t={t} />
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="list"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="space-y-5"
-            >
-              {visibleList.map((t) => (
-                <ListCard key={t.id} t={t} />
-              ))}
-            </motion.div>
-          )}
+        <AnimatePresence>
+          <motion.div
+            key="grid"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+          >
+            {visibleList.map((t) => (
+              <TopicCard key={t.id} topic={t} />
+            ))}
+          </motion.div>
         </AnimatePresence>
 
         {topics.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-gray-600">No topics match your filters.</p>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20"
+          >
+            <DocumentDuplicateIcon className="w-24 h-24 mx-auto text-[#006D5B]/20 mb-4" />
+            <h3 className="text-xl font-semibold text-[#006D5B] mb-2">No Summaries Found</h3>
+            <p className="text-[#4B4B4B] max-w-md mx-auto">
+              Your search returned no results. Please try different keywords or adjust the filters.
+            </p>
+          </motion.div>
         )}
 
         {canLoadMore && (
-          <div className="mt-10 text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-16 text-center"
+          >
             <button
               onClick={() => setVisible((v) => v + 6)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium hover:opacity-90"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-[#006D5B] text-white font-medium hover:bg-[#005c4d] transition-all duration-300 shadow-lg hover:shadow-xl"
             >
-              Load more
-              <ArrowRightIcon className="w-4 h-4" />
+              Load More Summaries
+              <ArrowRightIcon className="w-5 h-5" />
             </button>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

@@ -66,13 +66,22 @@ const BookCard = ({ book }) => {
       >
         {/* Book Spine */}
         <motion.div
-          className="absolute left-0 top-0 bottom-0 w-[20px] bg-gradient-to-r from-gray-800 to-gray-700"
+          className="absolute left-0 top-0 bottom-0 w-[20px] bg-gradient-to-r from-[#006D5B] to-[#004B3F]"
           style={{
             transformOrigin: "left",
             rotateY: "-90deg",
             translateX: "10px",
+            boxShadow: "inset -2px 0 4px rgba(0,0,0,0.2)",
           }}
-        />
+        >
+          {/* Spine texture */}
+          <div className="absolute inset-0 opacity-10" 
+               style={{
+                 backgroundImage: "linear-gradient(90deg, white 1px, transparent 1px)",
+                 backgroundSize: "4px 100%"
+               }} 
+          />
+        </motion.div>
 
         {/* Right Pages Stack (gives depth) */}
         <div
@@ -80,10 +89,18 @@ const BookCard = ({ book }) => {
           style={{
             transformOrigin: "right",
             transform: "rotateY(-20deg) translateX(15px)",
-            background: "linear-gradient(to left, #e5e7eb 0%, #fff 100%)",
-            boxShadow: "inset -1px 0 3px rgba(0,0,0,0.1)",
+            background: "linear-gradient(to left, #DCE6D5 0%, #fff 100%)",
+            boxShadow: "inset -1px 0 3px rgba(0,0,0,0.15)",
           }}
-        />
+        >
+          {/* Page texture */}
+          <div className="absolute inset-0 opacity-5"
+               style={{
+                 backgroundImage: "linear-gradient(0deg, #000 1px, transparent 1px)",
+                 backgroundSize: "100% 4px"
+               }}
+          />
+        </div>
 
         {/* Inner Pages */}
         <motion.div
@@ -99,23 +116,26 @@ const BookCard = ({ book }) => {
             },
           }}
         >
-          <div className="h-full flex flex-col p-6 md:p-8 bg-gradient-to-r from-white to-gray-50">
+          <div className="h-full flex flex-col p-6 md:p-8 bg-gradient-to-br from-[#DCE6D5]/40 to-white">
             <div className="flex-1">
-              <h3 className="text-lg md:text-xl font-bold text-gray-800">
+              <h3 className="text-lg md:text-xl font-bold text-[#006D5B]">
                 {book.title}
               </h3>
-              <p className="mt-1 text-sm text-gray-500">by {book.author}</p>
-              <div className="w-16 h-0.5 bg-green-500 my-4"></div>
-              <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+              <p className="mt-1 text-sm text-[#4B4B4B]/80">by {book.author}</p>
+              <div className="w-16 h-0.5 bg-[#006D5B] my-4 opacity-50"></div>
+              <p className="text-[#4B4B4B] text-sm md:text-base leading-relaxed">
                 {book.description}
               </p>
             </div>
             <Link
               to={`/book-summary/${book.id}`}
-              className="group mt-4 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105"
+              className="group relative mt-4 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#006D5B] text-white font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
             >
-              Read Book
-              <ArrowRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              <span className="relative z-10 flex items-center gap-2">
+                Read Book
+                <ArrowRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </span>
+              <div className="absolute inset-0 rounded-full bg-[#006D5B] opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-xl"></div>
             </Link>
           </div>
         </motion.div>
@@ -126,23 +146,26 @@ const BookCard = ({ book }) => {
           style={{
             transformOrigin: "left",
             transformStyle: "preserve-3d",
+            boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
           }}
           variants={{
             open: {
               rotateY: -170,
               transition: {
                 type: "spring",
-                stiffness: 50,
-                damping: 15,
+                stiffness: 45,
+                damping: 13,
                 restDelta: 0.5,
+                duration: 0.8,
               },
             },
             closed: {
               rotateY: 0,
               transition: {
                 type: "spring",
-                stiffness: 60,
-                damping: 15,
+                stiffness: 55,
+                damping: 13,
+                duration: 0.5,
               },
             },
           }}
@@ -214,14 +237,14 @@ const BookCard = ({ book }) => {
 
 export default function TopBooks() {
   return (
-    <section className="py-16 md:py-24 bg-white">
+    <section className="py-16 md:py-24 bg-[#DCE6D5]/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-4xl font-medium text-gray-900 mb-4 flex items-center justify-center gap-3">
-            <BookOpenIcon className="w-8 h-8 text-green-500" />
+          <h2 className="text-3xl md:text-4xl font-medium text-[#006D5B] mb-4 flex items-center justify-center gap-3">
+            <BookOpenIcon className="w-8 h-8 text-[#006D5B]" />
             Top Recommended Books
           </h2>
-          <p className="text-gray-600 max-w-3xl mx-auto text-base md:text-lg">
+          <p className="text-[#4B4B4B] max-w-3xl mx-auto text-base md:text-lg">
             A curated collection of essential textbooks and guides for every
             aspiring orthodontist. Dive into the foundational knowledge that
             shapes modern practice.
@@ -244,11 +267,11 @@ export default function TopBooks() {
       <div className="mt-12 text-center">
         <Link
           to="/books"
-          className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium"
+          className="inline-flex items-center gap-2 px-6 py-2 text-[#006D5B] hover:text-[#004B3F] font-medium transition-colors duration-300 rounded-full border-2 border-[#006D5B]/10 hover:border-[#006D5B]/20 bg-white/50 hover:bg-white/80"
         >
           View All Books
           <svg
-            className="w-4 h-4"
+            className="w-4 h-4 transition-transform group-hover:translate-x-1"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

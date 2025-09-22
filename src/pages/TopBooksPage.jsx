@@ -430,30 +430,29 @@ function ListCard({ book }) {
 }
 
 export default function TopBooksPage() {
-  const [q, setQ] = useState("");
+  const [query, setQuery] = useState("");
   const [author, setAuthor] = useState("All");
   const [sortBy, setSortBy] = useState("title-asc");
-  const [view, setView] = useState("grid");
   const [visible, setVisible] = useState(12);
 
   const authors = useMemo(
-    () => ["All", ...Array.from(new Set(BOOKS.map((b) => b.author)))],
+    () => ["All", ...Array.from(new Set(BOOKS.map((b) => b.author))).sort()],
     []
   );
 
   const filtered = useMemo(() => {
     let list = [...BOOKS];
 
-    if (author !== "All") list = list.filter((b) => b.author === author);
+    if (author !== "All") {
+      list = list.filter((b) => b.author === author);
+    }
 
-    const s = q.trim().toLowerCase();
-    if (s) {
-      list = list.filter(
-        (b) =>
-          b.title.toLowerCase().includes(s) ||
-          b.author.toLowerCase().includes(s) ||
-          b.description.toLowerCase().includes(s)
-      );
+    const searchTerms = query.trim().toLowerCase().split(/\s+/);
+    if (searchTerms[0]) {
+      list = list.filter((book) => {
+        const content = `${book.title} ${book.author} ${book.description} ${book.recommendedFor.join(" ")}`.toLowerCase();
+        return searchTerms.every(term => content.includes(term));
+      });
     }
 
     switch (sortBy) {
@@ -474,174 +473,142 @@ export default function TopBooksPage() {
     }
 
     return list;
-  }, [q, author, sortBy]);
+  }, [query, author, sortBy]);
 
   const visibleList = filtered.slice(0, visible);
   const canLoadMore = visible < filtered.length;
 
+  const resetFilters = () => {
+    setQuery("");
+    setAuthor("All");
+    setSortBy("title-asc");
+    setVisible(12);
+  };
+
   return (
-    <div className="py-16 md:py-24 bg-gray-50/50">
+    <div className="py-16 md:py-24 bg-[#DCE6D5]/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-10 md:mb-14">
-          <h1 className="text-3xl md:text-4xl font-medium text-gray-900 mb-3 flex items-center justify-center gap-3">
-            <BookOpenIcon className="w-8 h-8 text-green-500" /> All Books
-          </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Explore our curated orthodontics library. Use search, author
-            filters, sorting, and view options to find the perfect resource.
-          </p>
+        <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-5xl font-bold text-[#006D5B] mb-6 flex items-center justify-center gap-3"
+          >
+            <BookOpenIcon className="w-10 h-10" /> Recommended Books
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-lg md:text-xl text-[#4B4B4B]"
+          >
+            Explore our curated library of essential orthodontic literature. Find your next read with powerful search and filtering tools.
+          </motion.p>
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
-          <div className="flex-1">
-            <div className="relative">
-              <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Search by title, author, or topic..."
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-10"
+        >
+          {/* Search Bar */}
+          <div className="relative max-w-3xl mx-auto mb-6">
+            <MagnifyingGlassIcon className="w-6 h-6 text-[#006D5B] absolute left-4 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by title, author, or topic (e.g., 'Proffit biomechanics')..."
+              className="w-full pl-12 pr-4 py-4 rounded-xl border border-[#006D5B]/20 bg-white text-[#4B4B4B] placeholder-[#4B4B4B]/60 focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 shadow-sm"
+            />
           </div>
+          
+          {/* Filter/Sort Dropdowns */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <select
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
+            >
+              {authors.map((a) => <option key={a} value={a}>{a === 'All' ? 'All Authors' : a}</option>)}
+            </select>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {/* Author chips */}
-            <div className="flex flex-wrap gap-2 max-w-[60ch]">
-              {authors.map((a) => (
-                <button
-                  key={a}
-                  onClick={() => setAuthor(a)}
-                  className={`px-3 py-1.5 rounded-full text-sm border transition-all ${
-                    author === a
-                      ? "bg-green-50 text-green-700 border-green-200"
-                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  {a}
-                </button>
-              ))}
-            </div>
-
-            {/* Sort */}
-            <div className="relative">
-              <FunnelIcon className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none pl-10 pr-8 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                {SORTS.map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* View toggle */}
-            <div className="inline-flex rounded-xl overflow-hidden border border-gray-200">
-              <button
-                className={`px-3 py-2 text-sm ${
-                  view === "grid"
-                    ? "bg-green-50 text-green-700"
-                    : "bg-white text-gray-600"
-                }`}
-                onClick={() => setView("grid")}
-                aria-label="Grid view"
-              >
-                <Squares2X2Icon className="w-5 h-5" />
-              </button>
-              <button
-                className={`px-3 py-2 text-sm border-l border-gray-200 ${
-                  view === "list"
-                    ? "bg-green-50 text-green-700"
-                    : "bg-white text-gray-600"
-                }`}
-                onClick={() => setView("list")}
-                aria-label="List view"
-              >
-                <Bars3BottomLeftIcon className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Reset */}
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
+            >
+              {SORTS.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+            </select>
+            
             <button
-              className="px-3 py-2 text-sm rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
-              onClick={() => {
-                setQ("");
-                setAuthor("All");
-                setSortBy("title-asc");
-              }}
+              onClick={resetFilters}
+              className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] hover:bg-[#006D5B]/5 transition-colors w-full sm:w-auto"
             >
               Reset
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Result count */}
-        <div className="mb-6 text-sm text-gray-500">
-          {filtered.length} books
+        <div className="mb-8 text-center sm:text-left text-[#4B4B4B]">
+          Showing <span className="font-semibold text-[#006D5B]">{filtered.length}</span> of {BOOKS.length} books
         </div>
 
         <AnimatePresence mode="popLayout">
-          {view === "grid" ? (
-            <motion.div
-              key="grid"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
-            >
-              {visibleList.map((book) => (
-                <div
-                  key={book.id}
-                  className="relative w-full"
-                  style={{ minHeight: "450px" }}
-                >
-                  <FlipBookCard book={book} />
-                </div>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="list"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="space-y-5"
-            >
-              {visibleList.map((book) => (
-                <ListCard key={book.id} book={book} />
-              ))}
-            </motion.div>
-          )}
+          <motion.div
+            key="grid"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-16"
+          >
+            {visibleList.map((book) => (
+              <div
+                key={book.id}
+                className="relative w-full"
+                style={{ minHeight: "450px" }}
+              >
+                <FlipBookCard book={book} />
+              </div>
+            ))}
+          </motion.div>
         </AnimatePresence>
 
         {/* Empty state */}
         {filtered.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-gray-600">
-              No books match your filters. Try adjusting your search or author
-              selection.
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20"
+          >
+            <BookOpenIcon className="w-24 h-24 mx-auto text-[#006D5B]/20 mb-4" />
+            <h3 className="text-xl font-semibold text-[#006D5B] mb-2">No Books Found</h3>
+            <p className="text-[#4B4B4B] max-w-md mx-auto">
+              Your search returned no results. Try adjusting your keywords or resetting the filters.
             </p>
-          </div>
+          </motion.div>
         )}
 
         {/* Load more */}
         {canLoadMore && (
-          <div className="mt-10 text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-16 text-center"
+          >
             <button
               onClick={() => setVisible((v) => v + 8)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium hover:opacity-90"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-[#006D5B] text-white font-medium hover:bg-[#005c4d] transition-all duration-300 shadow-lg hover:shadow-xl"
             >
-              Load more
-              <ArrowRightIcon className="w-4 h-4" />
+              Load More Books
+              <ArrowRightIcon className="w-5 h-5" />
             </button>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

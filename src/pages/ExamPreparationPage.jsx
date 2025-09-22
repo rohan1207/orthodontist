@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   AcademicCapIcon,
@@ -8,13 +7,11 @@ import {
   ChartBarIcon,
   UserGroupIcon,
   Squares2X2Icon,
-  Bars3BottomLeftIcon,
   MagnifyingGlassIcon,
-  FunnelIcon,
-  ArrowRightIcon,
+  DocumentMagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 
-const MODULES = [
+const examModules = [
   {
     id: 1,
     title: "NEET MDS Comprehensive",
@@ -70,323 +67,213 @@ const MODULES = [
   },
 ];
 
-const TYPES = ["All", "Comprehensive", "Revision", "Practice", "Mock Tests"];
-const SORTS = [
-  { id: "success-desc", label: "Success rate • High → Low" },
-  { id: "success-asc", label: "Success rate • Low → High" },
-  { id: "duration-asc", label: "Duration • Short → Long" },
-  { id: "duration-desc", label: "Duration • Long → Short" },
-  { id: "students-desc", label: "Students • High → Low" },
-];
+function ModuleCard({ module }) {
+  const typeStyles = {
+    Comprehensive: {
+      icon: AcademicCapIcon,
+      bgColor: "bg-[#006D5B]/10",
+      textColor: "text-[#006D5B]",
+      progressColor: "bg-[#006D5B]",
+    },
+    Revision: {
+      icon: ClockIcon,
+      bgColor: "bg-blue-100",
+      textColor: "text-blue-700",
+      progressColor: "bg-blue-500",
+    },
+    Practice: {
+      icon: DocumentTextIcon,
+      bgColor: "bg-purple-100",
+      textColor: "text-purple-700",
+      progressColor: "bg-purple-500",
+    },
+    "Mock Tests": {
+      icon: ChartBarIcon,
+      bgColor: "bg-red-100",
+      textColor: "text-red-700",
+      progressColor: "bg-red-500",
+    },
+  };
 
-function GridCard({ m }) {
+  const style = typeStyles[module.type] || typeStyles.Comprehensive;
+  const Icon = style.icon;
+
   return (
     <motion.div
-      className="relative w-full"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#006D5B]/10 flex flex-col"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -5 }}
     >
-      <div className="relative bg-white rounded-2xl p-6 shadow-lg border border-gray-100 h-full">
-        <div className="flex items-start justify-between mb-6">
-          <div
-            className={`p-3 rounded-xl bg-gradient-to-r ${m.color} opacity-90`}
-          >
-            <m.icon className="w-6 h-6 text-white" />
+      <div className="p-6 flex-grow">
+        <div className="flex items-start justify-between mb-4">
+          <div className={`p-3 rounded-lg ${style.bgColor}`}>
+            <Icon className={`w-7 h-7 ${style.textColor}`} />
           </div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-bold text-green-600">
-              {m.successRate}%
-            </span>
-            <span className="text-sm text-gray-500">success</span>
-          </div>
-        </div>
-        <h3 className="text-lg font-semibold text-gray-900">{m.title}</h3>
-        <p className="text-gray-600 mt-1 line-clamp-2">{m.description}</p>
-        <div className="grid grid-cols-3 gap-4 my-6">
-          <div className="text-center">
-            <div className="text-sm text-gray-500">Duration</div>
-            <div className="font-semibold text-gray-700">
-              {m.durationMonths} months
+          <div className="text-right">
+            <div className={`text-3xl font-bold ${style.textColor}`}>
+              {module.successRate}%
             </div>
-          </div>
-          <div className="text-center border-x border-gray-100">
-            <div className="text-sm text-gray-500">Students</div>
-            <div className="font-semibold text-gray-700">
-              {m.students.toLocaleString()}
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="text-sm text-gray-500">Subjects</div>
-            <div className="font-semibold text-gray-700">{m.subjects}</div>
+            <div className="text-xs text-[#4B4B4B]/70">Success Rate</div>
           </div>
         </div>
-        <div className="relative h-1.5 bg-gray-100 rounded-full overflow-hidden mb-6">
-          <motion.div
-            initial={{ width: 0 }}
-            whileInView={{ width: `${m.successRate}%` }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="absolute h-full rounded-full"
-            style={{
-              background: `linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to))`,
-            }}
-          />
-        </div>
-        <Link
-          to={`/exam-prep/${m.id}`}
-          className="group w-full inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-green-500 to-emerald-600"
-        >
-          Explore Module
-          <ArrowRightIcon className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-        </Link>
-      </div>
-    </motion.div>
-  );
-}
 
-function ListCard({ m }) {
-  return (
-    <motion.div
-      className="w-full bg-white rounded-2xl p-6 shadow-lg border border-gray-100"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
-        <div className="flex items-start gap-4">
-          <div
-            className={`p-3 rounded-xl bg-gradient-to-r ${m.color} opacity-90`}
-          >
-            <m.icon className="w-6 h-6 text-white" />
+        <h3 className="text-xl font-semibold text-[#006D5B] line-clamp-2 mb-2 min-h-[3.5rem]">
+          {module.title}
+        </h3>
+        <p className="text-sm text-[#4B4B4B] line-clamp-2 mb-6 min-h-[2.5rem]">
+          {module.description}
+        </p>
+
+        <div className="grid grid-cols-3 gap-4 text-center border-t border-dashed border-[#006D5B]/10 pt-4">
+          <div>
+            <div className="text-2xl font-bold text-[#4B4B4B]">
+              {module.durationMonths}
+            </div>
+            <div className="text-xs text-[#4B4B4B]/70">Months</div>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">{m.title}</h3>
-            <p className="text-gray-600 mt-1 md:max-w-2xl">{m.description}</p>
-            <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-500">
-              <span className="inline-flex items-center gap-1">
-                <ClockIcon className="w-4 h-4" /> {m.durationMonths} months
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <UserGroupIcon className="w-4 h-4" />{" "}
-                {m.students.toLocaleString()} students
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <DocumentTextIcon className="w-4 h-4" /> {m.subjects} subjects
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <ChartBarIcon className="w-4 h-4" /> {m.successRate}% success
-              </span>
+            <div className="text-2xl font-bold text-[#4B4B4B]">
+              {module.students / 1000}k+
             </div>
+            <div className="text-xs text-[#4B4B4B]/70">Students</div>
+          </div>
+          <div>
+            <div className="text-2xl font-bold text-[#4B4B4B]">
+              {module.subjects}
+            </div>
+            <div className="text-xs text-[#4B4B4B]/70">Subjects</div>
           </div>
         </div>
-        <Link
-          to={`/exam-prep/${m.id}`}
-          className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium"
+      </div>
+
+      <div className="px-6 pb-6">
+        <a
+          href={`/exam-prep/${module.id}`}
+          className="block w-full text-center px-6 py-3.5 text-base font-semibold text-white rounded-xl transition-all duration-300 shadow-lg bg-[#006D5B] hover:bg-[#005c4d] hover:scale-102"
         >
-          Explore Module <ArrowRightIcon className="w-4 h-4" />
-        </Link>
+          Explore Module
+        </a>
       </div>
     </motion.div>
   );
 }
 
-export default function ExamPreparationPage() {
-  const [q, setQ] = useState("");
-  const [type, setType] = useState("All");
-  const [sortBy, setSortBy] = useState("success-desc");
-  const [view, setView] = useState("grid");
-  const [visible, setVisible] = useState(12);
+const ExamPreparationPage = () => {
+  const [modules, setModules] = useState(examModules);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("default");
+  const [typeFilter, setTypeFilter] = useState("all");
 
-  const modules = useMemo(() => {
-    let list = [...MODULES];
-    if (type !== "All") list = list.filter((m) => m.type === type);
+  useEffect(() => {
+    let filteredModules = examModules.filter((module) =>
+      module.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-    const s = q.trim().toLowerCase();
-    if (s)
-      list = list.filter(
-        (m) =>
-          m.title.toLowerCase().includes(s) ||
-          m.description.toLowerCase().includes(s)
+    if (typeFilter !== "all") {
+      filteredModules = filteredModules.filter(
+        (module) => module.type === typeFilter
       );
-
-    switch (sortBy) {
-      case "success-desc":
-        list.sort((a, b) => b.successRate - a.successRate);
-        break;
-      case "success-asc":
-        list.sort((a, b) => a.successRate - b.successRate);
-        break;
-      case "duration-asc":
-        list.sort((a, b) => a.durationMonths - b.durationMonths);
-        break;
-      case "duration-desc":
-        list.sort((a, b) => b.durationMonths - a.durationMonths);
-        break;
-      case "students-desc":
-        list.sort((a, b) => b.students - a.students);
-        break;
-      default:
-        break;
     }
 
-    return list;
-  }, [q, type, sortBy]);
+    if (sortOrder === "success") {
+      filteredModules.sort((a, b) => b.successRate - a.successRate);
+    } else if (sortOrder === "duration") {
+      filteredModules.sort((a, b) => a.durationMonths - b.durationMonths);
+    }
 
-  const visibleList = modules.slice(0, visible);
-  const canLoadMore = visible < modules.length;
+    setModules(filteredModules);
+  }, [searchTerm, sortOrder, typeFilter]);
+
+  const uniqueTypes = ["all", ...new Set(examModules.map((m) => m.type))];
 
   return (
-    <div className="py-16 md:py-24 bg-gray-50/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 md:mb-14">
-          <h1 className="text-3xl md:text-4xl font-medium text-gray-900 mb-3">
-            All Preparation Modules
+    <div className="bg-[#F9F9F9] min-h-screen">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="container mx-auto px-4 py-12"
+      >
+        <header className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-[#006D5B] mb-3">
+            Exam Preparation Modules
           </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Search, filter, and compare modules to craft your ideal NEET MDS
-            prep plan.
+          <p className="text-lg text-[#4B4B4B] max-w-3xl mx-auto">
+            Your comprehensive guide to mastering dental exams. Explore our
+            specialized modules designed for success.
           </p>
-        </div>
+        </header>
 
-        {/* Controls */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
-          <div className="flex-1">
-            <div className="relative">
-              <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <div className="mb-10 p-4 bg-white rounded-2xl shadow-sm border border-[#006D5B]/10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+            <div className="relative md:col-span-1">
+              <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
                 placeholder="Search modules..."
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 text-base bg-[#F9F9F9] border-transparent rounded-xl focus:ring-2 focus:ring-[#006D5B] focus:border-transparent transition-all"
               />
             </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            {/* Type filter */}
-            <div className="flex flex-wrap gap-2">
-              {TYPES.map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setType(t)}
-                  className={`px-3 py-1.5 rounded-full text-sm border transition-all ${
-                    type === t
-                      ? "bg-green-50 text-green-700 border-green-200"
-                      : "bg-white text-gray-700 border-gray-200 hover:border-gray-300"
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-
-            {/* Sort */}
-            <div className="relative">
-              <FunnelIcon className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:col-span-2">
               <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none pl-10 pr-8 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value)}
+                className="w-full px-4 py-3 text-base bg-[#F9F9F9] border-transparent rounded-xl focus:ring-2 focus:ring-[#006D5B] focus:border-transparent transition-all"
               >
-                {SORTS.map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.label}
+                {uniqueTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type === "all" ? "All Module Types" : type}
                   </option>
                 ))}
               </select>
-            </div>
-
-            {/* View toggle */}
-            <div className="inline-flex rounded-xl overflow-hidden border border-gray-200">
-              <button
-                className={`px-3 py-2 text-sm ${
-                  view === "grid"
-                    ? "bg-green-50 text-green-700"
-                    : "bg-white text-gray-600"
-                }`}
-                onClick={() => setView("grid")}
-                aria-label="Grid view"
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="w-full px-4 py-3 text-base bg-[#F9F9F9] border-transparent rounded-xl focus:ring-2 focus:ring-[#006D5B] focus:border-transparent transition-all"
               >
-                <Squares2X2Icon className="w-5 h-5" />
-              </button>
-              <button
-                className={`px-3 py-2 text-sm border-l border-gray-200 ${
-                  view === "list"
-                    ? "bg-green-50 text-green-700"
-                    : "bg-white text-gray-600"
-                }`}
-                onClick={() => setView("list")}
-                aria-label="List view"
-              >
-                <Bars3BottomLeftIcon className="w-5 h-5" />
-              </button>
+                <option value="default">Sort by Default</option>
+                <option value="success">Sort by Success Rate</option>
+                <option value="duration">Sort by Duration</option>
+              </select>
             </div>
-
-            {/* Reset */}
-            <button
-              className="px-3 py-2 text-sm rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
-              onClick={() => {
-                setQ("");
-                setType("All");
-                setSortBy("success-desc");
-              }}
-            >
-              Reset
-            </button>
           </div>
         </div>
 
-        <div className="mb-6 text-sm text-gray-500">
-          {modules.length} modules
-        </div>
-
-        <AnimatePresence mode="popLayout">
-          {view === "grid" ? (
-            <motion.div
-              key="grid"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-            >
-              {visibleList.map((m) => (
-                <GridCard key={m.id} m={m} />
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="list"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="space-y-5"
-            >
-              {visibleList.map((m) => (
-                <ListCard key={m.id} m={m} />
-              ))}
-            </motion.div>
-          )}
+        <AnimatePresence>
+          <motion.div
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {modules.map((module) => (
+              <ModuleCard key={module.id} module={module} />
+            ))}
+          </motion.div>
         </AnimatePresence>
 
         {modules.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-gray-600">No modules match your filters.</p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-20"
+          >
+            <div className="inline-block p-6 bg-white rounded-full shadow-md mb-6">
+              <DocumentMagnifyingGlassIcon className="w-16 h-16 text-[#006D5B]" />
+            </div>
+            <h3 className="text-2xl font-semibold text-[#006D5B]">
+              No Modules Found
+            </h3>
+            <p className="text-[#4B4B4B] mt-2">
+              Try adjusting your search or filter criteria.
+            </p>
+          </motion.div>
         )}
-
-        {canLoadMore && (
-          <div className="mt-10 text-center">
-            <button
-              onClick={() => setVisible((v) => v + 6)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium hover:opacity-90"
-            >
-              Load more
-              <ArrowRightIcon className="w-4 h-4" />
-            </button>
-          </div>
-        )}
-      </div>
+      </motion.div>
     </div>
   );
-}
+};
+
+export default ExamPreparationPage;

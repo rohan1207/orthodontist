@@ -75,26 +75,53 @@ const ServiceCard = ({ service }) => {
         }}
       />
 
-      <div className="relative bg-white p-6 rounded-2xl shadow-xl">
-        <div className="flex items-center gap-4 mb-4">
-          <div className={`p-3 rounded-xl bg-gradient-to-r ${service.color}`}>
-            <service.icon className="w-6 h-6 text-white" />
+      <div className="relative bg-white p-6 md:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10">
+        <div className="flex items-start gap-4 mb-6">
+          <div className="p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
+            <service.icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">
-            {service.title}
-          </h3>
+          <div>
+            <h3 className="text-xl md:text-2xl font-bold text-[#006D5B] mb-2">
+              {service.title}
+            </h3>
+            <p className="text-[#4B4B4B]">{service.description}</p>
+          </div>
         </div>
 
-        <p className="text-gray-600 mb-4">{service.description}</p>
+        <div className="bg-[#DCE6D5]/30 rounded-xl p-4 md:p-5">
+          <h4 className="text-[#006D5B] font-semibold mb-3">Key Features:</h4>
+          <ul className="space-y-3">
+            {service.features.map((feature, index) => (
+              <motion.li
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="flex items-center text-base text-[#4B4B4B]"
+              >
+                <div className="p-1 rounded-full bg-[#006D5B]/10 mr-3">
+                  <ShieldCheckIcon className="w-4 h-4 text-[#006D5B]" />
+                </div>
+                {feature}
+              </motion.li>
+            ))}
+          </ul>
+        </div>
 
-        <ul className="space-y-2 mb-4">
-          {service.features.map((feature, index) => (
-            <li key={index} className="flex items-center text-sm text-gray-600">
-              <ShieldCheckIcon className="w-4 h-4 mr-2 text-green-500" />
-              {feature}
-            </li>
-          ))}
-        </ul>
+        <motion.div 
+          className="mt-6 flex justify-end"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Link
+            to={`/services/${service.id}`}
+            className="inline-flex items-center text-[#006D5B] hover:text-[#006D5B]/80 font-medium"
+          >
+            Learn More
+            <ArrowRightIcon className="w-4 h-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </motion.div>
       </div>
     </motion.div>
   );
@@ -104,24 +131,33 @@ const StatsItem = ({ icon: Icon, value, label }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.5 }}
     whileInView={{ opacity: 1, scale: 1 }}
-    className="flex flex-col items-center p-4 bg-white rounded-xl shadow-lg"
+    className="flex flex-col items-center p-6 md:p-8 bg-white rounded-xl shadow-lg border border-[#006D5B]/10 hover:shadow-xl transition-shadow duration-300"
   >
-    <Icon className="w-8 h-8 text-green-500 mb-2" />
-    <div className="text-2xl font-bold text-gray-900">{value}</div>
-    <div className="text-sm text-gray-600 text-center">{label}</div>
+    <div className="p-3 rounded-xl bg-[#DCE6D5]/50 mb-4">
+      <Icon className="w-8 h-8 text-[#006D5B]" />
+    </div>
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+      className="text-3xl font-bold text-[#006D5B] mb-1"
+    >
+      {value}
+    </motion.div>
+    <div className="text-sm text-[#4B4B4B] text-center">{label}</div>
   </motion.div>
 );
 
 export default function AcademicHelp() {
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-16 md:py-24 bg-[#DCE6D5]/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-50 text-green-700 text-sm font-medium mb-4"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#006D5B]/10 text-[#006D5B] text-sm font-medium mb-4 border border-[#006D5B]/10"
           >
             <DocumentDuplicateIcon className="w-5 h-5" />
             Academic Support Services
@@ -130,7 +166,7 @@ export default function AcademicHelp() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4"
+            className="text-3xl md:text-5xl font-bold text-[#006D5B] mb-4 md:mb-6"
           >
             Expert Academic Assistance
           </motion.h2>
@@ -138,7 +174,7 @@ export default function AcademicHelp() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-base md:text-xl text-gray-600 max-w-3xl mx-auto"
+            className="text-base md:text-xl text-[#4B4B4B] max-w-3xl mx-auto"
           >
             Professional support for your academic journey with plagiarism
             checking, proofreading, and expert consultation services.
@@ -168,15 +204,15 @@ export default function AcademicHelp() {
           ))}
         </div>
 
-        {/* CTA */}
+        {/* Main CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="text-center"
+          className="text-center mb-24"
         >
           <Link
             to="/academic-help"
-            className="group inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold text-base md:text-lg hover:opacity-90 transition-opacity duration-200"
+            className="group inline-flex items-center gap-3 px-8 py-4 md:px-10 md:py-5 bg-[#006D5B] text-white rounded-xl font-semibold text-lg md:text-xl hover:bg-[#006D5B]/90 transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Explore All Academic Services
             <motion.span
@@ -187,10 +223,40 @@ export default function AcademicHelp() {
                 repeatType: "reverse",
                 ease: "easeInOut",
               }}
+              className="bg-white/20 rounded-full p-1"
             >
-              <ArrowRightIcon className="w-5 h-5" />
+              <ArrowRightIcon className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" />
             </motion.span>
           </Link>
+        </motion.div>
+
+        {/* Additional Support CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center bg-[#006D5B] text-white py-12 md:py-16 px-4 rounded-2xl shadow-lg"
+        >
+          <h3 className="text-2xl md:text-3xl font-bold mb-4">Need Immediate Academic Support?</h3>
+          <p className="text-base md:text-lg mb-8 text-white/90 max-w-2xl mx-auto">
+            Our expert team is available 24/7 to help you with your academic needs. Get started with a free consultation.
+          </p>
+          <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center px-8 py-4 text-[#006D5B] bg-white rounded-xl font-semibold hover:bg-[#DCE6D5] transition-all duration-300"
+            >
+              Schedule Consultation
+              <ArrowRightIcon className="w-5 h-5 ml-2" />
+            </Link>
+            <Link
+              to="/services"
+              className="inline-flex items-center justify-center px-8 py-4 text-white border-2 border-white rounded-xl font-semibold hover:bg-white/10 transition-all duration-300"
+            >
+              View Service Details
+              <ArrowRightIcon className="w-5 h-5 ml-2" />
+            </Link>
+          </div>
         </motion.div>
       </div>
     </section>

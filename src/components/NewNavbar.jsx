@@ -38,7 +38,7 @@ export default function Navbar() {
     <>
       <nav
         className={
-          "fixed top-0 left-1/2 transform -translate-x-1/2 z-50 rounded-b-[20px] bg-white/95 shadow-sm border-b border-gray-200 backdrop-blur-sm"
+          "fixed top-0 left-1/2 transform -translate-x-1/2 z-50 rounded-b-[20px] bg-[#DCE6D5]/95 shadow-sm border-b border-[#006D5B]/10 backdrop-blur-sm"
         }
         style={{
           fontFamily: NAV_FONT,
@@ -50,19 +50,19 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <img
-              src="/logo1.png"
+              src="/logo2.png"
               alt="Logo"
               className="h-10 w-10 md:h-14 md:w-14"
             />
             <Link to="/">
               <span
-                className="text-lg font-normal tracking-wide"
+                className="text-lg font-normal tracking-wide text-[#006D5B]"
                 style={{ letterSpacing: "0.08em" }}
               >
                 OrthoChronicles
               </span>
               <span
-                className="text-sm font-light block text-gray-600"
+                className="text-sm font-light block text-slate-500"
                 style={{ letterSpacing: "0.1em", marginTop: "-4px" }}
               >
                 From Braces To Breakthroughs
@@ -76,7 +76,7 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-gray-700 hover:text-gray-900 transition-colors duration-300"
+                className="text-[#006D5B] hover:text-[#004B3F] transition-colors duration-300"
                 style={{
                   fontFamily: MENU_FONT,
                   fontWeight: 400,
@@ -95,11 +95,11 @@ export default function Navbar() {
           <div className="flex items-center gap-2 md:gap-4">
             <Link
               to="/contact"
-              className="hidden md:flex items-center justify-center text-gray-900"
+              className="hidden md:flex items-center justify-center text-white hover:text-white/90 transition-all duration-300"
               style={{
                 width: "184px",
                 height: "46px",
-                background: "#86efac",
+                background: "#006D5B",
                 borderRadius: "25px",
                 fontFamily: MENU_FONT,
                 fontWeight: 400,
@@ -108,6 +108,7 @@ export default function Navbar() {
                 lineHeight: "100%",
                 letterSpacing: "0%",
                 opacity: 1,
+                boxShadow: "0 2px 4px rgba(0, 109, 91, 0.1)",
               }}
             >
               Contact Us
@@ -141,7 +142,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 w-full h-full z-[60] bg-white/95 backdrop-blur-lg"
+            className="fixed inset-0 w-full h-full z-[60] bg-[#DCE6D5]/98 backdrop-blur-lg"
             style={{ fontFamily: NAV_FONT }}
           >
             <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-full gap-4">

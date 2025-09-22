@@ -14,6 +14,7 @@ import TopBooksPage from "./pages/TopBooksPage.jsx";
 import ExamPreparationPage from "./pages/ExamPreparationPage.jsx";
 import TopicSummariesPage from "./pages/TopicSummariesPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
+import ArticleTemplate from "./pages/ArticleTemplate.jsx";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -27,6 +28,7 @@ const AnimatedRoutes = () => {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/academic-help" element={<AcademicHelpPage />} />
           <Route path="/articles" element={<ArticlesPage />} />
+          <Route path="/article/:id" element={<ArticleTemplate />} />
           <Route path="/top-books" element={<TopBooksPage />} />
           <Route path="/exam-prep" element={<ExamPreparationPage />} />
           <Route path="/summaries" element={<TopicSummariesPage />} />

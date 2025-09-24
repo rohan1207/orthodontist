@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { buildApiUrl } from "../utils/api";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import DOMPurify from "dompurify";
@@ -427,7 +428,7 @@ export default function ArticleTemplate() {
 
     async function fetchArticle() {
       try {
-        const res = await fetch(`/api/blogs/${encodeURIComponent(id)}`);
+  const res = await fetch(buildApiUrl(`/api/blogs/${encodeURIComponent(id)}`));
         if (!res.ok) {
           const text = await res.text();
           throw new Error(`Failed to load article: ${res.status} ${text}`);
@@ -487,7 +488,7 @@ export default function ArticleTemplate() {
 
         // fetch related articles
         try {
-          const relRes = await fetch(`/api/blogs?limit=4`);
+          const relRes = await fetch(buildApiUrl('/api/blogs?limit=4'));
           if (relRes.ok) {
             const relData = await relRes.json();
             if (mounted) {

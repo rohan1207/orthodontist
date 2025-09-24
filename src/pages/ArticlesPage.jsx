@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
+import { buildApiUrl } from "../utils/api";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -81,7 +82,7 @@ export default function ArticlesPage() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("/api/blogs?limit=100");
+  const res = await fetch(buildApiUrl('/api/blogs?limit=100'));
         if (!res.ok) throw new Error(`fetch failed ${res.status}`);
         const data = await res.json();
         if (!cancelled) {

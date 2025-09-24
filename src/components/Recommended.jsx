@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { buildApiUrl } from "../utils/api";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -129,7 +130,7 @@ export default function Recommended() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("/api/blogs?limit=4");
+  const res = await fetch(buildApiUrl('/api/blogs?limit=4'));
         if (!res.ok) throw new Error(`fetch failed ${res.status}`);
         const data = await res.json();
         if (!cancelled) setArticles(data);

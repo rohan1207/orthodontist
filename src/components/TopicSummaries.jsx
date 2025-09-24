@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -22,9 +22,9 @@ const sampleTopics = [
       "Graber's Orthodontics",
       "Proffit's Orthodontics",
     ],
-    keyPoints: 12,
-    readTime: "15 mins",
-    difficulty: "Medium",
+    teaser:
+      "Chapter-wise, high-yield summary covering prenatal/postnatal growth, factors, and major growth theories—simplified for quick recall.",
+    highlights: ["High-yield", "Concept-first", "Exam-focused"],
     icon: LightBulbIcon,
     color: "from-green-500 to-emerald-600",
     preview: [
@@ -41,9 +41,9 @@ const sampleTopics = [
       "Clinical Orthodontics",
       "Biomechanics in Clinical Practice",
     ],
-    keyPoints: 15,
-    readTime: "20 mins",
-    difficulty: "Advanced",
+    teaser:
+      "Force systems, centers of resistance, and M/F ratio explained with simple visuals and step-by-step intuition.",
+    highlights: ["Visual aids", "Step-by-step", "Tricky concepts made easy"],
     icon: ChartBarIcon,
     color: "from-green-500 to-emerald-600",
     preview: ["Force Systems", "Center of Resistance", "Moment to Force Ratio"],
@@ -56,9 +56,9 @@ const sampleTopics = [
       "Clinical Diagnosis",
       "Treatment Strategies",
     ],
-    keyPoints: 18,
-    readTime: "25 mins",
-    difficulty: "Intermediate",
+    teaser:
+      "From clinical exam to radiographs and objectives—distilled, organized notes that tell you exactly what to look for.",
+    highlights: ["Structured flow", "Checklists", "Decision cues"],
     icon: DocumentTextIcon,
     color: "from-green-500 to-emerald-600",
     preview: [
@@ -75,9 +75,9 @@ const sampleTopics = [
       "Contemporary Orthodontics",
       "Appliance Design",
     ],
-    keyPoints: 10,
-    readTime: "18 mins",
-    difficulty: "Intermediate",
+    teaser:
+      "Fixed, removable, and functional appliances—what they are, when to use, and how to remember them fast.",
+    highlights: ["Mnemonics", "When-to-use", "Compare & contrast"],
     icon: DocumentDuplicateIcon,
     color: "from-green-500 to-emerald-600",
     preview: [
@@ -136,22 +136,20 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6 bg-[#DCE6D5]/30 p-3 sm:p-4 rounded-xl">
-          <div className="text-center">
-            <div className="text-xs sm:text-sm text-[#4B4B4B] mb-0.5 sm:mb-1">Key Points</div>
-            <div className="font-semibold text-[#006D5B] text-sm sm:text-base">
-              {topic.keyPoints}
-            </div>
-          </div>
-          <div className="text-center border-x border-[#006D5B]/10">
-            <div className="text-sm text-[#4B4B4B] mb-1">Read Time</div>
-            <div className="font-semibold text-[#006D5B]">{topic.readTime}</div>
-          </div>
-          <div className="text-center">
-            <div className="text-sm text-[#4B4B4B] mb-1">Difficulty</div>
-            <div className="font-semibold text-[#006D5B]">
-              {topic.difficulty}
-            </div>
+        {/* Teaser + Highlights to encourage click-through */}
+        <div className="mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base text-[#4B4B4B] leading-relaxed line-clamp-2">
+            {topic.teaser}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {topic.highlights?.slice(0, 3).map((tag, idx) => (
+              <span
+                key={idx}
+                className="px-3 py-1 text-xs font-medium rounded-full bg-[#DCE6D5]/60 text-[#006D5B] border border-[#006D5B]/10"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         </div>
 
@@ -224,30 +222,84 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
   );
 };
 
-const StatBox = ({ icon: Icon, value, label }) => (
-  <motion.div
-    initial={{ scale: 0.5, opacity: 0 }}
-    whileInView={{ scale: 1, opacity: 1 }}
-    className="bg-white p-3 sm:p-6 md:p-8 rounded-2xl shadow-lg border border-[#006D5B]/10 hover:shadow-xl transition-shadow duration-300"
-  >
-    <div className="flex items-center justify-center mb-3">
-      <div className="p-2 sm:p-3 rounded-xl bg-[#DCE6D5]/50">
-        <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-[#006D5B]" />
+const useCounter = (end, duration = 2) => {
+  const [count, setCount] = useState(0);
+  const nodeRef = useRef(null);
+
+  useEffect(() => {
+    const node = nodeRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          let startTime;
+          const numericEnd = parseInt(end);
+          const startValue = 0;
+
+          const animate = (currentTime) => {
+            if (!startTime) startTime = currentTime;
+            const elapsedTime = (currentTime - startTime) / 1000;
+            const progress = Math.min(elapsedTime / duration, 1);
+
+            // Easing function for smooth animation
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const currentValue = Math.floor(
+              startValue + (numericEnd - startValue) * easeOutQuart
+            );
+
+            setCount(currentValue);
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            }
+          };
+
+          requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(node);
+    return () => observer.unobserve(node);
+  }, [end, duration]);
+
+  return [count, nodeRef];
+};
+
+const StatBox = ({ icon: Icon, value, label }) => {
+  const numericValue = parseInt(value);
+  const suffix = value.replace(numericValue.toString(), "");
+  const [count, ref] = useCounter(numericValue);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ scale: 0.5, opacity: 0 }}
+      whileInView={{ scale: 1, opacity: 1 }}
+      className="bg-white p-3 sm:p-6 md:p-8 rounded-2xl shadow-lg border border-[#006D5B]/10 hover:shadow-xl transition-shadow duration-300"
+    >
+      <div className="flex items-center justify-center mb-3">
+        <div className="p-2 sm:p-3 rounded-xl bg-[#DCE6D5]/50">
+          <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-[#006D5B]" />
+        </div>
       </div>
-    </div>
-    <div className="text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="text-xl sm:text-2xl md:text-3xl font-bold text-[#006D5B] mb-0.5 sm:mb-1"
-      >
-        {value}
-      </motion.div>
-      <div className="text-sm text-[#4B4B4B]">{label}</div>
-    </div>
-  </motion.div>
-);
+      <div className="text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-xl sm:text-2xl md:text-3xl font-bold text-[#006D5B] mb-0.5 sm:mb-1"
+        >
+          {count}
+          {suffix}
+        </motion.div>
+        <div className="text-sm text-[#4B4B4B]">{label}</div>
+      </div>
+    </motion.div>
+  );
+};
 
 export default function TopicSummaries() {
   const [expandedId, setExpandedId] = useState(null);
@@ -322,30 +374,28 @@ export default function TopicSummaries() {
         </div>
 
         {/* View All Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="text-center"
-        >
+        <div className="w-full flex justify-center mb-12">
           <Link
             to="/summaries"
-            className="group inline-flex items-center gap-3 px-8 py-4 md:px-10 md:py-5 bg-[#006D5B] text-white rounded-xl font-semibold text-lg md:text-xl hover:bg-[#006D5B]/90 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
+            style={{
+              width: "300px",
+              height: "75px",
+              borderRadius: "50px",
+              textDecoration: "none",
+            }}
           >
-            Explore All Topic Summaries
-            <motion.span
-              animate={{ x: [0, 5, 0] }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut",
-              }}
-              className="bg-white/20 rounded-full p-1"
-            >
-              <ArrowRightIcon className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" />
-            </motion.span>
+            {/* Tooth peeks from top center on hover/click */}
+            <div className="pointer-events-none absolute left-1/2 top-0 z-[3] -translate-x-1/2 -translate-y-2 opacity-0 scale-90 transition-all duration-300 ease-out group-hover:-translate-y-8 group-hover:opacity-100 group-hover:scale-100 group-active:translate-y-10 text-xl">
+              <img
+                src="/tooth_peak.png"
+                alt=""
+                className="w-16 h-16 drop-shadow-lg"
+              />
+            </div>
+            <span className="relative z-[2] text-lg">Explore All Topics</span>
           </Link>
-        </motion.div>
+        </div>
 
         {/* Additional CTA */}
         <motion.div

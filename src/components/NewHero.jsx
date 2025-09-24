@@ -5,6 +5,93 @@ import { Float, Environment, Image } from "@react-three/drei";
 const HERO_FONT = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 // Right-side visual uses hero.png card with torus + orbs (from Hero.jsx logic)
 
+// Braces-like underline SVG under the title
+function BracesUnderline() {
+  const brackets = [60, 140, 220, 300, 360];
+  return (
+    <div
+      className="mx-auto lg:mx-0 group"
+      style={{ width: "clamp(160px, 38vw, 360px)", height: 32 }}
+    >
+      <svg
+        viewBox="0 0 400 40"
+        width="100%"
+        height="100%"
+        className="overflow-visible"
+      >
+        <defs>
+          <linearGradient id="wire" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#006D5B" />
+            <stop offset="100%" stopColor="#B6E2D3" />
+          </linearGradient>
+        </defs>
+        {/* Brackets */}
+        {brackets.map((x, i) => (
+          <g key={i}>
+            {/* Side wings */}
+            <rect
+              x={x - 18}
+              y={20}
+              width={6}
+              height={4}
+              rx={1}
+              fill="#ffffff"
+              stroke="#006D5B"
+              strokeWidth={1}
+            />
+            <rect
+              x={x + 12}
+              y={20}
+              width={6}
+              height={4}
+              rx={1}
+              fill="#ffffff"
+              stroke="#006D5B"
+              strokeWidth={1}
+            />
+
+            {/* Main bracket body */}
+            <rect
+              x={x - 10}
+              y={15}
+              width={20}
+              height={14}
+              rx={2}
+              fill="#ffffff"
+              opacity={0.98}
+              stroke="#006D5B"
+              strokeWidth={1.5}
+            />
+            {/* Slot */}
+            <rect
+              x={x - 6}
+              y={19}
+              width={12}
+              height={6}
+              rx={1.5}
+              fill="#B6E2D3"
+            />
+            {/* Ligature */}
+            <circle cx={x} cy={22} r={2} fill="#76c8b2" />
+          </g>
+        ))}
+        {/* Straight archwire on top for visibility */}
+        <line
+          x1="0"
+          y1="22"
+          x2="400"
+          y2="22"
+          stroke="#006D5B"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          style={{ filter: "drop-shadow(0 1px 3px rgba(0,109,91,0.25))" }}
+          className="transition-transform duration-300 group-hover:-translate-y-[1px]"
+        />
+      </svg>
+    </div>
+  );
+}
+
 export default function NewHero() {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -64,7 +151,7 @@ export default function NewHero() {
                   OrthoChronicles
                 </h1>
 
-                <div className="h-1 w-24 bg-gradient-to-r from-[#006D5B] to-[#B6E2D3] rounded-full mx-auto lg:mx-0 shadow-lg" />
+                <BracesUnderline />
               </div>
 
               {/* Sub-text */}
@@ -89,17 +176,43 @@ export default function NewHero() {
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
                 <button
-                  className="group relative flex items-center justify-center bg-[#DCE6D5] text-[#006D5B] font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 w-full sm:w-[240px] h-[60px] sm:h-[70px] rounded-full text-base"
+                  className="group relative flex items-center justify-center bg-[#D6EDDS] text-[#006D5B] font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
+                  style={{
+                    width: "300px",
+                    height: "75px",
+                    borderRadius: "50px",
+                  }}
                 >
-                  <span className="relative z-[2] flex items-center gap-2">
+                  {/* Tooth peeks from top center on hover/click */}
+                  <div className="pointer-events-none absolute left-1/2 top-0 z-[3] -translate-x-1/2 -translate-y-2 opacity-0 scale-90 transition-all duration-300 ease-out group-hover:-translate-y-8 group-hover:opacity-100 group-hover:scale-100 group-active:translate-y-10 text-xl">
+                    <img
+                      src="/tooth_peak.png"
+                      alt=""
+                      className="w-16 h-16 drop-shadow-lg"
+                    />
+                  </div>
+                  <span className="relative z-[2] flex items-center gap-2 text-lg">
                     Explore
                   </span>
                 </button>
 
                 <button
-                  className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 w-full sm:w-[240px] h-[60px] sm:h-[70px] rounded-full text-base hover:bg-[#004B3F]"
+                  className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
+                  style={{
+                    width: "300px",
+                    height: "75px",
+                    borderRadius: "50px",
+                  }}
                 >
-                  <span className="relative z-[2]">Start Learning</span>
+                  {/* Tooth peeks from top center on hover/click */}
+                  <div className="pointer-events-none absolute left-1/2 top-0 z-[3] -translate-x-1/2 -translate-y-2 opacity-0 scale-90 transition-all duration-300 ease-out group-hover:-translate-y-8 group-hover:opacity-100 group-hover:scale-100 group-active:translate-y-10 text-xl">
+                    <img
+                      src="/tooth_peak.png"
+                      alt=""
+                      className="w-16 h-16 drop-shadow-lg"
+                    />
+                  </div>
+                  <span className="relative z-[2] text-lg">Start Learning</span>
                 </button>
               </div>
 
@@ -114,7 +227,9 @@ export default function NewHero() {
                       />
                     ))}
                   </div>
-                  <span className="text-sm font-medium text-slate-600">1000+ Students</span>
+                  <span className="text-sm font-medium text-slate-600">
+                    1000+ Students
+                  </span>
                 </div>
                 <div className="flex items-center gap-1">
                   {[1, 2, 3, 4, 5].map((i) => (
@@ -126,10 +241,11 @@ export default function NewHero() {
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
-                  <span className="text-sm font-medium text-slate-600 ml-1">4.9/5</span>
+                  <span className="text-sm font-medium text-slate-600 ml-1">
+                    4.9/5
+                  </span>
                 </div>
               </div>
-              
             </div>
 
             {/* === Right: Interactive Visual === */}
@@ -143,7 +259,7 @@ export default function NewHero() {
       </div>
 
       {/* Scroll Down Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce hidden md:block">
+      <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-20 animate-bounce hidden md:block">
         <div
           className="w-8 h-12 border-2 rounded-full flex justify-center"
           style={{ borderColor: "#006D5B" }}

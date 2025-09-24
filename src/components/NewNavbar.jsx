@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 // Import font (e.g., 'Inter', 'Montserrat', or 'Helvetica Neue')
 const fontUrl =
@@ -24,6 +24,7 @@ const MENU_FONT = "Poppins, Inter, Helvetica Neue, Arial, sans-serif";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
 
   const menuItems = [
     { name: "Home", href: "/" },
@@ -71,24 +72,50 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center gap-8">
-            {menuItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="text-[#006D5B] hover:text-[#004B3F] transition-colors duration-300"
-                style={{
-                  fontFamily: MENU_FONT,
-                  fontWeight: 400,
-                  fontStyle: "normal",
-                  fontSize: "16px",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                }}
-              >
-                {item.name}
-              </Link>
-            ))}
+          <div className="hidden lg:flex items-center gap-2 xl:gap-4">
+            {menuItems.map((item) => {
+              const isActive = location.pathname === item.href;
+              return (
+                <div key={item.name} className="relative group">
+                  {/* Subtle hover background */}
+                  <span
+                    className={`pointer-events-none absolute inset-0 rounded-full bg-[#006D5B]/10 transition-opacity duration-300 ${
+                      isActive
+                        ? "opacity-100"
+                        : "opacity-0 group-hover:opacity-100"
+                    }`}
+                  ></span>
+
+                  <Link
+                    to={item.href}
+                    className={`relative z-10 inline-flex items-center px-4 py-2 rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#006D5B]/30 focus-visible:ring-offset-2 ${
+                      isActive
+                        ? "text-[#004B3F]"
+                        : "text-[#006D5B] group-hover:text-[#004B3F]"
+                    }`}
+                    style={{
+                      fontFamily: MENU_FONT,
+                      fontWeight: 400,
+                      fontStyle: "normal",
+                      fontSize: "16px",
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                    }}
+                  >
+                    {item.name}
+                  </Link>
+
+                  {/* Running underline */}
+                  <span
+                    className={`pointer-events-none absolute left-3 right-3 bottom-1 h-[2px] rounded-full transform origin-left transition-transform duration-300 ease-out ${
+                      isActive
+                        ? "bg-[#004B3F] scale-x-100"
+                        : "bg-[#006D5B] scale-x-0 group-hover:scale-x-100"
+                    }`}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           {/* Right Side Actions */}

@@ -84,7 +84,9 @@ const ServiceCard = ({ service }) => {
             <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#006D5B] mb-1 sm:mb-2">
               {service.title}
             </h3>
-            <p className="text-sm sm:text-base text-[#4B4B4B]">{service.description}</p>
+            <p className="text-sm sm:text-base text-[#4B4B4B]">
+              {service.description}
+            </p>
           </div>
         </div>
 
@@ -150,7 +152,7 @@ const StatsItem = ({ icon: Icon, value, label }) => (
 
 export default function AcademicHelp() {
   return (
-    <section className="py-10 sm:py-16 md:py-24 bg-[#DCE6D5]/30">
+    <section className="py-10 sm:py-16 md:py-24 bg-[#DCE6D5]">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
@@ -205,30 +207,28 @@ export default function AcademicHelp() {
         </div>
 
         {/* Main CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="text-center mb-24"
-        >
+        <div className="w-full flex justify-center mb-12">
           <Link
             to="/academic-help"
-            className="group inline-flex items-center gap-3 px-8 py-4 md:px-10 md:py-5 bg-[#006D5B] text-white rounded-xl font-semibold text-lg md:text-xl hover:bg-[#006D5B]/90 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
+            style={{
+              width: "300px",
+              height: "75px",
+              borderRadius: "50px",
+              textDecoration: "none",
+            }}
           >
-            Explore All Academic Services
-            <motion.span
-              animate={{ x: [0, 5, 0] }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut",
-              }}
-              className="bg-white/20 rounded-full p-1"
-            >
-              <ArrowRightIcon className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" />
-            </motion.span>
+            {/* Tooth peeks from top center on hover/click */}
+            <div className="pointer-events-none absolute left-1/2 top-0 z-[3] -translate-x-1/2 -translate-y-2 opacity-0 scale-90 transition-all duration-300 ease-out group-hover:-translate-y-8 group-hover:opacity-100 group-hover:scale-100 group-active:translate-y-10 text-xl">
+              <img
+                src="/tooth_peak.png"
+                alt=""
+                className="w-16 h-16 drop-shadow-lg"
+              />
+            </div>
+            <span className="relative z-[2] text-lg">Explore All Services</span>
           </Link>
-        </motion.div>
+        </div>
 
         {/* Additional Support CTA */}
         <motion.div

@@ -5,7 +5,7 @@ const HERO_FONT = "Inter, Helvetica Neue, Arial, sans-serif";
 const Footer = () => {
   return (
     <footer
-      className="w-full bg-[#006D5B]/5 border-t border-[#006D5B]/10 pt-16 pb-8 px-4 sm:px-6 lg:px-8"
+      className="w-full bg-[#DCE6D5]/30 border-t border-[#006D5B]/10 pt-16 pb-8 px-4 sm:px-6 lg:px-8"
       style={{ fontFamily: HERO_FONT }}
     >
       <div className="max-w-7xl mx-auto">

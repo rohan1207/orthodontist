@@ -1,45 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-const recommendedArticles = [
-  {
-    id: 1,
-    title: "Understanding Dental Anatomy",
-    description:
-      "A comprehensive guide to dental structures, terminology, and basic concepts essential for dental students.",
-    image: "/article1.jpg",
-    category: "Fundamentals",
-    readTime: "12 min read",
-  },
-  {
-    id: 2,
-    title: "Clinical Case Studies in Orthodontics",
-    description:
-      "Real-world orthodontic cases with detailed analysis and treatment approaches. Perfect for practical learning.",
-    image: "/article2.jpg",
-    category: "Clinical Practice",
-    readTime: "15 min read",
-  },
-  {
-    id: 3,
-    title: "Exam Preparation Strategies",
-    description:
-      "Expert tips and structured approaches to ace your dental exams with confidence and precision.",
-    image: "/article3.jpg",
-    category: "Study Tips",
-    readTime: "10 min read",
-  },
-  {
-    id: 4,
-    title: "Latest Orthodontic Technologies",
-    description:
-      "Exploring cutting-edge technologies and innovations shaping the future of orthodontic practice.",
-    image: "/article4.jpg",
-    category: "Technology",
-    readTime: "8 min read",
-  },
-];
+// Fetch from backend instead of using local JSON data
 
 const RecommendedCard = ({ article }) => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -76,6 +39,7 @@ const RecommendedCard = ({ article }) => {
             <img
               src={article.image}
               alt={article.title}
+              loading="lazy"
               className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#006D5B]/80 via-[#006D5B]/20 to-transparent">
@@ -155,6 +119,32 @@ const RecommendedCard = ({ article }) => {
 };
 
 export default function Recommended() {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchTop() {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch("/api/blogs?limit=4");
+        if (!res.ok) throw new Error(`fetch failed ${res.status}`);
+        const data = await res.json();
+        if (!cancelled) setArticles(data);
+      } catch (err) {
+        if (!cancelled) setError(err.message || "Failed to load");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    fetchTop();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section className="py-10 md:py-24 bg-[#DCE6D5]/30">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -171,33 +161,60 @@ export default function Recommended() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 md:gap-8 lg:gap-10">
-          {recommendedArticles.map((article) => (
-            <RecommendedCard key={article.id} article={article} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid place-items-center py-20">
+            <div className="loader">Loading...</div>
+          </div>
+        ) : error ? (
+          <div className="text-center text-red-600 py-10">
+            Error loading articles: {error}
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 md:gap-8 lg:gap-10">
+              {articles.map((b, idx) => {
+                const article = {
+                  id: b.slug || idx,
+                  title: b.mainHeading || "Untitled",
+                  description:
+                    (b.summaryPoints && b.summaryPoints[0]) ||
+                    b.subHeading ||
+                    "",
+                  // Use heroImage first so thumbnails match the article page's hero image
+                  image:
+                    b.heroImage ||
+                    (b.gallery && b.gallery[0]) ||
+                    "/article1.jpg",
+                  category: b.category || "Article",
+                  readTime: b.readingTime ? `${b.readingTime} min read` : "-",
+                };
+                return <RecommendedCard key={article.id} article={article} />;
+              })}
+            </div>
 
-        <div className="mt-10 sm:mt-16 text-center">
-          <Link
-            to="/articles"
-            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base text-[#006D5B] hover:text-[#004B3F] font-medium transition-all duration-300 rounded-full border-2 border-[#006D5B]/10 hover:border-[#006D5B]/20 bg-white/50 hover:bg-white/80 hover:shadow-md"
-          >
-            View All Articles
-            <svg
-              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-          </Link>
-        </div>
+            <div className="mt-10 sm:mt-16 text-center">
+              <Link
+                to="/articles"
+                className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base text-[#006D5B] hover:text-[#004B3F] font-medium transition-all duration-300 rounded-full border-2 border-[#006D5B]/10 hover:border-[#006D5B]/20 bg-white/50 hover:bg-white/80 hover:shadow-md"
+              >
+                View All Articles
+                <svg
+                  className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

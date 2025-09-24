@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import DOMPurify from "dompurify";
 import {
   ArrowLeftIcon,
   ShareIcon,
@@ -18,111 +17,295 @@ import {
 } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartSolidIcon } from "@heroicons/react/24/solid";
 
-// Generic component to render sanitized HTML
-const RenderHtmlContent = ({ html }) => {
-  const sanitizedHtml = DOMPurify.sanitize(html);
-  return <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />;
+// NEW: Component-based content rendering
+const renderContent = (block) => {
+  switch (block.type) {
+    case "heading":
+      return (
+        <h2
+          key={block.id}
+          className="text-3xl font-bold text-[#005c4d] mt-12 mb-6"
+        >
+          {block.text}
+        </h2>
+      );
+    case "paragraph":
+      return (
+        <p
+          key={block.id}
+          className="text-lg text-[#fbbaba] leading-relaxed mb-6"
+        >
+          {block.text}
+        </p>
+      );
+    case "image":
+      return (
+        <div key={block.id} className="my-10">
+          <img
+            src={block.src}
+            alt={block.caption}
+            className="rounded-2xl shadow-lg w-full object-cover"
+          />
+          {block.caption && (
+            <p className="text-center text-sm text-gray-500 mt-3 italic">
+              {block.caption}
+            </p>
+          )}
+        </div>
+      );
+    case "quote":
+      return (
+        <blockquote
+          key={block.id}
+          className="border-l-4 border-[#006D5B] pl-8 py-6 my-10 bg-[#DCE6D5]/40 rounded-r-2xl"
+        >
+          <p className="text-xl italic text-[#4B4B4B] mb-4">"{block.text}"</p>
+          {block.cite && (
+            <cite className="text-[#006D5B] font-semibold not-italic">
+              — {block.cite}
+            </cite>
+          )}
+        </blockquote>
+      );
+    case "note":
+      return (
+        <div
+          key={block.id}
+          className="bg-[#DCE6D5]/40 p-8 rounded-2xl border-l-4 border-[#006D5B] my-10"
+        >
+          <h3 className="text-2xl font-bold text-[#005c4d] mb-4 flex items-center">
+            <SparklesIcon className="w-6 h-6 text-[#006D5B] mr-3" />
+            {block.title}
+          </h3>
+          <p className="text-lg text-[#4B4B4B] mb-4">{block.text}</p>
+          {block.points && (
+            <div className="bg-white/70 p-6 rounded-xl mt-6">
+              <ul className="space-y-3">
+                {block.points.map((point, index) => (
+                  <li key={index} className="flex items-start">
+                    <CheckCircleIcon className="w-5 h-5 text-[#006D5B] mr-3 mt-1 flex-shrink-0" />
+                    <span
+                      className="text-[#4B4B4B]"
+                      dangerouslySetInnerHTML={{ __html: point }}
+                    ></span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      );
+    case "challenge":
+      return (
+        <div
+          key={block.id}
+          className="bg-yellow-50 p-8 rounded-2xl border border-yellow-200 my-10"
+        >
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            {block.title}
+          </h2>
+          <p className="text-lg text-gray-700 mb-6">{block.text}</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {block.steps.map((step, index) => (
+              <div key={index} className="text-center">
+                <div className="w-16 h-16 bg-yellow-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-yellow-800">
+                    {index + 1}
+                  </span>
+                </div>
+                <h4 className="font-bold mb-2">{step.title}</h4>
+                <p className="text-sm text-gray-600">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    default:
+      return null;
+  }
 };
 
-// Convert plain text into simple HTML: paragraphs, lists, headings, links, and YouTube embeds
-function textToHtml(text) {
-  if (!text) return "";
+// NEW: Dummy data for related articles
+const relatedArticles = [
+  {
+    id: 2,
+    title: "The Biomechanics of Tooth Movement",
+    category: "Fundamentals",
+    heroImage: "/article1.jpg",
+  },
+  {
+    id: 3,
+    title: "Modern Bracket Systems Compared",
+    category: "Clinical Tech",
+    heroImage: "/article2.jpg",
+  },
+  {
+    id: 4,
+    title: "Managing Orthodontic Emergencies",
+    category: "Patient Care",
+    heroImage: "/article3.jpg",
+  },
+];
 
-  // Helper: detect youtube id and return iframe
-  function youtubeEmbed(url) {
-    const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/i);
-    if (!m) return null;
-    const id = m[1];
-    return `<div class="video-embed" style="margin:1rem 0"><iframe width=560 height=315 src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`;
-  }
-
-  // Split into blocks separated by one or more blank lines
-  const blocks = String(text)
-    .split(/\n\s*\n/)
-    .map((b) => b.trim())
-    .filter(Boolean);
-  const htmlBlocks = blocks.map((block) => {
-    const lines = block
-      .split(/\n/)
-      .map((l) => l.trim())
-      .filter(Boolean);
-
-    // Unordered list (lines starting with - or *)
-    if (lines.every((l) => /^[-*]\s+/.test(l))) {
-      const items = lines
-        .map((l) => `<li>${l.replace(/^[-*]\s+/, "")}</li>`)
-        .join("");
-      return `<ul class="list-disc pl-6 mb-4">${items}</ul>`;
-    }
-
-    // Ordered list (lines starting with 1. 2. etc)
-    if (lines.every((l) => /^\d+\.\s+/.test(l))) {
-      const items = lines
-        .map((l) => `<li>${l.replace(/^\d+\.\s+/, "")}</li>`)
-        .join("");
-      return `<ol class="list-decimal pl-6 mb-4">${items}</ol>`;
-    }
-
-    // Single-line headings (ends with ':' or short length)
-    if (lines.length === 1 && /:$/.test(lines[0])) {
-      return `<h3 class="text-2xl font-semibold text-[#005c4d] mb-3">${lines[0].replace(
-        /:$/,
-        ""
-      )}</h3>`;
-    }
-
-    // Convert URLs to links and embed YouTube where possible
-    let html = block.replace(/(https?:\/\/[^\s]+)/g, (url) => {
-      const embed = youtubeEmbed(url);
-      if (embed) return embed;
-      return `<a href="${url}" target="_blank" rel="noreferrer" class="text-[#006D5B] underline">${url}</a>`;
-    });
-
-    // Preserve single newlines as <br/> for readability
-    html = html
-      .split(/\n/)
-      .map((line) => line.trim())
-      .join("<br/>");
-    return `<p class="mb-4 text-[#4B4B4B] leading-relaxed">${html}</p>`;
-  });
-
-  return htmlBlocks.join("\n");
-}
-
-// Related Reads Component (receives relatedArticles prop)
-const RelatedReads = ({ relatedArticles = [] }) => {
-  return (
-    <div className="mt-16 pt-12 border-t border-[#006D5B]/10">
-      <h2 className="text-3xl font-bold text-[#005c4d] mb-8 text-center">
-        Related Reads
-      </h2>
-      <div className="grid md:grid-cols-3 gap-8">
-        {relatedArticles.map((article) => (
-          <Link
-            to={`/article/${article.slug || article.id}`}
-            key={article.slug || article.id}
-            className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
-          >
-            <div className="overflow-hidden">
-              <img
-                src={article.heroImage}
-                alt={article.title}
-                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div className="p-6">
-              <span className="text-sm font-semibold text-[#006D5B]">
-                {article.category}
-              </span>
-              <h3 className="mt-2 text-lg font-bold text-[#4B4B4B] group-hover:text-[#005c4d] transition-colors">
-                {article.title}
-              </h3>
-            </div>
-          </Link>
-        ))}
-      </div>
+// NEW: Related Reads Component
+const RelatedReads = () => (
+  <div className="mt-16 pt-12 border-t border-[#006D5B]/10">
+    <h2 className="text-3xl font-bold text-[#005c4d] mb-8 text-center">
+      Related Reads
+    </h2>
+    <div className="grid md:grid-cols-3 gap-8">
+      {relatedArticles.map((article) => (
+        <Link
+          to={`/article/${article.id}`}
+          key={article.id}
+          className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
+        >
+          <div className="overflow-hidden">
+            <img
+              src={article.heroImage}
+              alt={article.title}
+              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div className="p-6">
+            <span className="text-sm font-semibold text-[#006D5B]">
+              {article.category}
+            </span>
+            <h3 className="mt-2 text-lg font-bold text-[#4B4B4B] group-hover:text-[#005c4d] transition-colors">
+              {article.title}
+            </h3>
+          </div>
+        </Link>
+      ))}
     </div>
-  );
+  </div>
+);
+
+// DEMO ARTICLE DATA - RESTRUCTURED
+const demoArticle = {
+  id: 1,
+  title: "The Secret to Mastering Cephalometric Analysis",
+  subtitle: "What they don't teach you in textbooks",
+  author: "Dr. Shravani",
+  authorImage: "/user.jpeg",
+  authorBio:
+    "Lead Orthodontist with 15+ years experience, Former Harvard Faculty",
+  publishDate: "2025-01-15",
+  readTime: 12,
+  views: 15420,
+  likes: 1240,
+  heroImage: "/demo.png",
+  category: "Advanced Techniques",
+  difficulty: "Intermediate",
+  tags: ["Cephalometrics", "X-Ray Analysis", "Clinical Skills", "Diagnosis"],
+
+  // OLD content properties removed
+  // NEW structured content array
+  content: [
+    {
+      id: "p1",
+      type: "paragraph",
+      text: "Every orthodontic resident faces the same nightmare: staring at a cephalometric X-ray for what feels like hours, trying to identify landmarks that seem to vanish the moment you think you've found them.",
+    },
+    {
+      id: "p2",
+      type: "paragraph",
+      text: "I remember my first week of residency when Dr. Martinez handed me a lateral ceph and asked me to identify the ANB angle. I spent 45 minutes on what should have been a 2-minute task. The patient was waiting, my confidence was shattered, and I felt like I'd never master this essential skill.",
+    },
+    {
+      id: "p3",
+      type: "paragraph",
+      text: "But here's what changed everything for me—and what I wish someone had told me on day one...",
+    },
+  ],
+
+  fullContent: [
+    {
+      id: "note1",
+      type: "note",
+      title: 'The "Landmark Map" Technique',
+      text: 'Instead of hunting for individual landmarks, successful orthodontists use what I call the "Landmark Map" technique. They create a mental grid system that makes every landmark predictable.',
+      points: [
+        "<strong>Zone 1 (Cranial):</strong> Start with Sella and Nasion - they're your north star.",
+        '<strong>Zone 2 (Maxillary):</strong> A-point becomes obvious once you know the "shadow trick".',
+        "<strong>Zone 3 (Mandibular):</strong> B-point and Pogonion follow a predictable curve.",
+      ],
+    },
+    {
+      id: "img1",
+      type: "image",
+      src: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=600&h=400&fit=crop",
+      caption: "Systematic analysis leads to greater accuracy.",
+    },
+    { id: "h1", type: "heading", text: "Why This Works" },
+    {
+      id: "p4",
+      type: "paragraph",
+      text: "The human brain is wired for pattern recognition, not random searching. When you approach cephs systematically, you're working with your neural pathways, not against them. Studies show that orthodontists using systematic approaches are 340% faster and 67% more accurate in their measurements.",
+    },
+    {
+      id: "q1",
+      type: "quote",
+      text: "The difference between a struggling resident and a confident orthodontist isn't talent—it's having the right system.",
+      cite: "Dr. Robert Ricketts, Pioneer of Cephalometric Analysis",
+    },
+    {
+      id: "challenge1",
+      type: "challenge",
+      title: "The 5-Minute Ceph Challenge",
+      text: "Here's a practical exercise that will revolutionize your ceph reading skills:",
+      steps: [
+        {
+          title: "Minute 1-2",
+          description: "Orient the film and identify the three zones",
+        },
+        {
+          title: "Minute 3-4",
+          description: "Mark landmarks using the map technique",
+        },
+        {
+          title: "Minute 5",
+          description: "Calculate key angles and verify measurements",
+        },
+      ],
+    },
+  ],
+
+  comments: [
+    {
+      id: 1,
+      author: "Sarah M.",
+      authorImage:
+        "https://images.unsplash.com/photo-1494790108755-2616b612b762?w=400&h=400&fit=crop&crop=face",
+      content:
+        "This completely changed how I approach ceph analysis! Went from 30 minutes per case to 8 minutes. Thank you Dr. Shravani!",
+      date: "2 days ago",
+      likes: 24,
+      isStudent: true,
+    },
+    {
+      id: 2,
+      author: "Dr. James Park",
+      authorImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+      content:
+        "I've been practicing for 10 years and still learned something new. The zone system is brilliant.",
+      date: "1 week ago",
+      likes: 18,
+      isStudent: false,
+    },
+    {
+      id: 3,
+      author: "Emily R.",
+      authorImage:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
+      content:
+        "Just passed my boards using these techniques! The 5-minute challenge was a game changer.",
+      date: "2 weeks ago",
+      likes: 31,
+      isStudent: true,
+    },
+  ],
 };
 
 // Subscription Gate Component (glass card with inline auth)
@@ -133,10 +316,9 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  // Replace with real API calls as needed
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate success and call parent
+    // Dummy success flow
     onAuthSuccess?.();
   };
 
@@ -144,37 +326,39 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.28 }}
+      transition={{ duration: 0.3 }}
       className="w-full max-w-xl"
     >
-      <div className="bg-white/75 backdrop-blur-2xl rounded-2xl border border-white/60 shadow-2xl p-6 sm:p-8">
+      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/60 shadow-2xl p-8 sm:p-10">
         {!showForm ? (
           <div className="text-center">
-            <LockClosedIcon className="w-14 h-14 text-[#006D5B] mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-[#005c4d] mb-2">
+            <LockClosedIcon className="w-14 h-14 text-[#006D5B] mx-auto mb-5" />
+            <h3 className="text-2xl font-bold text-[#005c4d] mb-3">
               Unlock the Full Article
             </h3>
-            <p className="text-[#4B4B4B] mb-4">
+            <p className="text-[#4B4B4B] mb-6">
               Join 15,000+ learners mastering orthodontics with expert guides,
               case studies, and weekly discussions.
             </p>
-
-            <div className="bg-[#DCE6D5]/60 p-4 rounded-xl mb-5 text-left">
-              <h4 className="font-semibold text-[#005c4d] mb-2">Free includes</h4>
+            <div className="bg-[#DCE6D5]/60 p-5 rounded-xl mb-6 text-left">
+              <h4 className="font-semibold text-[#005c4d] mb-3">
+                Free includes
+              </h4>
               <ul className="text-sm text-[#4B4B4B] space-y-2">
                 <li className="flex items-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" /> Access to 200+ in-depth articles
+                  <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" /> Access
+                  to 200+ in-depth articles
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" /> Downloadable study guides
+                  <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" />{" "}
+                  Downloadable study guides
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" /> Weekly case discussions
+                  <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" /> Weekly
+                  case discussions
                 </li>
               </ul>
             </div>
-
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
                 onClick={() => setShowForm(true)}
@@ -187,7 +371,7 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
           </div>
         ) : (
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-6">
               <button
                 className="text-sm text-[#006D5B] hover:text-[#005c4d]"
                 onClick={() => setShowForm(false)}
@@ -197,7 +381,9 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
               <div className="inline-flex bg-white/70 rounded-full p-1 border border-[#006D5B]/10">
                 <button
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    mode === "login" ? "bg-[#006D5B] text-white" : "text-[#005c4d]"
+                    mode === "login"
+                      ? "bg-[#006D5B] text-white"
+                      : "text-[#005c4d]"
                   }`}
                   onClick={() => setMode("login")}
                 >
@@ -205,7 +391,9 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
                 </button>
                 <button
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    mode === "signup" ? "bg-[#006D5B] text-white" : "text-[#005c4d]"
+                    mode === "signup"
+                      ? "bg-[#006D5B] text-white"
+                      : "text-[#005c4d]"
                   }`}
                   onClick={() => setMode("signup")}
                 >
@@ -217,7 +405,9 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
             <form onSubmit={handleSubmit} className="space-y-4">
               {mode === "signup" && (
                 <div>
-                  <label className="block text-sm text-[#4B4B4B] mb-1">Full name</label>
+                  <label className="block text-sm text-[#4B4B4B] mb-1">
+                    Full name
+                  </label>
                   <input
                     type="text"
                     value={name}
@@ -228,9 +418,10 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
                   />
                 </div>
               )}
-
               <div>
-                <label className="block text-sm text-[#4B4B4B] mb-1">Email</label>
+                <label className="block text-sm text-[#4B4B4B] mb-1">
+                  Email
+                </label>
                 <input
                   type="email"
                   value={email}
@@ -240,9 +431,10 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
                   required
                 />
               </div>
-
               <div>
-                <label className="block text-sm text-[#4B4B4B] mb-1">Password</label>
+                <label className="block text-sm text-[#4B4B4B] mb-1">
+                  Password
+                </label>
                 <input
                   type="password"
                   value={password}
@@ -252,15 +444,15 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
                   required
                 />
               </div>
-
               <button
                 type="submit"
                 className="w-full bg-[#006D5B] text-white py-3 rounded-xl font-semibold hover:bg-[#005c4d] transition-colors shadow-lg"
               >
                 {mode === "login" ? "Log in" : "Create account"}
               </button>
-
-              <p className="text-xs text-center text-gray-500">By continuing you agree to our Terms and Privacy Policy</p>
+              <p className="text-xs text-center text-gray-500">
+                By continuing you agree to our Terms and Privacy Policy
+              </p>
             </form>
           </div>
         )}
@@ -404,138 +596,23 @@ const CommentSection = ({ comments }) => {
 export default function ArticleTemplate() {
   const { id } = useParams();
   const targetRef = useRef();
-
-  // NEW: State for the dynamically fetched article
-  const [article, setArticle] = useState(null);
-  const [related, setRelated] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [gateActive, setGateActive] = useState(false);
   const gateSentinelRef = useRef(null);
 
-  // Fetch article data from backend by slug (slug is used as :slug param)
-  useEffect(() => {
-    if (!id) return;
-    let mounted = true;
-    setLoading(true);
-    setError(null);
-    setArticle(null);
-
-    async function fetchArticle() {
-      try {
-        const res = await fetch(`/api/blogs/${encodeURIComponent(id)}`);
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`Failed to load article: ${res.status} ${text}`);
-        }
-        const data = await res.json();
-
-        // Map backend Blog document to ArticleTemplate shape
-        const mapped = {
-          id: data.slug,
-          slug: data.slug,
-          title: data.mainHeading || data.metaTitle || "",
-          subtitle: data.subHeading || data.metaDescription || "",
-          category: data.category || "",
-          difficulty: data.difficultyLevel || data.difficulty || "",
-          views: data.views || 0,
-          readTime: data.readingTime || data.readTime || 0,
-          publishDate: data.scheduledAt
-            ? new Date(data.scheduledAt).toLocaleDateString()
-            : data.createdAt
-            ? new Date(data.createdAt).toLocaleDateString()
-            : new Date().toLocaleDateString(),
-          author: data.author || "",
-          authorImage:
-            (data.gallery && data.gallery[0]) || data.heroImage || "/user.jpeg",
-          authorBio:
-            (data.coAuthors && data.coAuthors.join(", ")) ||
-            data.authorBio ||
-            "",
-          heroImage:
-            data.heroImage ||
-            (data.gallery && data.gallery[0]) ||
-            "/article1.jpg",
-          contentPreviewHtml: data.content
-            ? textToHtml(
-                data.content
-                  .split(/\n\s*\n/)
-                  .slice(0, 1)
-                  .join("\n\n")
-              )
-            : "",
-          fullContentHtml: data.content
-            ? /<\/?[a-z][\s\S]*>/i.test(data.content)
-              ? data.content
-              : textToHtml(data.content)
-            : "",
-          tags: data.tags || [],
-          comments: data.comments || [],
-          likes: data.likes || 0,
-        };
-
-        if (mounted) {
-          setArticle(mapped);
-          setIsSubscribed(false);
-          setGateActive(false);
-          window.scrollTo(0, 0);
-        }
-
-        // fetch related articles
-        try {
-          const relRes = await fetch(`/api/blogs?limit=4`);
-          if (relRes.ok) {
-            const relData = await relRes.json();
-            if (mounted) {
-              const filtered = relData
-                .filter((b) => b.slug !== data.slug)
-                .slice(0, 3);
-              setRelated(
-                filtered.map((b) => ({
-                  slug: b.slug,
-                  title: b.mainHeading,
-                  heroImage:
-                    b.heroImage ||
-                    (b.gallery && b.gallery[0]) ||
-                    "/article1.jpg",
-                  category: b.category || "",
-                }))
-              );
-            }
-          }
-        } catch (err) {
-          // non-fatal
-          console.warn("related fetch failed", err);
-        }
-      } catch (err) {
-        console.error(err);
-        if (mounted) setError(String(err));
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    }
-
-    fetchArticle();
-
-    return () => {
-      mounted = false;
-    };
-  }, [id]);
+  const article = demoArticle;
 
   const handleAuthSuccess = () => {
     setIsSubscribed(true);
     setGateActive(false);
   };
 
-  // Trigger the gate once user reaches end of intro
+  // Trigger the gate once user reaches end of intro (within ~1–2 scrolls)
   useEffect(() => {
-    if (!article || !gateSentinelRef.current || isSubscribed) return;
-
     const el = gateSentinelRef.current;
+    if (!el || isSubscribed) return;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -548,67 +625,7 @@ export default function ArticleTemplate() {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [article, isSubscribed]); // Re-run when article loads
-
-  // Show gate on first small user interaction (wheel/touch/scroll/keydown)
-  // This is more reliable when navigating via client-side routing.
-  useEffect(() => {
-    if (isSubscribed) return;
-
-    let triggered = false;
-
-    const trigger = () => {
-      if (triggered) return;
-      triggered = true;
-      setGateActive(true);
-    };
-
-    const onScroll = () => {
-      if (window.pageYOffset > 10) trigger();
-    };
-    const onWheel = () => trigger();
-    const onTouchStart = () => trigger();
-    const onKeyDown = (e) => {
-      if (["ArrowDown", "PageDown", " ", " "].includes(e.key)) trigger();
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("wheel", onWheel, { passive: true });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [isSubscribed, article]);
-
-  // Loading, error, and Not Found states
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-xl text-gray-500">Loading article...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-xl text-red-500">{error}</p>
-      </div>
-    );
-  }
-
-  if (!article) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-xl text-gray-500">Article not found</p>
-      </div>
-    );
-  }
+  }, [isSubscribed]);
 
   return (
     <div ref={targetRef} className="bg-[#F9F9F9] min-h-screen">
@@ -703,11 +720,9 @@ export default function ArticleTemplate() {
                 <div className="font-semibold text-[#005c4d]">
                   {article.author}
                 </div>
-                {article.authorBio && (
-                  <div className="text-sm text-[#4B4B4B]">
-                    {article.authorBio}
-                  </div>
-                )}
+                <div className="text-sm text-[#4B4B4B]">
+                  {article.authorBio}
+                </div>
               </div>
             </div>
 
@@ -736,18 +751,22 @@ export default function ArticleTemplate() {
         </motion.div>
 
         {/* Article Content */}
-        <article className="prose prose-lg max-w-none prose-h2:text-3xl prose-h2:font-bold prose-h2:text-[#005c4d] prose-blockquote:border-[#006D5B] prose-blockquote:bg-[#DCE6D5]/40 prose-a:text-[#006D5B] hover:prose-a:text-[#005c4d]">
-          {/* Article Content: show preview when not subscribed, full content after subscription */}
-            <div>
-              {isSubscribed ? (
-                <RenderHtmlContent html={article.fullContentHtml || article.contentPreviewHtml} />
-              ) : (
-                <RenderHtmlContent html={article.contentPreviewHtml || article.fullContentHtml} />
-              )}
-            </div>
+        <article className="prose-lg max-w-none">
+          {/* Preview Content (always visible) */}
+          {article.content.map((block) => renderContent(block))}
 
-            {/* Gate sentinel (kept for analytics/behavior) */}
-            <div ref={gateSentinelRef} aria-hidden="true" className="h-2" />
+          {/* Gate sentinel — becomes visible near end of intro */}
+          <div ref={gateSentinelRef} aria-hidden="true" className="h-2" />
+
+          {/* Full Content (behind subscription gate) */}
+          {isSubscribed && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              {article.fullContent.map((block) => renderContent(block))}
+            </motion.div>
+          )}
         </article>
 
         {/* Action Buttons */}
@@ -798,101 +817,8 @@ export default function ArticleTemplate() {
           </div>
         </div>
 
-        {/* Comments Section: render only when comments exist */}
-        {article.comments && article.comments.length > 0 && (
-          <CommentSection comments={article.comments} />
-        )}
-
-        {/* Summary points */}
-        {article.summaryPoints && article.summaryPoints.length > 0 && (
-          <div className="mt-8 bg-white p-6 rounded-2xl border border-[#006D5B]/10">
-            <h3 className="text-lg font-semibold text-[#005c4d] mb-3">
-              Key takeaways
-            </h3>
-            <ul className="list-disc pl-5 text-[#4B4B4B] space-y-2">
-              {article.summaryPoints.map((p, i) => (
-                <li key={i}>{p}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Citations / Sources */}
-        {(article.citations && article.citations.length > 0) ||
-        (article.sources && article.sources.length > 0) ? (
-          <div className="mt-8 bg-white p-6 rounded-2xl border border-[#006D5B]/10">
-            {article.citations && article.citations.length > 0 && (
-              <div className="mb-4">
-                <h4 className="font-semibold text-[#005c4d] mb-2">Citations</h4>
-                <ul className="list-disc pl-5 text-[#4B4B4B]">
-                  {article.citations.map((c, i) => (
-                    <li key={i}>
-                      {c.text}
-                      {c.link ? ` — ${c.link}` : ""}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {article.sources && article.sources.length > 0 && (
-              <div>
-                <h4 className="font-semibold text-[#005c4d] mb-2">Sources</h4>
-                <ul className="list-disc pl-5 text-[#4B4B4B]">
-                  {article.sources.map((s, i) => (
-                    <li key={i}>
-                      {s.label}
-                      {s.url ? ` — ${s.url}` : ""}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        ) : null}
-
-        {/* Attachments */}
-        {article.attachments && article.attachments.length > 0 && (
-          <div className="mt-8">
-            <h4 className="font-semibold text-[#005c4d] mb-3">Attachments</h4>
-            <div className="space-y-2">
-              {article.attachments.map((a, i) => (
-                <a
-                  key={i}
-                  href={a}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[#006D5B] underline"
-                >
-                  {a}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Quiz Questions */}
-        {article.quizQuestions && article.quizQuestions.length > 0 && (
-          <div className="mt-8 bg-white p-6 rounded-2xl border border-[#006D5B]/10">
-            <h3 className="text-lg font-semibold text-[#005c4d] mb-4">
-              Quick quiz
-            </h3>
-            <ol className="list-decimal pl-5 text-[#4B4B4B] space-y-3">
-              {article.quizQuestions.map((q, i) => (
-                <li key={i}>
-                  <div className="font-medium">{q.question}</div>
-                  {q.options && (
-                    <ul className="list-disc pl-5 mt-2 text-sm">
-                      {q.options.map((opt, j) => (
-                        <li key={j}>{opt}</li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))}
-            </ol>
-          </div>
-        )}
+        {/* Comments Section */}
+        {isSubscribed && <CommentSection comments={article.comments} />}
 
         {/* Author Bio */}
         <div className="mt-12 p-8 bg-white rounded-2xl border border-[#006D5B]/10">
@@ -923,7 +849,7 @@ export default function ArticleTemplate() {
         </div>
 
         {/* Related Reads Section */}
-        <RelatedReads relatedArticles={related} />
+        <RelatedReads />
       </motion.div>
     </div>
   );

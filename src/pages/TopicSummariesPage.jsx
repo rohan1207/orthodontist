@@ -25,9 +25,9 @@ const TOPICS = [
       "Graber's Orthodontics",
       "Proffit's Orthodontics",
     ],
-    keyPoints: 12,
-    readTimeMin: 15,
-    difficulty: "Medium",
+    teaser:
+      "Chapter-wise, high-yield summary covering prenatal/postnatal growth, factors, and major growth theories—simplified for quick recall.",
+    highlights: ["High-yield", "Concept-first", "Exam-focused"],
     color: "from-green-500 to-emerald-600",
   },
   {
@@ -38,9 +38,9 @@ const TOPICS = [
       "Clinical Orthodontics",
       "Biomechanics in Clinical Practice",
     ],
-    keyPoints: 15,
-    readTimeMin: 20,
-    difficulty: "Advanced",
+    teaser:
+      "Force systems, centers of resistance, and M/F ratio explained with simple visuals and step-by-step intuition.",
+    highlights: ["Visual aids", "Step-by-step", "Tricky concepts made easy"],
     color: "from-green-500 to-emerald-600",
   },
   {
@@ -51,9 +51,9 @@ const TOPICS = [
       "Clinical Diagnosis",
       "Treatment Strategies",
     ],
-    keyPoints: 18,
-    readTimeMin: 25,
-    difficulty: "Intermediate",
+    teaser:
+      "From clinical exam to radiographs and objectives—distilled, organized notes that tell you exactly what to look for.",
+    highlights: ["Structured flow", "Checklists", "Decision cues"],
     color: "from-green-500 to-emerald-600",
   },
   {
@@ -64,9 +64,9 @@ const TOPICS = [
       "Contemporary Orthodontics",
       "Appliance Design",
     ],
-    keyPoints: 10,
-    readTimeMin: 18,
-    difficulty: "Intermediate",
+    teaser:
+      "Fixed, removable, and functional appliances—what they are, when to use, and how to remember them fast.",
+    highlights: ["Mnemonics", "When-to-use", "Compare & contrast"],
     color: "from-green-500 to-emerald-600",
   },
 ];
@@ -81,13 +81,6 @@ const SORTS = [
 ];
 
 function TopicCard({ topic }) {
-  const difficultyColors = {
-    Beginner: "bg-green-100 text-green-800",
-    Intermediate: "bg-blue-100 text-blue-800",
-    Medium: "bg-yellow-100 text-yellow-800",
-    Advanced: "bg-red-100 text-red-800",
-  };
-
   return (
     <motion.div
       className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#006D5B]/10 flex flex-col"
@@ -96,41 +89,34 @@ function TopicCard({ topic }) {
       viewport={{ once: true }}
       whileHover={{ y: -5 }}
     >
-      <div className="p-6 flex-grow flex flex-col">
-        <div className="flex items-start justify-between mb-4">
+      <div className="p-6 flex flex-col gap-3 flex-grow">
+        <div className="flex items-start justify-between">
           <div className="p-3 rounded-lg bg-[#006D5B]/10">
             <DocumentTextIcon className="w-6 h-6 text-[#006D5B]" />
           </div>
-          <span
-            className={`px-3 py-1 text-xs font-semibold rounded-full ${
-              difficultyColors[topic.difficulty] || "bg-gray-100 text-gray-800"
-            }`}
-          >
-            {topic.difficulty}
-          </span>
         </div>
 
-        <h3 className="text-xl font-semibold text-[#006D5B] line-clamp-2 mb-2 flex-grow min-h-[3.5rem]">
+        <h3 className="text-xl font-semibold text-[#006D5B] line-clamp-2">
           {topic.title}
         </h3>
 
-        <p className="text-sm text-[#4B4B4B]/70 mb-6 line-clamp-1">
+        <p className="text-sm text-[#4B4B4B] leading-relaxed line-clamp-2">
+          {topic.teaser}
+        </p>
+
+        <p className="text-xs text-[#4B4B4B]/70">
           Sources: {topic.sources.join(", ")}
         </p>
 
-        <div className="grid grid-cols-2 gap-4 text-center border-t border-dashed border-[#006D5B]/10 pt-4">
-          <div>
-            <div className="text-2xl font-bold text-[#4B4B4B]">
-              {topic.keyPoints}
-            </div>
-            <div className="text-xs text-[#4B4B4B]/70">Key Points</div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold text-[#4B4B4B]">
-              {topic.readTimeMin}
-            </div>
-            <div className="text-xs text-[#4B4B4B]/70">Mins Read</div>
-          </div>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {topic.highlights?.slice(0, 3).map((tag, idx) => (
+            <span
+              key={idx}
+              className="px-3 py-1 text-xs font-medium rounded-full bg-[#DCE6D5]/60 text-[#006D5B] border border-[#006D5B]/10"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
 
@@ -138,7 +124,7 @@ function TopicCard({ topic }) {
         to={`/summaries/${topic.id}`}
         className="block bg-[#006D5B] text-white text-center font-medium py-4 hover:bg-[#005c4d] transition-colors duration-300"
       >
-        View Summary
+        Read Summary
       </Link>
     </motion.div>
   );

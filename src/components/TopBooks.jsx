@@ -41,7 +41,7 @@ const topBooksData = [
 const BookCard = ({ book, isOpen, onToggle }) => {
   return (
     <motion.div
-      className="relative w-full cursor-pointer"
+      className="relative w-full cursor-pointer "
       style={{
         perspective: "2000px",
         aspectRatio: "3/4",
@@ -51,13 +51,13 @@ const BookCard = ({ book, isOpen, onToggle }) => {
       onClick={onToggle}
       onHoverStart={() => {
         // Only trigger hover on desktop/laptop devices
-        if (window.matchMedia('(hover: hover)').matches) {
+        if (window.matchMedia("(hover: hover)").matches) {
           onToggle();
         }
       }}
       onHoverEnd={() => {
         // Only trigger hover on desktop/laptop devices
-        if (window.matchMedia('(hover: hover)').matches) {
+        if (window.matchMedia("(hover: hover)").matches) {
           onToggle();
         }
       }}
@@ -256,7 +256,7 @@ export default function TopBooks() {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-[#DCE6D5]/30">
+    <section className="py-16 md:py-24 bg-[#DCE6D5]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-medium text-[#006D5B] mb-4 flex items-center justify-center gap-3">

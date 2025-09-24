@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   CheckBadgeIcon,
   ShieldCheckIcon,
@@ -18,12 +17,10 @@ const SERVICES = [
 const HERO_FONT = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 
 export default function Founder() {
-  const [showServices, setShowServices] = useState(true);
-
   return (
     <section
       id="founder"
-      className="relative isolate overflow-hidden pt-6 pb-8 md:pt-12 md:pb-24 mt-12 bg-[#DCE6D5]/40"
+      className="relative isolate overflow-hidden pt-6 pb-8 md:pt-12 md:pb-24 mt-0 bg-[#DCE6D5]/40"
       style={{ fontFamily: HERO_FONT }}
     >
       <div className="mx-auto grid max-w-7xl items-start gap-8 md:gap-10 px-4 md:grid-cols-12 md:px-6">
@@ -118,16 +115,16 @@ export default function Founder() {
 
             <div className="mt-5 md:mt-6 flex flex-wrap gap-3">
               <a
+                href="/about"
+                className="rounded-full border border-[#006D5B]/20 bg-[#DCE6D5]/70 px-5 py-3 text-sm font-semibold text-[#006D5B] backdrop-blur-sm shadow hover:shadow-md hover:bg-[#DCE6D5]/90 transition-all"
+              >
+                About OrthoChronicles
+              </a>
+              <a
                 href="/book"
                 className="rounded-full bg-[#006D5B] px-5 py-3 text-sm font-semibold text-white shadow-xl hover:shadow-2xl transition-all hover:-translate-y-0.5 hover:bg-[#004B3F]"
               >
                 Book a consultation
-              </a>
-              <a
-                href="#contact"
-                className="rounded-full border border-[#006D5B]/20 bg-[#DCE6D5]/70 px-5 py-3 text-sm font-semibold text-[#006D5B] backdrop-blur-sm shadow hover:shadow-md hover:bg-[#DCE6D5]/90 transition-all"
-              >
-                About OrthoChronicles
               </a>
             </div>
 
@@ -137,26 +134,17 @@ export default function Founder() {
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-[#006D5B]">
                   Key Procedures
                 </h3>
-                <button
-                  onClick={() => setShowServices((v) => !v)}
-                  className="text-xs font-medium text-[#4B4B4B] hover:text-[#006D5B]"
-                  aria-expanded={showServices}
-                >
-                  {showServices ? "Hide" : "Show"}
-                </button>
               </div>
-              {showServices && (
-                <ul className="mt-3 flex flex-wrap gap-2">
-                  {SERVICES.map((s, i) => (
-                    <li key={i}>
-                      <span className="inline-flex items-center gap-2 rounded-full border border-[#006D5B]/20 bg-white/80 px-3 py-1.5 text-[11px] md:text-xs text-[#006D5B] shadow-sm transition hover:border-[#006D5B]/30 hover:bg-white/90">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#006D5B]" />
-                        {s}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {SERVICES.map((s, i) => (
+                  <li key={i}>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-[#006D5B]/20 bg-white/80 px-3 py-1.5 text-[11px] md:text-xs text-[#006D5B] shadow-sm transition hover:border-[#006D5B]/30 hover:bg-white/90">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#006D5B]" />
+                      {s}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {/* Trust card */}

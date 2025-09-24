@@ -1,276 +1,169 @@
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
-  AcademicCapIcon,
-  ClockIcon,
   DocumentTextIcon,
-  ChartBarIcon,
-  UserGroupIcon,
-  Squares2X2Icon,
-  MagnifyingGlassIcon,
-  DocumentMagnifyingGlassIcon,
+  CheckCircleIcon,
+  AcademicCapIcon,
+  HeartIcon as HeartOutline,
+  ArrowDownTrayIcon,
 } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
+
+// Convert Google Drive view link to direct download link for demo
+const DRIVE_ID = "1f3Yo89FL59rsUwpT6KH8kaVDMDylU5el";
+const DEMO_DOWNLOAD = `https://drive.google.com/uc?export=download&id=${DRIVE_ID}`;
 
 const examModules = [
   {
     id: 1,
-    title: "NEET MDS Comprehensive",
-    description:
-      "Complete preparation strategy with past papers, MCQs, and expert guidance.",
-    durationMonths: 6,
-    students: 2500,
-    successRate: 92,
-    subjects: 12,
-    type: "Comprehensive",
-    color: "from-green-500 to-emerald-600",
-    icon: AcademicCapIcon,
+    title: "Oral Pathology",
+    downloads: 200,
+    likes: 1200,
+    questionPaperUrl: DEMO_DOWNLOAD,
+    answerUrl: DEMO_DOWNLOAD,
   },
   {
     id: 2,
-    title: "Quick Revision Series",
-    description:
-      "Rapid review of high-yield topics with focused MCQ practice sessions.",
-    durationMonths: 2,
-    students: 1800,
-    successRate: 88,
-    subjects: 8,
-    type: "Revision",
-    color: "from-blue-500 to-cyan-600",
-    icon: ClockIcon,
+    title: "Prosthodontics",
+    downloads: 180,
+    likes: 980,
+    questionPaperUrl: DEMO_DOWNLOAD,
+    answerUrl: DEMO_DOWNLOAD,
   },
   {
     id: 3,
-    title: "Subject Wise Practice",
-    description:
-      "In-depth practice sessions focusing on individual subjects with detailed explanations.",
-    durationMonths: 4,
-    students: 3200,
-    successRate: 95,
-    subjects: 15,
-    type: "Practice",
-    color: "from-purple-500 to-indigo-600",
-    icon: DocumentTextIcon,
+    title: "General Anatomy",
+    downloads: 240,
+    likes: 1320,
+    questionPaperUrl: DEMO_DOWNLOAD,
+    answerUrl: DEMO_DOWNLOAD,
   },
-  // Additional examples
   {
     id: 4,
-    title: "Mock Test Marathon",
-    description:
-      "Timed tests with analytics and adaptive difficulty to mirror exam pressure.",
-    durationMonths: 1,
-    students: 2200,
-    successRate: 86,
-    subjects: 10,
-    type: "Mock Tests",
-    color: "from-rose-500 to-pink-600",
-    icon: ChartBarIcon,
+    title: "NEET MDS 2023 Paper",
+    downloads: 320,
+    likes: 2100,
+    questionPaperUrl: DEMO_DOWNLOAD,
+    answerUrl: DEMO_DOWNLOAD,
+  },
+  {
+    id: 5,
+    title: "Orthodontics",
+    downloads: 205,
+    likes: 1150,
+    questionPaperUrl: DEMO_DOWNLOAD,
+    answerUrl: DEMO_DOWNLOAD,
+  },
+  {
+    id: 6,
+    title: "Periodontics",
+    downloads: 190,
+    likes: 870,
+    questionPaperUrl: DEMO_DOWNLOAD,
+    answerUrl: DEMO_DOWNLOAD,
   },
 ];
 
 function ModuleCard({ module }) {
-  const typeStyles = {
-    Comprehensive: {
-      icon: AcademicCapIcon,
-      bgColor: "bg-[#006D5B]/10",
-      textColor: "text-[#006D5B]",
-      progressColor: "bg-[#006D5B]",
-    },
-    Revision: {
-      icon: ClockIcon,
-      bgColor: "bg-blue-100",
-      textColor: "text-blue-700",
-      progressColor: "bg-blue-500",
-    },
-    Practice: {
-      icon: DocumentTextIcon,
-      bgColor: "bg-purple-100",
-      textColor: "text-purple-700",
-      progressColor: "bg-purple-500",
-    },
-    "Mock Tests": {
-      icon: ChartBarIcon,
-      bgColor: "bg-red-100",
-      textColor: "text-red-700",
-      progressColor: "bg-red-500",
-    },
-  };
-
-  const style = typeStyles[module.type] || typeStyles.Comprehensive;
-  const Icon = style.icon;
-
+  const [liked, setLiked] = useState(false);
   return (
     <motion.div
-      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#006D5B]/10 flex flex-col"
+      className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-[#006D5B]/10"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       whileHover={{ y: -5 }}
     >
-      <div className="p-6 flex-grow">
-        <div className="flex items-start justify-between mb-4">
-          <div className={`p-3 rounded-lg ${style.bgColor}`}>
-            <Icon className={`w-7 h-7 ${style.textColor}`} />
-          </div>
-          <div className="text-right">
-            <div className={`text-3xl font-bold ${style.textColor}`}>
-              {module.successRate}%
-            </div>
-            <div className="text-xs text-[#4B4B4B]/70">Success Rate</div>
-          </div>
-        </div>
-
-        <h3 className="text-xl font-semibold text-[#006D5B] line-clamp-2 mb-2 min-h-[3.5rem]">
+      <div className="p-6">
+        <h3 className="text-xl font-semibold text-[#006D5B] mb-4 line-clamp-1">
           {module.title}
         </h3>
-        <p className="text-sm text-[#4B4B4B] line-clamp-2 mb-6 min-h-[2.5rem]">
-          {module.description}
-        </p>
-
-        <div className="grid grid-cols-3 gap-4 text-center border-t border-dashed border-[#006D5B]/10 pt-4">
-          <div>
-            <div className="text-2xl font-bold text-[#4B4B4B]">
-              {module.durationMonths}
-            </div>
-            <div className="text-xs text-[#4B4B4B]/70">Months</div>
+        <div className="flex items-center justify-between mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#DCE6D5]/50 border border-[#006D5B]/15 text-[#006D5B]">
+            <ArrowDownTrayIcon className="w-4 h-4" />
+            <span className="text-sm font-medium">
+              {module.downloads}+ downloads
+            </span>
           </div>
-          <div>
-            <div className="text-2xl font-bold text-[#4B4B4B]">
-              {module.students / 1000}k+
-            </div>
-            <div className="text-xs text-[#4B4B4B]/70">Students</div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold text-[#4B4B4B]">
-              {module.subjects}
-            </div>
-            <div className="text-xs text-[#4B4B4B]/70">Subjects</div>
-          </div>
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setLiked((v) => !v)}
+            aria-pressed={liked}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#006D5B]/15 bg-white hover:bg-[#DCE6D5]/40 transition-colors"
+          >
+            {liked ? (
+              <HeartSolid className="w-5 h-5 text-rose-500" />
+            ) : (
+              <HeartOutline className="w-5 h-5 text-[#006D5B]" />
+            )}
+            <span className="text-sm font-medium text-[#4B4B4B]">
+              {(module.likes + (liked ? 1 : 0)).toLocaleString()}
+            </span>
+          </motion.button>
         </div>
-      </div>
+        <div className="space-y-3">
+          <a
+            href={module.questionPaperUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between gap-4 w-full px-4 py-3 rounded-xl border border-[#006D5B]/15 bg-[#DCE6D5]/40 hover:bg-[#DCE6D5]/60 transition-colors"
+          >
+            <span className="flex items-center gap-3 text-[#006D5B] font-medium">
+              <DocumentTextIcon className="w-5 h-5" />
+              Question Paper
+            </span>
+            <span className="text-[#4B4B4B] text-sm">Download</span>
+          </a>
 
-      <div className="px-6 pb-6">
-        <a
-          href={`/exam-prep/${module.id}`}
-          className="block w-full text-center px-6 py-3.5 text-base font-semibold text-white rounded-xl transition-all duration-300 shadow-lg bg-[#006D5B] hover:bg-[#005c4d] hover:scale-102"
-        >
-          Explore Module
-        </a>
+          <a
+            href={module.answerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between gap-4 w-full px-4 py-3 rounded-xl border border-[#006D5B]/15 bg-[#DCE6D5]/40 hover:bg-[#DCE6D5]/60 transition-colors"
+          >
+            <span className="flex items-center gap-3 text-[#006D5B] font-medium">
+              <CheckCircleIcon className="w-5 h-5" />
+              Answer Sheet + Explanation
+            </span>
+            <span className="text-[#4B4B4B] text-sm">Download</span>
+          </a>
+        </div>
       </div>
     </motion.div>
   );
 }
 
 const ExamPreparationPage = () => {
-  const [modules, setModules] = useState(examModules);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("default");
-  const [typeFilter, setTypeFilter] = useState("all");
-
-  useEffect(() => {
-    let filteredModules = examModules.filter((module) =>
-      module.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    if (typeFilter !== "all") {
-      filteredModules = filteredModules.filter(
-        (module) => module.type === typeFilter
-      );
-    }
-
-    if (sortOrder === "success") {
-      filteredModules.sort((a, b) => b.successRate - a.successRate);
-    } else if (sortOrder === "duration") {
-      filteredModules.sort((a, b) => a.durationMonths - b.durationMonths);
-    }
-
-    setModules(filteredModules);
-  }, [searchTerm, sortOrder, typeFilter]);
-
-  const uniqueTypes = ["all", ...new Set(examModules.map((m) => m.type))];
-
   return (
     <div className="bg-[#F9F9F9] min-h-screen mt-16">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="container mx-auto px-4 py-12 "
+        className="container mx-auto px-4 py-12"
       >
         <header className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-[#006D5B] mb-3">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#006D5B]/10 text-[#006D5B] text-sm font-medium mb-4 border border-[#006D5B]/10">
+            <AcademicCapIcon className="w-5 h-5" />
+            Exam Preparation
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-[#006D5B] mb-3">
             Exam Preparation Modules
           </h1>
           <p className="text-lg text-[#4B4B4B] max-w-3xl mx-auto">
-            Your comprehensive guide to mastering dental exams. Explore our
-            specialized modules designed for success.
+            Each module provides two simple, downloadable resources.
           </p>
         </header>
 
-        <div className="mb-10 p-4 bg-white rounded-2xl shadow-sm border border-[#006D5B]/10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-            <div className="relative md:col-span-1">
-              <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search modules..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 text-base bg-[#F9F9F9] border-transparent rounded-xl focus:ring-2 focus:ring-[#006D5B] focus:border-transparent transition-all"
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:col-span-2">
-              <select
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-                className="w-full px-4 py-3 text-base bg-[#F9F9F9] border-transparent rounded-xl focus:ring-2 focus:ring-[#006D5B] focus:border-transparent transition-all"
-              >
-                {uniqueTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type === "all" ? "All Module Types" : type}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value)}
-                className="w-full px-4 py-3 text-base bg-[#F9F9F9] border-transparent rounded-xl focus:ring-2 focus:ring-[#006D5B] focus:border-transparent transition-all"
-              >
-                <option value="default">Sort by Default</option>
-                <option value="success">Sort by Success Rate</option>
-                <option value="duration">Sort by Duration</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <AnimatePresence>
-          <motion.div
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {modules.map((module) => (
-              <ModuleCard key={module.id} module={module} />
-            ))}
-          </motion.div>
-        </AnimatePresence>
-
-        {modules.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center py-20"
-          >
-            <div className="inline-block p-6 bg-white rounded-full shadow-md mb-6">
-              <DocumentMagnifyingGlassIcon className="w-16 h-16 text-[#006D5B]" />
-            </div>
-            <h3 className="text-2xl font-semibold text-[#006D5B]">
-              No Modules Found
-            </h3>
-            <p className="text-[#4B4B4B] mt-2">
-              Try adjusting your search or filter criteria.
-            </p>
-          </motion.div>
-        )}
+        <motion.div
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+        >
+          {examModules.map((module) => (
+            <ModuleCard key={module.id} module={module} />
+          ))}
+        </motion.div>
       </motion.div>
     </div>
   );

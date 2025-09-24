@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Home from "./pages/Home.jsx";
 import NewNavbar from "./components/NewNavbar.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 
 import BlogPage from "./pages/BlogPage.jsx";
 import Footer from "./components/Footer.jsx";
@@ -47,6 +48,7 @@ const App = () => {
   return (
     <div className="min-h-screen w-full bg-white overflow-x-hidden">
       <BrowserRouter>
+        <ScrollToTop />
         <AnimatedRoutes />
       </BrowserRouter>
     </div>

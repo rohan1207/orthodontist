@@ -8,14 +8,22 @@ import blogRoutes from './routes/blogRoutes.js';
 dotenv.config();
 
 const app = express();
-// Configure CORS from environment when deployed (e.g. set CORS_ORIGIN to a single origin
-// or a comma-separated list). If not set, fall back to the default behavior (allow all).
-const corsOptions = process.env.CORS_ORIGIN
-  ? { origin: process.env.CORS_ORIGIN.split(',') }
-  : undefined;
+
+// More robust CORS configuration
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN 
+    ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
+    : ['https://orthodontist.onrender.com', 'http://localhost:3000'], // fallback origins
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
 app.use(cors(corsOptions));
-// Support preflight for all routes
+
+// Handle preflight requests
 app.options('*', cors(corsOptions));
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
@@ -27,6 +35,7 @@ async function start() {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('MongoDB connected');
 
+    // Add routes after CORS middleware
     app.use('/api/admin', adminRoutes);
     app.use('/api/blogs', blogRoutes);
 

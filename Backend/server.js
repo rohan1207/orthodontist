@@ -9,18 +9,27 @@ dotenv.config();
 
 const app = express();
 
-// More robust CORS configuration
-const corsOptions = {
-  origin: process.env.CORS_ORIGIN 
-    ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
-    : ['https://orthodontist.onrender.com', 'http://localhost:3000'], // fallback origins
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
+// Configure and normalize CORS origins from env (comma-separated). If not set,
+// fall back to allowing all origins for easier debugging.
+let corsOptions;
+if (process.env.CORS_ORIGIN) {
+  const origins = process.env.CORS_ORIGIN
+    .split(',')
+    .map((s) => s.trim().replace(/\/$/, ''))
+    .filter(Boolean);
+  corsOptions = {
+    origin: origins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+} else {
+  // undefined => allow all origins (cors default)
+  corsOptions = undefined;
+}
 
+console.log('Effective CORS origins:', corsOptions && corsOptions.origin ? corsOptions.origin : 'allow-all');
 app.use(cors(corsOptions));
-
 // Handle preflight requests
 app.options('*', cors(corsOptions));
 

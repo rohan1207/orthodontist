@@ -1,10 +1,70 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { AcademicCapIcon } from "@heroicons/react/24/outline";
-import { examTopics } from "../components/ExamPreparation.jsx";
-import { ExamTopicCard } from "../components/ExamPreparation.jsx";
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { AcademicCapIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { buildApiUrl, getGoogleDriveDownloadUrl } from '../utils/api';
+
+const ExamTopicCard = ({ topic }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden border border-[#006D5B]/10"
+    >
+      <div className="p-6 flex-grow">
+        <h3 className="text-xl font-bold text-[#006D5B] mb-2">{topic.name}</h3>
+        <p className="text-[#4B4B4B] text-sm mb-4">{topic.description}</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {topic.years.map((year) => (
+            <span key={year} className="px-2 py-1 text-xs rounded-full bg-[#DCE6D5] text-[#006D5B] font-medium">
+              {year}
+            </span>
+          ))}
+        </div>
+        {topic.answersNote && (
+          <p className="text-xs text-gray-500 italic">{topic.answersNote}</p>
+        )}
+      </div>
+      <div className="bg-gray-50 p-4">
+        <a
+          href={getGoogleDriveDownloadUrl(topic.downloadUrl)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full group inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#006D5B] rounded-lg hover:bg-[#005c4d] transition-colors"
+        >
+          <ArrowDownTrayIcon className="w-4 h-4" />
+          Download Papers
+        </a>
+      </div>
+    </motion.div>
+  );
+};
 
 const ExamPreparationPage = () => {
+  const [papers, setPapers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPapers = async () => {
+      try {
+        const res = await fetch(buildApiUrl('/api/exampreps'));
+        if (!res.ok) {
+          throw new Error('Failed to fetch exam papers');
+        }
+        const data = await res.json();
+        setPapers(data.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPapers();
+  }, []);
+
   return (
     <div className="bg-[#F9F9F9] min-h-screen mt-16">
       <motion.div
@@ -28,11 +88,17 @@ const ExamPreparationPage = () => {
 
         <motion.div
           layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8"
         >
-          {examTopics.map((topic) => (
-            <ExamTopicCard key={topic.id} topic={topic} />
-          ))}
+          {loading ? (
+            <div className="text-center col-span-full py-10">Loading...</div>
+          ) : error ? (
+            <div className="text-center col-span-full text-red-500 py-10">{error}</div>
+          ) : (
+            papers.map((paper) => (
+              <ExamTopicCard key={paper._id} topic={paper} />
+            ))
+          )}
         </motion.div>
       </motion.div>
     </div>

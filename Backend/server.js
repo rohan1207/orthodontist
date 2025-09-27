@@ -5,6 +5,8 @@ import mongoose from 'mongoose';
 import adminRoutes from './routes/adminRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import examPrepRoutes from './routes/examPrepRoutes.js';
 
 dotenv.config();
 
@@ -49,6 +51,8 @@ async function start() {
     app.use('/api/admin', adminRoutes);
     app.use('/api/blogs', blogRoutes);
     app.use('/api/books', bookRoutes);
+    app.use('/api/users', userRoutes);
+    app.use('/api/exampreps', examPrepRoutes);
 
     app.get('/', (req, res) => res.json({ ok: true }));
 

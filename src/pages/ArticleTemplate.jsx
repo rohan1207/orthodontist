@@ -14,10 +14,11 @@ import {
   EyeIcon,
   LockClosedIcon,
   SparklesIcon,
-  CheckCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
+import { useAuth } from "../context/AuthContext";
+import SubscriptionGate from '../components/SubscriptionGate.jsx';
 import { HeartIcon as HeartSolidIcon } from "@heroicons/react/24/solid";
 
 // Generic component to render sanitized HTML
@@ -62,140 +63,6 @@ const RelatedReads = ({ relatedArticles = [] }) => {
   );
 };
 
-// Subscription Gate Component
-const SubscriptionGate = ({ onAuthSuccess }) => {
-  const [showForm, setShowForm] = useState(false);
-  const [mode, setMode] = useState("login"); // 'login' | 'signup'
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onAuthSuccess?.();
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.28 }}
-      className="w-full max-w-xl"
-    >
-      <div className="bg-white/75 backdrop-blur-2xl rounded-2xl border border-white/60 shadow-2xl p-6 sm:p-8">
-        {!showForm ? (
-          <div className="text-center">
-            <LockClosedIcon className="w-14 h-14 text-[#006D5B] mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-[#005c4d] mb-2">
-              Unlock the Full Article
-            </h3>
-            <p className="text-[#4B4B4B] mb-4">
-              Join 15,000+ learners mastering orthodontics with expert guides,
-              case studies, and weekly discussions.
-            </p>
-            <div className="bg-[#DCE6D5]/60 p-4 rounded-xl mb-5 text-left">
-              <h4 className="font-semibold text-[#005c4d] mb-2">Free includes</h4>
-              <ul className="text-sm text-[#4B4B4B] space-y-2">
-                <li className="flex items-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" /> Access to 200+ in-depth articles
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" /> Downloadable study guides
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" /> Weekly case discussions
-                </li>
-              </ul>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <button
-                onClick={() => setShowForm(true)}
-                className="w-full sm:w-auto min-w-[220px] bg-[#006D5B] text-white py-3 px-6 rounded-xl font-semibold hover:bg-[#005c4d] transition-colors shadow-lg"
-              >
-                Sign up / Log in
-              </button>
-              <span className="text-xs text-gray-500">No card required</span>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <button
-                className="text-sm text-[#006D5B] hover:text-[#005c4d]"
-                onClick={() => setShowForm(false)}
-              >
-                ← Back
-              </button>
-              <div className="inline-flex bg-white/70 rounded-full p-1 border border-[#006D5B]/10">
-                <button
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    mode === "login" ? "bg-[#006D5B] text-white" : "text-[#005c4d]"
-                  }`}
-                  onClick={() => setMode("login")}
-                >
-                  Log in
-                </button>
-                <button
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    mode === "signup" ? "bg-[#006D5B] text-white" : "text-[#005c4d]"
-                  }`}
-                  onClick={() => setMode("signup")}
-                >
-                  Sign up
-                </button>
-              </div>
-            </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {mode === "signup" && (
-                <div>
-                  <label className="block text-sm text-[#4B4B4B] mb-1">Full name</label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white/80 focus:ring-2 focus:ring-[#006D5B] focus:border-transparent"
-                    placeholder="Dr. Jane Doe"
-                    required
-                  />
-                </div>
-              )}
-              <div>
-                <label className="block text-sm text-[#4B4B4B] mb-1">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white/80 focus:ring-2 focus:ring-[#006D5B] focus:border-transparent"
-                  placeholder="you@example.com"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-[#4B4B4B] mb-1">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white/80 focus:ring-2 focus:ring-[#006D5B] focus:border-transparent"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-[#006D5B] text-white py-3 rounded-xl font-semibold hover:bg-[#005c4d] transition-colors shadow-lg"
-              >
-                {mode === "login" ? "Log in" : "Create account"}
-              </button>
-              <p className="text-xs text-center text-gray-500">By continuing you agree to our Terms and Privacy Policy</p>
-            </form>
-          </div>
-        )}
-      </div>
-    </motion.div>
-  );
-};
 
 // Reading Progress Component
 const ReadingProgress = ({ target }) => {
@@ -326,6 +193,7 @@ const CommentSection = ({ comments }) => {
 
 // Main Component
 export default function ArticleTemplate() {
+  const { user } = useAuth(); // Use the global auth context
   const { id } = useParams();
   const targetRef = useRef();
 
@@ -334,7 +202,6 @@ export default function ArticleTemplate() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [gateActive, setGateActive] = useState(false);
@@ -412,7 +279,7 @@ export default function ArticleTemplate() {
         }
         if (mounted) {
           setArticle(mapped);
-          setIsSubscribed(false);
+          // No longer reset subscription status on each load
           setGateActive(false);
           window.scrollTo(0, 0);
         }
@@ -454,13 +321,15 @@ export default function ArticleTemplate() {
     };
   }, [id]);
 
+  // When auth succeeds, the `user` object from context will update.
+  // We just need to hide the gate.
   const handleAuthSuccess = () => {
-    setIsSubscribed(true);
     setGateActive(false);
   };
 
   useEffect(() => {
-    if (!article || !gateSentinelRef.current || isSubscribed) return;
+    // Depend on the global `user` object instead of local state
+    if (!article || !gateSentinelRef.current || user) return;
 
     const el = gateSentinelRef.current;
     const observer = new IntersectionObserver(
@@ -475,10 +344,11 @@ export default function ArticleTemplate() {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [article, isSubscribed]);
+  }, [article, user]);
 
   useEffect(() => {
-    if (isSubscribed) return;
+    // Depend on the global `user` object
+    if (user) return;
 
     let triggered = false;
     const trigger = () => {
@@ -507,7 +377,7 @@ export default function ArticleTemplate() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [isSubscribed, article]);
+  }, [user, article]);
 
   if (loading) {
     return (
@@ -537,7 +407,7 @@ export default function ArticleTemplate() {
     <div ref={targetRef} className="bg-[#F9F9F9] min-h-screen">
       <ReadingProgress target={targetRef} />
       <AnimatePresence>
-        {gateActive && !isSubscribed && (
+        {gateActive && !user && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -644,7 +514,7 @@ export default function ArticleTemplate() {
         </motion.div>
         <article className="prose prose-lg max-w-none prose-h2:text-3xl prose-h2:font-bold prose-h2:text-[#005c4d] prose-blockquote:border-[#006D5B] prose-blockquote:bg-[#DCE6D5]/40 prose-a:text-[#006D5B] hover:prose-a:text-[#005c4d]">
           <div>
-            {isSubscribed ? (
+            {user ? (
               <RenderHtmlContent html={article.fullContentHtml} />
             ) : (
               <RenderHtmlContent html={article.contentPreviewHtml} />

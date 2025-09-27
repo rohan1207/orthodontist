@@ -30,6 +30,7 @@
     "axios": "^1.12.2",
     "dompurify": "^3.2.7",
     "editorjs-html": "^4.0.5",
+    "firebase": "^12.3.0",
     "framer-motion": "^12.23.1",
     "gsap": "^3.13.0",
     "gsap-trial": "^3.12.7",

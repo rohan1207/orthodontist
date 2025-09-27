@@ -17,8 +17,10 @@ export async function setupAdmin(req, res) {
 }
 
 export async function loginAdmin(req, res) {
-  const { username, password } = req.body;
-  const admin = await Admin.findOne({ username });
+  const { username, email, password } = req.body;
+  const identifier = username || email;
+  if (!identifier || !password) return res.status(400).json({ error: 'username/email and password required' });
+  const admin = await Admin.findOne({ username: identifier });
   if (!admin) return res.status(401).json({ error: 'invalid credentials' });
   const match = await admin.comparePassword(password);
   if (!match) return res.status(401).json({ error: 'invalid credentials' });

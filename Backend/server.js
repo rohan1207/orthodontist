@@ -4,12 +4,13 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import adminRoutes from './routes/adminRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
+import bookRoutes from './routes/bookRoutes.js';
 
 dotenv.config();
 
 const app = express();
 
-// Configure and normalize CORS origins from env (comma-separated). If not set,
+// Configure and normalize CORS origi ns from env (comma-separated). If not set,
 // fall back to allowing all origins for easier debugging.
 let corsOptions;
 if (process.env.CORS_ORIGIN) {
@@ -47,6 +48,7 @@ async function start() {
     // Add routes after CORS middleware
     app.use('/api/admin', adminRoutes);
     app.use('/api/blogs', blogRoutes);
+    app.use('/api/books', bookRoutes);
 
     app.get('/', (req, res) => res.json({ ok: true }));
 

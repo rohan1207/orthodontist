@@ -1,5 +1,5 @@
 // Simple API base helper for the orthodontist frontend
-const rawBase = import.meta.env.VITE_API_URL || '';
+const rawBase = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 let normalizedBase = rawBase || '';
 if (normalizedBase && !/^https?:\/\//i.test(normalizedBase)) {
   normalizedBase = `http://${normalizedBase}`;

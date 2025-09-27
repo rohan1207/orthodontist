@@ -13,7 +13,9 @@ import AcademicHelpPage from "./pages/AcademicHelpPage.jsx";
 import ArticlesPage from "./pages/ArticlesPage.jsx";
 import TopBooksPage from "./pages/TopBooksPage.jsx";
 import ExamPreparationPage from "./pages/ExamPreparationPage.jsx";
+import ExamPreparationTemplate from "./pages/ExamPreparationTemplate.jsx";
 import TopicSummariesPage from "./pages/TopicSummariesPage.jsx";
+import TopicSummariesTemplate from "./pages/TopicSummariesTemplate.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
 import ArticleTemplate from "./pages/ArticleTemplate.jsx";
 
@@ -32,7 +34,9 @@ const AnimatedRoutes = () => {
           <Route path="/article/:id" element={<ArticleTemplate />} />
           <Route path="/top-books" element={<TopBooksPage />} />
           <Route path="/exam-prep" element={<ExamPreparationPage />} />
+          <Route path="/exam-prep/:topicId" element={<ExamPreparationTemplate />} />
           <Route path="/summaries" element={<TopicSummariesPage />} />
+          <Route path="/summaries/:topicId" element={<TopicSummariesTemplate />} />
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </AnimatePresence>

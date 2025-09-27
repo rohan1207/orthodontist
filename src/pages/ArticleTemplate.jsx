@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { buildApiUrl } from "../utils/api";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import DOMPurify from "dompurify";
+import DOMPurify from 'dompurify';
+import edjsHTML from 'editorjs-html';
 import {
   ArrowLeftIcon,
   ShareIcon,
@@ -21,76 +22,11 @@ import { HeartIcon as HeartSolidIcon } from "@heroicons/react/24/solid";
 
 // Generic component to render sanitized HTML
 const RenderHtmlContent = ({ html }) => {
-  const sanitizedHtml = DOMPurify.sanitize(html);
-  return <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />;
+  // We trust DOMPurify to sanitize, so we can directly set the HTML.
+  return <div dangerouslySetInnerHTML={{ __html: html }} />;
 };
 
-// Convert plain text into simple HTML: paragraphs, lists, headings, links, and YouTube embeds
-function textToHtml(text) {
-  if (!text) return "";
-
-  // Helper: detect youtube id and return iframe
-  function youtubeEmbed(url) {
-    const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/i);
-    if (!m) return null;
-    const id = m[1];
-    return `<div class="video-embed" style="margin:1rem 0"><iframe width=560 height=315 src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`;
-  }
-
-  // Split into blocks separated by one or more blank lines
-  const blocks = String(text)
-    .split(/\n\s*\n/)
-    .map((b) => b.trim())
-    .filter(Boolean);
-  const htmlBlocks = blocks.map((block) => {
-    const lines = block
-      .split(/\n/)
-      .map((l) => l.trim())
-      .filter(Boolean);
-
-    // Unordered list (lines starting with - or *)
-    if (lines.every((l) => /^[-*]\s+/.test(l))) {
-      const items = lines
-        .map((l) => `<li>${l.replace(/^[-*]\s+/, "")}</li>`)
-        .join("");
-      return `<ul class="list-disc pl-6 mb-4">${items}</ul>`;
-    }
-
-    // Ordered list (lines starting with 1. 2. etc)
-    if (lines.every((l) => /^\d+\.\s+/.test(l))) {
-      const items = lines
-        .map((l) => `<li>${l.replace(/^\d+\.\s+/, "")}</li>`)
-        .join("");
-      return `<ol class="list-decimal pl-6 mb-4">${items}</ol>`;
-    }
-
-    // Single-line headings (ends with ':' or short length)
-    if (lines.length === 1 && /:$/.test(lines[0])) {
-      return `<h3 class="text-2xl font-semibold text-[#005c4d] mb-3">${lines[0].replace(
-        /:$/,
-        ""
-      )}</h3>`;
-    }
-
-    // Convert URLs to links and embed YouTube where possible
-    let html = block.replace(/(https?:\/\/[^\s]+)/g, (url) => {
-      const embed = youtubeEmbed(url);
-      if (embed) return embed;
-      return `<a href="${url}" target="_blank" rel="noreferrer" class="text-[#006D5B] underline">${url}</a>`;
-    });
-
-    // Preserve single newlines as <br/> for readability
-    html = html
-      .split(/\n/)
-      .map((line) => line.trim())
-      .join("<br/>");
-    return `<p class="mb-4 text-[#4B4B4B] leading-relaxed">${html}</p>`;
-  });
-
-  return htmlBlocks.join("\n");
-}
-
-// Related Reads Component (receives relatedArticles prop)
+// Related Reads Component
 const RelatedReads = ({ relatedArticles = [] }) => {
   return (
     <div className="mt-16 pt-12 border-t border-[#006D5B]/10">
@@ -126,7 +62,7 @@ const RelatedReads = ({ relatedArticles = [] }) => {
   );
 };
 
-// Subscription Gate Component (glass card with inline auth)
+// Subscription Gate Component
 const SubscriptionGate = ({ onAuthSuccess }) => {
   const [showForm, setShowForm] = useState(false);
   const [mode, setMode] = useState("login"); // 'login' | 'signup'
@@ -134,10 +70,8 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  // Replace with real API calls as needed
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate success and call parent
     onAuthSuccess?.();
   };
 
@@ -160,7 +94,6 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
               Join 15,000+ learners mastering orthodontics with expert guides,
               case studies, and weekly discussions.
             </p>
-
             <div className="bg-[#DCE6D5]/60 p-4 rounded-xl mb-5 text-left">
               <h4 className="font-semibold text-[#005c4d] mb-2">Free includes</h4>
               <ul className="text-sm text-[#4B4B4B] space-y-2">
@@ -175,7 +108,6 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
                 </li>
               </ul>
             </div>
-
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
                 onClick={() => setShowForm(true)}
@@ -214,7 +146,6 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
                 </button>
               </div>
             </div>
-
             <form onSubmit={handleSubmit} className="space-y-4">
               {mode === "signup" && (
                 <div>
@@ -229,7 +160,6 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
                   />
                 </div>
               )}
-
               <div>
                 <label className="block text-sm text-[#4B4B4B] mb-1">Email</label>
                 <input
@@ -241,7 +171,6 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
                   required
                 />
               </div>
-
               <div>
                 <label className="block text-sm text-[#4B4B4B] mb-1">Password</label>
                 <input
@@ -253,14 +182,12 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
                   required
                 />
               </div>
-
               <button
                 type="submit"
                 className="w-full bg-[#006D5B] text-white py-3 rounded-xl font-semibold hover:bg-[#005c4d] transition-colors shadow-lg"
               >
                 {mode === "login" ? "Log in" : "Create account"}
               </button>
-
               <p className="text-xs text-center text-gray-500">By continuing you agree to our Terms and Privacy Policy</p>
             </form>
           </div>
@@ -295,7 +222,7 @@ const ReadingProgress = ({ target }) => {
   useEffect(() => {
     window.addEventListener("scroll", scrollListener);
     return () => window.removeEventListener("scroll", scrollListener);
-  });
+  }, [target]);
 
   return (
     <div
@@ -324,7 +251,6 @@ const CommentSection = ({ comments }) => {
           {showComments ? "Hide" : "Show"} Comments
         </button>
       </div>
-
       <AnimatePresence>
         {showComments && (
           <motion.div
@@ -333,7 +259,6 @@ const CommentSection = ({ comments }) => {
             exit={{ opacity: 0, height: 0 }}
             className="space-y-6"
           >
-            {/* Comment Input */}
             <div className="bg-[#DCE6D5]/40 p-4 rounded-xl">
               <textarea
                 value={newComment}
@@ -351,8 +276,6 @@ const CommentSection = ({ comments }) => {
                 </button>
               </div>
             </div>
-
-            {/* Comments List */}
             <div className="space-y-6">
               {comments.map((comment) => (
                 <motion.div
@@ -406,7 +329,6 @@ export default function ArticleTemplate() {
   const { id } = useParams();
   const targetRef = useRef();
 
-  // NEW: State for the dynamically fetched article
   const [article, setArticle] = useState(null);
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -418,7 +340,7 @@ export default function ArticleTemplate() {
   const [gateActive, setGateActive] = useState(false);
   const gateSentinelRef = useRef(null);
 
-  // Fetch article data from backend by slug (slug is used as :slug param)
+  // Fetch article data from backend by slug
   useEffect(() => {
     if (!id) return;
     let mounted = true;
@@ -426,59 +348,68 @@ export default function ArticleTemplate() {
     setError(null);
     setArticle(null);
 
+    const edjsParser = edjsHTML({
+      table: function (block) {
+        const data = block.data;
+        const headers = data.withHeadings ? data.content.shift() : [];
+        const headerHtml = headers.length ? `<thead><tr>${headers.map(cell => `<th>${cell}</th>`).join('')}</tr></thead>` : '';
+        const rows = data.content.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('');
+        return `<div class="table-wrapper"><table class="table">${headerHtml}<tbody>${rows}</tbody></table></div>`;
+      }
+    });
+
     async function fetchArticle() {
       try {
-  const res = await fetch(buildApiUrl(`/api/blogs/${encodeURIComponent(id)}`));
+        const res = await fetch(buildApiUrl(`/api/blogs/${encodeURIComponent(id)}`));
         if (!res.ok) {
           const text = await res.text();
           throw new Error(`Failed to load article: ${res.status} ${text}`);
         }
         const data = await res.json();
 
-        // Map backend Blog document to ArticleTemplate shape
         const mapped = {
           id: data.slug,
           slug: data.slug,
           title: data.mainHeading || data.metaTitle || "",
           subtitle: data.subHeading || data.metaDescription || "",
           category: data.category || "",
-          difficulty: data.difficultyLevel || data.difficulty || "",
+          difficulty: data.difficultyLevel || "",
           views: data.views || 0,
-          readTime: data.readingTime || data.readTime || 0,
-          publishDate: data.scheduledAt
-            ? new Date(data.scheduledAt).toLocaleDateString()
-            : data.createdAt
-            ? new Date(data.createdAt).toLocaleDateString()
-            : new Date().toLocaleDateString(),
+          readTime: data.readingTime || 0,
+          publishDate: new Date(data.scheduledAt || data.createdAt || Date.now()).toLocaleDateString(),
           author: data.author || "",
-          authorImage:
-            (data.gallery && data.gallery[0]) || data.heroImage || "/user.jpeg",
-          authorBio:
-            (data.coAuthors && data.coAuthors.join(", ")) ||
-            data.authorBio ||
-            "",
-          heroImage:
-            data.heroImage ||
-            (data.gallery && data.gallery[0]) ||
-            "/article1.jpg",
-          contentPreviewHtml: data.content
-            ? textToHtml(
-                data.content
-                  .split(/\n\s*\n/)
-                  .slice(0, 1)
-                  .join("\n\n")
-              )
-            : "",
-          fullContentHtml: data.content
-            ? /<\/?[a-z][\s\S]*>/i.test(data.content)
-              ? data.content
-              : textToHtml(data.content)
-            : "",
+          authorImage: data.heroImage || "/user.jpeg",
+          authorBio: (data.coAuthors && data.coAuthors.join(", ")) || "",
+          heroImage: data.heroImage || "/article1.jpg",
+          contentPreviewHtml: "",
+          fullContentHtml: "",
           tags: data.tags || [],
           comments: data.comments || [],
           likes: data.likes || 0,
         };
+        
+                if (data.content) {
+            try {
+              const contentData = JSON.parse(data.content);
+              const parsedBlocks = edjsParser.parse(contentData);
+              
+              // Handle both array (multi-block) and string (single-block) parser output
+              if (Array.isArray(parsedBlocks)) {
+                mapped.fullContentHtml = DOMPurify.sanitize(parsedBlocks.join(''));
+                mapped.contentPreviewHtml = DOMPurify.sanitize(parsedBlocks.slice(0, 2).join(''));
+              } else if (typeof parsedBlocks === 'string') {
+                mapped.fullContentHtml = DOMPurify.sanitize(parsedBlocks);
+                mapped.contentPreviewHtml = DOMPurify.sanitize(parsedBlocks);
+              } else {
+                 throw new Error("Parsed content is not a recognized format.");
+              }
 
+            } catch (e) {
+              console.error("Failed to parse Editor.js content:", e);
+              mapped.fullContentHtml = "<p>Error rendering content.</p>";
+              mapped.contentPreviewHtml = "<p>Error rendering content.</p>";
+            }
+        }
         if (mounted) {
           setArticle(mapped);
           setIsSubscribed(false);
@@ -491,25 +422,21 @@ export default function ArticleTemplate() {
           const relRes = await fetch(buildApiUrl('/api/blogs?limit=4'));
           if (relRes.ok) {
             const relData = await relRes.json();
-            if (mounted) {
-              const filtered = relData
+            if (mounted && relData.blogs) {
+              const filtered = relData.blogs
                 .filter((b) => b.slug !== data.slug)
                 .slice(0, 3);
               setRelated(
                 filtered.map((b) => ({
                   slug: b.slug,
                   title: b.mainHeading,
-                  heroImage:
-                    b.heroImage ||
-                    (b.gallery && b.gallery[0]) ||
-                    "/article1.jpg",
+                  heroImage: b.heroImage || "/article1.jpg",
                   category: b.category || "",
                 }))
               );
             }
           }
         } catch (err) {
-          // non-fatal
           console.warn("related fetch failed", err);
         }
       } catch (err) {
@@ -532,7 +459,6 @@ export default function ArticleTemplate() {
     setGateActive(false);
   };
 
-  // Trigger the gate once user reaches end of intro
   useEffect(() => {
     if (!article || !gateSentinelRef.current || isSubscribed) return;
 
@@ -549,15 +475,12 @@ export default function ArticleTemplate() {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [article, isSubscribed]); // Re-run when article loads
+  }, [article, isSubscribed]);
 
-  // Show gate on first small user interaction (wheel/touch/scroll/keydown)
-  // This is more reliable when navigating via client-side routing.
   useEffect(() => {
     if (isSubscribed) return;
 
     let triggered = false;
-
     const trigger = () => {
       if (triggered) return;
       triggered = true;
@@ -570,7 +493,7 @@ export default function ArticleTemplate() {
     const onWheel = () => trigger();
     const onTouchStart = () => trigger();
     const onKeyDown = (e) => {
-      if (["ArrowDown", "PageDown", " ", " "].includes(e.key)) trigger();
+      if (["ArrowDown", "PageDown", " "].includes(e.key)) trigger();
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -586,7 +509,6 @@ export default function ArticleTemplate() {
     };
   }, [isSubscribed, article]);
 
-  // Loading, error, and Not Found states
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -614,9 +536,6 @@ export default function ArticleTemplate() {
   return (
     <div ref={targetRef} className="bg-[#F9F9F9] min-h-screen">
       <ReadingProgress target={targetRef} />
-      {/* Inline auth is inside the gate overlay now */}
-
-      {/* Glassmorphism Gate Overlay */}
       <AnimatePresence>
         {gateActive && !isSubscribed && (
           <motion.div
@@ -632,8 +551,6 @@ export default function ArticleTemplate() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Left/Right Navigation Arrows */}
       <div className="fixed top-1/2 -translate-y-1/2 left-4 z-30 hidden lg:block">
         <Link
           to="/article/prev"
@@ -650,14 +567,12 @@ export default function ArticleTemplate() {
           <ChevronRightIcon className="w-6 h-6 text-[#006D5B]" />
         </Link>
       </div>
-
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7 }}
         className="max-w-4xl mx-auto px-4 py-8 md:py-12"
       >
-        {/* Header Navigation */}
         <div className="mb-8">
           <Link
             to="/articles"
@@ -667,8 +582,6 @@ export default function ArticleTemplate() {
             Back to Articles
           </Link>
         </div>
-
-        {/* Article Header */}
         <header className="mb-12">
           <div className="flex flex-wrap items-center gap-4 mb-6">
             <span className="bg-[#006D5B] text-white px-4 py-2 rounded-full text-sm font-semibold">
@@ -684,15 +597,12 @@ export default function ArticleTemplate() {
               </span>
             </div>
           </div>
-
           <h1 className="text-4xl md:text-5xl font-bold text-[#005c4d] leading-tight mb-4">
             {article.title}
           </h1>
-
           <p className="text-xl text-[#4B4B4B]/80 mb-8 leading-relaxed">
             {article.subtitle}
           </p>
-
           <div className="flex flex-wrap items-center justify-between gap-6 bg-white p-4 rounded-2xl border border-[#006D5B]/10">
             <div className="flex items-center gap-4">
               <img
@@ -711,7 +621,6 @@ export default function ArticleTemplate() {
                 )}
               </div>
             </div>
-
             <div className="flex items-center gap-6 text-sm text-[#4B4B4B]">
               <div className="flex items-center gap-2">
                 <ClockIcon className="w-4 h-4" />
@@ -721,8 +630,6 @@ export default function ArticleTemplate() {
             </div>
           </div>
         </header>
-
-        {/* Hero Image */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -735,23 +642,16 @@ export default function ArticleTemplate() {
             className="w-full h-full object-cover"
           />
         </motion.div>
-
-        {/* Article Content */}
         <article className="prose prose-lg max-w-none prose-h2:text-3xl prose-h2:font-bold prose-h2:text-[#005c4d] prose-blockquote:border-[#006D5B] prose-blockquote:bg-[#DCE6D5]/40 prose-a:text-[#006D5B] hover:prose-a:text-[#005c4d]">
-          {/* Article Content: show preview when not subscribed, full content after subscription */}
-            <div>
-              {isSubscribed ? (
-                <RenderHtmlContent html={article.fullContentHtml || article.contentPreviewHtml} />
-              ) : (
-                <RenderHtmlContent html={article.contentPreviewHtml || article.fullContentHtml} />
-              )}
-            </div>
-
-            {/* Gate sentinel (kept for analytics/behavior) */}
-            <div ref={gateSentinelRef} aria-hidden="true" className="h-2" />
+          <div>
+            {isSubscribed ? (
+              <RenderHtmlContent html={article.fullContentHtml} />
+            ) : (
+              <RenderHtmlContent html={article.contentPreviewHtml} />
+            )}
+          </div>
+          <div ref={gateSentinelRef} aria-hidden="true" className="h-2" />
         </article>
-
-        {/* Action Buttons */}
         <div className="flex items-center justify-between mt-12 pt-8 border-t border-[#006D5B]/10">
           <div className="flex items-center gap-4">
             <button
@@ -769,7 +669,6 @@ export default function ArticleTemplate() {
               )}
               {article.likes + (liked ? 1 : 0)}
             </button>
-
             <button
               onClick={() => setBookmarked(!bookmarked)}
               className={`p-2 rounded-full transition-colors ${
@@ -780,13 +679,10 @@ export default function ArticleTemplate() {
             >
               <BookmarkIcon className="w-5 h-5" />
             </button>
-
             <button className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
               <ShareIcon className="w-5 h-5" />
             </button>
           </div>
-
-          {/* Tags */}
           <div className="flex flex-wrap items-center gap-2">
             {article.tags.map((tag) => (
               <span
@@ -798,13 +694,9 @@ export default function ArticleTemplate() {
             ))}
           </div>
         </div>
-
-        {/* Comments Section: render only when comments exist */}
         {article.comments && article.comments.length > 0 && (
           <CommentSection comments={article.comments} />
         )}
-
-        {/* Summary points */}
         {article.summaryPoints && article.summaryPoints.length > 0 && (
           <div className="mt-8 bg-white p-6 rounded-2xl border border-[#006D5B]/10">
             <h3 className="text-lg font-semibold text-[#005c4d] mb-3">
@@ -817,8 +709,6 @@ export default function ArticleTemplate() {
             </ul>
           </div>
         )}
-
-        {/* Citations / Sources */}
         {(article.citations && article.citations.length > 0) ||
         (article.sources && article.sources.length > 0) ? (
           <div className="mt-8 bg-white p-6 rounded-2xl border border-[#006D5B]/10">
@@ -835,7 +725,6 @@ export default function ArticleTemplate() {
                 </ul>
               </div>
             )}
-
             {article.sources && article.sources.length > 0 && (
               <div>
                 <h4 className="font-semibold text-[#005c4d] mb-2">Sources</h4>
@@ -851,8 +740,6 @@ export default function ArticleTemplate() {
             )}
           </div>
         ) : null}
-
-        {/* Attachments */}
         {article.attachments && article.attachments.length > 0 && (
           <div className="mt-8">
             <h4 className="font-semibold text-[#005c4d] mb-3">Attachments</h4>
@@ -863,7 +750,7 @@ export default function ArticleTemplate() {
                   href={a}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[#006D5B] underline"
+                  className="block text-[#006D5B] hover:underline"
                 >
                   {a}
                 </a>
@@ -871,59 +758,6 @@ export default function ArticleTemplate() {
             </div>
           </div>
         )}
-
-        {/* Quiz Questions */}
-        {article.quizQuestions && article.quizQuestions.length > 0 && (
-          <div className="mt-8 bg-white p-6 rounded-2xl border border-[#006D5B]/10">
-            <h3 className="text-lg font-semibold text-[#005c4d] mb-4">
-              Quick quiz
-            </h3>
-            <ol className="list-decimal pl-5 text-[#4B4B4B] space-y-3">
-              {article.quizQuestions.map((q, i) => (
-                <li key={i}>
-                  <div className="font-medium">{q.question}</div>
-                  {q.options && (
-                    <ul className="list-disc pl-5 mt-2 text-sm">
-                      {q.options.map((opt, j) => (
-                        <li key={j}>{opt}</li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))}
-            </ol>
-          </div>
-        )}
-
-        {/* Author Bio */}
-        <div className="mt-12 p-8 bg-white rounded-2xl border border-[#006D5B]/10">
-          <div className="flex items-start gap-6">
-            <img
-              src={article.authorImage}
-              alt={article.author}
-              className="w-20 h-20 rounded-full object-cover"
-            />
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-[#005c4d] mb-2">
-                About {article.author}
-              </h3>
-              <p className="text-[#4B4B4B] mb-4">
-                Dr. Shravani is a leading orthodontist with over 15 years of
-                clinical experience. She has trained thousands of dental
-                students and residents, and her innovative teaching methods have
-                transformed how orthodontics is taught globally.
-              </p>
-              <div className="flex items-center gap-4">
-                <button className="bg-[#006D5B] text-white px-6 py-2 rounded-lg hover:bg-[#005c4d] transition-colors">
-                  Follow Dr. Shravani
-                </button>
-                <span className="text-sm text-gray-600">15,420 followers</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Related Reads Section */}
         <RelatedReads relatedArticles={related} />
       </motion.div>
     </div>

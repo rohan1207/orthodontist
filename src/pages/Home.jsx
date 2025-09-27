@@ -1,7 +1,7 @@
 
 import NewHero from "../components/NewHero.jsx";
 
-import Recommended from "../components/Recommended.jsx";
+import Articles from "../components/Articles.jsx";
 
 import Founder from "../components/Founder.jsx";
 import TopBooks from "../components/TopBooks.jsx";
@@ -16,10 +16,11 @@ export default function Home() {
       
       <NewHero />
       <Founder/>
+      <ExamPreparation/>
       <TopBooks/>
-      <Recommended />
+      <Articles />
 			
-			<ExamPreparation/>
+			
       <TopicSummaries/>
       <AcademicHelp/>
 			

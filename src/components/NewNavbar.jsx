@@ -31,7 +31,7 @@ export default function Navbar() {
     { name: "Articles", href: "/articles" },
     { name: "Top Books", href: "/top-books" },
     { name: "Exam Preparation", href: "/exam-prep" },
-    { name: "Topic Summaries", href: "/summaries" },
+    { name: "Concept Capsules", href: "/summaries" },
     { name: "Academic Help", href: "/academic-help" },
   ];
 

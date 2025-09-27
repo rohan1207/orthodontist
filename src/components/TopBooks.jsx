@@ -1,42 +1,12 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { BookOpenIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
+import { BookOpenIcon, ShoppingCartIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
+import { buildApiUrl } from "../utils/api";
 
-const topBooksData = [
-  {
-    id: 1,
-    title: "Handbook of  Orthodontics",
-    author: "William R. Proffit",
-    description:
-      "The definitive guide covering diagnosis, treatment planning, and mechanics. A must-have for every orthodontic resident.",
-    coverImage: "/book1.webp",
-  },
-  {
-    id: 2,
-    title: "Handbook of Orthodontics",
-    author: "Robert E. Moyers",
-    description:
-      "A foundational text focusing on growth and development, and the biological basis of orthodontic treatment.",
-    coverImage: "/book2.jpg",
-  },
-  {
-    id: 3,
-    title: "Orthodontics: Current Principles and Techniques",
-    author: "Lee W. Graber",
-    description:
-      "An in-depth resource on advanced techniques, new technologies, and evidence-based practices in the field.",
-    coverImage: "/book3.jpeg",
-  },
-  {
-    id: 4,
-    title: "Systemized Orthodontic Treatment Mechanics",
-    author: "R. G. 'Wick' Alexander",
-    description:
-      "A practical guide to applying the Alexander Discipline, focusing on efficient and predictable treatment mechanics.",
-    coverImage: "/book4.jpeg",
-  },
-];
+
 
 const BookCard = ({ book, isOpen, onToggle }) => {
   return (
@@ -50,13 +20,11 @@ const BookCard = ({ book, isOpen, onToggle }) => {
       animate={isOpen ? "open" : "closed"}
       onClick={onToggle}
       onHoverStart={() => {
-        // Only trigger hover on desktop/laptop devices
         if (window.matchMedia("(hover: hover)").matches) {
           onToggle();
         }
       }}
       onHoverEnd={() => {
-        // Only trigger hover on desktop/laptop devices
         if (window.matchMedia("(hover: hover)").matches) {
           onToggle();
         }
@@ -81,7 +49,6 @@ const BookCard = ({ book, isOpen, onToggle }) => {
             boxShadow: "inset -2px 0 4px rgba(0,0,0,0.2)",
           }}
         >
-          {/* Spine texture */}
           <div
             className="absolute inset-0 opacity-10"
             style={{
@@ -102,7 +69,6 @@ const BookCard = ({ book, isOpen, onToggle }) => {
             boxShadow: "inset -1px 0 3px rgba(0,0,0,0.15)",
           }}
         >
-          {/* Page texture */}
           <div
             className="absolute inset-0 opacity-5"
             style={{
@@ -129,27 +95,106 @@ const BookCard = ({ book, isOpen, onToggle }) => {
         >
           <div className="h-full flex flex-col p-4 sm:p-6 bg-gradient-to-br from-[#DCE6D5]/40 to-white">
             <div className="flex-1 overflow-y-auto">
-              <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#006D5B]">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#006D5B] line-clamp-2">
                 {book.title}
               </h3>
               <p className="mt-1 text-xs sm:text-sm text-[#4B4B4B]/80">
                 by {book.author}
               </p>
               <div className="w-12 h-0.5 bg-[#006D5B] my-2 sm:my-3 opacity-50"></div>
-              <p className="text-[#4B4B4B] text-xs sm:text-sm leading-relaxed">
+              
+              {/* Description */}
+              <p className="text-[#4B4B4B] text-xs sm:text-sm leading-relaxed mb-3">
                 {book.description}
               </p>
+              
+              {/* Tags */}
+              {book.tags && book.tags.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-xs font-semibold text-[#006D5B] mb-1">Recommended For:</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {book.tags.map((tag, index) => (
+                      <span 
+                        key={index} 
+                        className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#DCE6D5] text-[#006D5B]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-            <Link
-              to={`/book-summary/${book.id}`}
-              className="group relative mt-4 inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#006D5B] text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                Read Book
-                <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
-              </span>
-              <div className="absolute inset-0 rounded-full bg-[#006D5B] opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-xl"></div>
-            </Link>
+            
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-2 mt-auto pt-2">
+              {/* E-book Link */}
+              {book.ebookLink && (
+                <a
+                  href={book.ebookLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#F3F7F4] text-[#006D5B] text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#E0ECE6] hover:shadow-lg hover:-translate-y-0.5 border border-[#006D5B]/20"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <BookOpenIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Read E-book</span>
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-auto opacity-70" />
+                </a>
+              )}
+              
+              {/* Purchase / Buy Link */}
+              {book.buyLink ? (
+                <a
+                  href={book.buyLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#006D5B] text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-2">
+                    <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span>Buy Now</span>
+                  </div>
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-80" />
+                </a>
+              ) : book.purchaseLinks && book.purchaseLinks.length > 0 ? (
+                <div className="space-y-2">
+                  {book.purchaseLinks.map((link, index) => (
+                    <a
+                      key={index}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#006D5B] text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="flex items-center gap-2">
+                        <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span>Buy on {link.platform}</span>
+                      </div>
+                      <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-80" />
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <a
+                  href={`https://www.google.com/search?q=${encodeURIComponent(book.title + ' ' + book.author + ' buy')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#F3F7F4] text-[#006D5B] text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#E0ECE6] hover:shadow-lg hover:-translate-y-0.5 border border-[#006D5B]/20"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-2">
+                    <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span>Find where to buy</span>
+                  </div>
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-70" />
+                </a>
+              )}
+              
+             
+            </div>
           </div>
         </motion.div>
 
@@ -183,12 +228,11 @@ const BookCard = ({ book, isOpen, onToggle }) => {
             },
           }}
         >
-          {/* Front Cover */}
           <motion.div
             className="absolute inset-0 w-full h-full"
             style={{
               backfaceVisibility: "hidden",
-              transform: "translateZ(1px)", // Slight offset to prevent z-fighting
+              transform: "translateZ(1px)",
             }}
           >
             <img
@@ -196,7 +240,6 @@ const BookCard = ({ book, isOpen, onToggle }) => {
               alt={book.title}
               className="w-full h-full object-cover rounded-lg"
             />
-            {/* Subtle shadow overlay for depth */}
             <motion.div
               className="absolute inset-0 rounded-lg"
               style={{
@@ -210,8 +253,6 @@ const BookCard = ({ book, isOpen, onToggle }) => {
               }}
             />
           </motion.div>
-
-          {/* Inside of Cover */}
           <motion.div
             className="absolute inset-0 w-full h-full bg-gradient-to-r from-gray-100 to-gray-50 rounded-lg"
             style={{
@@ -222,8 +263,6 @@ const BookCard = ({ book, isOpen, onToggle }) => {
           />
         </motion.div>
       </div>
-
-      {/* Environmental shadow - positioned relative to parent */}
       <motion.div
         className="absolute -bottom-2 md:-bottom-6 left-1/2 -translate-x-1/2 rounded-full opacity-50 pointer-events-none"
         style={{
@@ -250,10 +289,47 @@ const BookCard = ({ book, isOpen, onToggle }) => {
 
 export default function TopBooks() {
   const [openBookId, setOpenBookId] = useState(null);
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.get(buildApiUrl('/api/books'));
+        if (response.data && Array.isArray(response.data)) {
+          // Sort books by order field if available
+          const sortedBooks = [...response.data].sort((a, b) => (a.order || 0) - (b.order || 0));
+          setBooks(sortedBooks);
+        } else {
+          setBooks(fallbackBooks);
+        }
+      } catch (err) {
+        console.error('Error fetching books:', err);
+        setError('Failed to load books. Using fallback data.');
+        setBooks(fallbackBooks);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, []);
 
   const handleToggle = (bookId) => {
     setOpenBookId((prevId) => (prevId === bookId ? null : bookId));
   };
+
+  if (loading) {
+    return (
+      <section className="py-16 md:py-24 bg-[#DCE6D5] min-h-[60vh] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#006D5B] mx-auto mb-4"></div>
+          <p className="text-[#4B4B4B]">Loading recommended books...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 md:py-24 bg-[#DCE6D5]">
@@ -268,18 +344,23 @@ export default function TopBooks() {
             aspiring orthodontist. Dive into the foundational knowledge that
             shapes modern practice.
           </p>
+          {error && (
+            <div className="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
+              <p className="text-sm">{error}</p>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-10 md:gap-y-12 lg:gap-x-12">
-          {topBooksData.map((book) => (
+          {books.map((book) => (
             <div
-              key={book.id}
+              key={book._id || book.id}
               className="relative w-full min-h-[280px] sm:min-h-[360px] md:min-h-[440px]"
             >
               <BookCard
                 book={book}
-                isOpen={openBookId === book.id}
-                onToggle={() => handleToggle(book.id)}
+                isOpen={openBookId === (book._id || book.id)}
+                onToggle={() => handleToggle(book._id || book.id)}
               />
             </div>
           ))}

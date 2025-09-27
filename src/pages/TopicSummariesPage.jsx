@@ -195,7 +195,7 @@ export default function TopicSummariesPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-bold text-[#006D5B] mb-6 flex items-center justify-center gap-3"
           >
-            <DocumentDuplicateIcon className="w-10 h-10" /> Topic Summaries
+            <DocumentDuplicateIcon className="w-10 h-10" /> Concept Capsules
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

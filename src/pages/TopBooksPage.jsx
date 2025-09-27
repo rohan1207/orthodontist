@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MagnifyingGlassIcon,
-  Squares2X2Icon,
-  Bars3BottomLeftIcon,
-  FunnelIcon,
   ArrowRightIcon,
-  BookOpenIcon,
+  ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/outline";
+import { BookOpenIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
+import { buildApiUrl } from "../utils/api";
+
 
 // Safe image with fallback to avoid broken covers
 function SafeImage({ src, alt, className }) {
@@ -25,142 +26,6 @@ function SafeImage({ src, alt, className }) {
   );
 }
 
-// Master list of books (can be sourced from API later)
-const BOOKS = [
-  {
-    id: 1,
-    title: "Handbook of  Orthodontics",
-    author: "William R. Proffit",
-    description:
-      "The definitive guide covering diagnosis, treatment planning, and mechanics. A must-have for every orthodontic resident.",
-    coverImage: "/book1.webp",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Diagnosis", "Treatment Planning", "Mechanics"],
-  },
-  {
-    id: 2,
-    title: "Handbook of Orthodontics",
-    author: "Robert E. Moyers",
-    description:
-      "A foundational text focusing on growth and development, and the biological basis of orthodontic treatment.",
-    coverImage: "/book2.jpg",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Growth & Development", "Biology"],
-  },
-  {
-    id: 3,
-    title: "Orthodontics: Current Principles and Techniques",
-    author: "Lee W. Graber",
-    description:
-      "An in-depth resource on advanced techniques, new technologies, and evidence-based practices in the field.",
-    coverImage: "/book3.jpeg",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Advanced Techniques", "Evidence-based"],
-  },
-  {
-    id: 4,
-    title: "Systemized Orthodontic Treatment Mechanics",
-    author: "R. G. 'Wick' Alexander",
-    description:
-      "A practical guide to applying the Alexander Discipline, focusing on efficient and predictable treatment mechanics.",
-    coverImage: "/book4.jpeg",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Alexander Discipline", "Mechanics"],
-  },
-  // Additional entries (placeholders to populate the page)
-  {
-    id: 5,
-    title: "Biomechanics in Orthodontics",
-    author: "Charles J. Burstone",
-    description:
-      "Core principles of force systems, anchorage, and controlled tooth movement explained with clarity.",
-    coverImage: "/book1.webp",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Force Systems", "Anchorage"],
-  },
-  {
-    id: 6,
-    title: "Cephalometrics in Orthodontics",
-    author: "William B. Downs",
-    description:
-      "A friendly walkthrough of cephalometric landmarks, analyses, and interpretation for clinicians.",
-    coverImage: "/book2.jpg",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Cephalometrics", "Analysis"],
-  },
-  {
-    id: 7,
-    title: "Contemporary Orthodontics",
-    author: "William R. Proffit",
-    description:
-      "Widely used modern text blending fundamentals with clinical applications and evidence-based updates.",
-    coverImage: "/book3.jpeg",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Fundamentals", "Clinical"],
-  },
-  {
-    id: 8,
-    title: "Orthodontic Diagnosis and Planning",
-    author: "Ravindra Nanda",
-    description:
-      "Structured approaches to diagnostic synthesis and treatment planning across various malocclusions.",
-    coverImage: "/book4.jpeg",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Diagnosis", "Planning"],
-  },
-  {
-    id: 9,
-    title: "Essentials of Facial Growth",
-    author: "Donald H. Enlow",
-    description:
-      "Understanding craniofacial growth patterns and their implications for orthodontic interventions.",
-    coverImage: "/book1.webp",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Craniofacial Growth"],
-  },
-  {
-    id: 10,
-    title: "Advanced Anchorage Concepts",
-    author: "Pancherz & Sugawara",
-    description:
-      "Mini-implants and biomechanics strategies to achieve reliable anchorage and treatment efficiency.",
-    coverImage: "/book2.jpg",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["TADs", "Anchorage"],
-  },
-  {
-    id: 11,
-    title: "Aligner Orthodontics Handbook",
-    author: "Tarek El-Bialy",
-    description:
-      "Digital planning, staging, and clinical protocols for effective clear aligner treatments.",
-    coverImage: "/book3.jpeg",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Aligners", "Digital Planning"],
-  },
-  {
-    id: 12,
-    title: "Fixed Appliance Therapy – A Practical Guide",
-    author: "P. S. Fleming",
-    description:
-      "Step-by-step brackets to finishing protocols, with practical tips for everyday clinical use.",
-    coverImage: "/book4.jpeg",
-    buyLink: "#",
-    ebookLink: "",
-    recommendedFor: ["Fixed Appliances", "Finishing"],
-  },
-];
 
 const SORTS = [
   { id: "title-asc", label: "Title A → Z" },
@@ -169,75 +34,27 @@ const SORTS = [
   { id: "author-desc", label: "Author Z → A" },
 ];
 
-function TopicChips({ items = [] }) {
-  const trimmed = items.slice(0, 3);
-  return (
-    <div className="mt-2 flex flex-wrap gap-1.5">
-      {trimmed.map((t, i) => (
-        <span
-          key={i}
-          className="px-2 py-0.5 rounded-full text-xs bg-green-50 text-green-700 border border-green-200"
-        >
-          {t}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function Actions({ book }) {
-  const hasEbook = book.ebookLink && book.ebookLink.length > 0;
-  const hasBuy = book.buyLink && book.buyLink.length > 0;
-  return (
-    <div className="mt-auto flex gap-2">
-      {hasEbook ? (
-        <a
-          href={book.ebookLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-lg text-white bg-gradient-to-r from-green-500 to-emerald-600 text-sm font-medium hover:opacity-95"
-        >
-          Open eBook
-        </a>
-      ) : (
-        <Link
-          to={`/book-summary/${book.id}`}
-          className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-lg text-white bg-gradient-to-r from-green-500 to-emerald-600 text-sm font-medium hover:opacity-95"
-        >
-          Read Summary
-        </Link>
-      )}
-      {hasBuy && (
-        <a
-          href={book.buyLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-3 py-2 rounded-lg border border-gray-200 text-gray-700 bg-white text-sm font-medium hover:bg-gray-50"
-        >
-          Buy
-        </a>
-      )}
-    </div>
-  );
-}
-
-function FlipBookCard({ book }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggle = () => setIsOpen((v) => !v);
-
+const BookCard = ({ book, isOpen, onToggle }) => {
   return (
     <motion.div
-      className="relative w-full cursor-pointer"
+      className="relative w-full cursor-pointer "
       style={{
         perspective: "2000px",
         aspectRatio: "3/4",
-        containIntrinsicSize: "300px 400px",
       }}
       initial={false}
       animate={isOpen ? "open" : "closed"}
-      onHoverStart={() => setIsOpen(true)}
-      onHoverEnd={() => setIsOpen(false)}
-      onClick={toggle}
+      onClick={onToggle}
+      onHoverStart={() => {
+        if (window.matchMedia("(hover: hover)").matches) {
+          onToggle();
+        }
+      }}
+      onHoverEnd={() => {
+        if (window.matchMedia("(hover: hover)").matches) {
+          onToggle();
+        }
+      }}
     >
       <div
         className="absolute inset-0"
@@ -250,69 +67,172 @@ function FlipBookCard({ book }) {
       >
         {/* Book Spine */}
         <motion.div
-          className="absolute left-0 top-0 bottom-0 w-[20px] bg-gradient-to-r from-gray-800 to-gray-700"
+          className="absolute left-0 top-0 bottom-0 w-[20px] bg-gradient-to-r from-[#006D5B] to-[#004B3F]"
           style={{
             transformOrigin: "left",
             rotateY: "-90deg",
             translateX: "10px",
+            boxShadow: "inset -2px 0 4px rgba(0,0,0,0.2)",
           }}
-        />
+        >
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage:
+                "linear-gradient(90deg, white 1px, transparent 1px)",
+              backgroundSize: "4px 100%",
+            }}
+          />
+        </motion.div>
 
-        {/* Right Pages Stack */}
+        {/* Right Pages Stack (gives depth) */}
         <div
-          className="absolute right-0 top-0 bottom-0 w-[15px] bg-white shadow-inner transform-gpu"
+          className="absolute right-0 top-0 bottom-0 w-[15px] bg-white shadow-inner transform-gpu rounded-tr-md rounded-br-md"
           style={{
             transformOrigin: "right",
             transform: "rotateY(-20deg) translateX(15px)",
-            background: "linear-gradient(to left, #e5e7eb 0%, #fff 100%)",
+            background: "linear-gradient(to left, #DCE6D5 0%, #fff 100%)",
+            boxShadow: "inset -1px 0 3px rgba(0,0,0,0.15)",
           }}
-        />
+        >
+          <div
+            className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage:
+                "linear-gradient(0deg, #000 1px, transparent 1px)",
+              backgroundSize: "100% 4px",
+            }}
+          />
+        </div>
 
         {/* Inner Pages */}
         <motion.div
           className="absolute w-full h-full bg-white rounded-r-lg overflow-hidden"
           variants={{
-            open: { opacity: 1, transition: { duration: 0.4, delay: 0.2 } },
-            closed: { opacity: 0, transition: { duration: 0.2 } },
+            open: {
+              opacity: 1,
+              transition: { duration: 0.4, delay: 0.2 },
+            },
+            closed: {
+              opacity: 0,
+              transition: { duration: 0.2 },
+            },
           }}
         >
-          <div className="h-full flex flex-col p-5 md:p-6 bg-gradient-to-r from-white to-gray-50">
-            <div className="flex-1 min-h-0">
-              <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
+          <div className="h-full flex flex-col p-4 sm:p-6 bg-gradient-to-br from-[#DCE6D5]/40 to-white">
+            <div className="flex-1 overflow-y-auto">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#006D5B] line-clamp-2">
                 {book.title}
               </h3>
-              <p className="mt-1 text-sm text-gray-500">by {book.author}</p>
-              <div className="w-14 h-0.5 bg-green-500 my-3" />
-              <p className="text-gray-600 text-sm leading-relaxed line-clamp-4">
+              <p className="mt-1 text-xs sm:text-sm text-[#4B4B4B]/80">
+                by {book.author}
+              </p>
+              <div className="w-12 h-0.5 bg-[#006D5B] my-2 sm:my-3 opacity-50"></div>
+              
+              {/* Description */}
+              <p className="text-[#4B4B4B] text-xs sm:text-sm leading-relaxed mb-3">
                 {book.description}
               </p>
-              <TopicChips items={book.recommendedFor} />
+              
+              {/* Tags */}
+              {book.tags && book.tags.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-xs font-semibold text-[#006D5B] mb-1">Recommended For:</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {book.tags.map((tag, index) => (
+                      <span 
+                        key={index} 
+                        className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#DCE6D5] text-[#006D5B]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-            <Actions book={book} />
+            
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-2 mt-auto pt-2">
+              {/* E-book Link */}
+              {book.ebookLink && (
+                <a
+                  href={book.ebookLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#F3F7F4] text-[#006D5B] text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#E0ECE6] hover:shadow-lg hover:-translate-y-0.5 border border-[#006D5B]/20"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <BookOpenIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Read E-book</span>
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-auto opacity-70" />
+                </a>
+              )}
+              
+              {/* Purchase / Buy Link */}
+              {book.buyLink ? (
+                <a
+                  href={book.buyLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#006D5B] text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-2">
+                    <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span>Buy Now</span>
+                  </div>
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-80" />
+                </a>
+              ) : (
+                <a
+                  href={`https://www.google.com/search?q=${encodeURIComponent(book.title + ' ' + book.author + ' buy')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#F3F7F4] text-[#006D5B] text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#E0ECE6] hover:shadow-lg hover:-translate-y-0.5 border border-[#006D5B]/20"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-2">
+                    <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span>Find where to buy</span>
+                  </div>
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-70" />
+                </a>
+              )}
+            </div>
           </div>
         </motion.div>
 
         {/* Book Cover */}
         <motion.div
           className="absolute w-full h-full rounded-lg shadow-2xl overflow-hidden"
-          style={{ transformOrigin: "left", transformStyle: "preserve-3d" }}
+          style={{
+            transformOrigin: "left",
+            transformStyle: "preserve-3d",
+            boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+          }}
           variants={{
             open: {
               rotateY: -170,
               transition: {
                 type: "spring",
-                stiffness: 50,
-                damping: 15,
+                stiffness: 45,
+                damping: 13,
                 restDelta: 0.5,
+                duration: 0.8,
               },
             },
             closed: {
               rotateY: 0,
-              transition: { type: "spring", stiffness: 60, damping: 15 },
+              transition: {
+                type: "spring",
+                stiffness: 55,
+                damping: 13,
+                duration: 0.5,
+              },
             },
           }}
         >
-          {/* Front Cover */}
           <motion.div
             className="absolute inset-0 w-full h-full"
             style={{
@@ -332,11 +252,12 @@ function FlipBookCard({ book }) {
                   "linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 20%)",
                 pointerEvents: "none",
               }}
-              variants={{ open: { opacity: 0 }, closed: { opacity: 1 } }}
+              variants={{
+                open: { opacity: 0 },
+                closed: { opacity: 1 },
+              }}
             />
           </motion.div>
-
-          {/* Inside of Cover */}
           <motion.div
             className="absolute inset-0 w-full h-full bg-gradient-to-r from-gray-100 to-gray-50 rounded-lg"
             style={{
@@ -347,101 +268,328 @@ function FlipBookCard({ book }) {
           />
         </motion.div>
       </div>
-
-      {/* Environmental shadow */}
       <motion.div
-        className="absolute -bottom-8 left-1/2 -translate-x-1/2 rounded-full opacity-50 pointer-events-none"
+        className="absolute -bottom-2 md:-bottom-6 left-1/2 -translate-x-1/2 rounded-full opacity-50 pointer-events-none"
         style={{
           background:
             "radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%)",
-          width: "100%",
-          height: "20px",
+          width: "95%",
+          height: "14px",
           transform: "rotateX(60deg)",
         }}
         variants={{
-          open: { width: "90%", opacity: 0.3 },
-          closed: { width: "100%", opacity: 0.2 },
+          open: {
+            width: "85%",
+            opacity: 0.3,
+          },
+          closed: {
+            width: "95%",
+            opacity: 0.2,
+          },
         }}
       />
     </motion.div>
   );
-}
+};
 
-function ListCard({ book }) {
+
+
+const BookCardInner = ({ book, isOpen, onToggle }) => {
   return (
     <motion.div
-      className="w-full bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      className="relative w-full cursor-pointer "
+      style={{
+        perspective: "2000px",
+        aspectRatio: "3/4",
+      }}
+      initial={false}
+      animate={isOpen ? "open" : "closed"}
+      onClick={onToggle}
+      onHoverStart={() => {
+        if (window.matchMedia("(hover: hover)").matches) {
+          onToggle();
+        }
+      }}
+      onHoverEnd={() => {
+        if (window.matchMedia("(hover: hover)").matches) {
+          onToggle();
+        }
+      }}
     >
-      <div className="grid grid-cols-1 md:grid-cols-[220px_1fr]">
-        <div className="relative h-44 md:h-full">
-          <SafeImage
-            src={book.coverImage}
-            alt={book.title}
-            className="w-full h-full object-cover"
+      <div
+        className="absolute inset-0"
+        style={{
+          transformStyle: "preserve-3d",
+          transformOrigin: "left",
+          willChange: "transform",
+          isolation: "isolate",
+        }}
+      >
+        {/* Book Spine */}
+        <motion.div
+          className="absolute left-0 top-0 bottom-0 w-[20px] bg-gradient-to-r from-[#006D5B] to-[#004B3F]"
+          style={{
+            transformOrigin: "left",
+            rotateY: "-90deg",
+            translateX: "10px",
+            boxShadow: "inset -2px 0 4px rgba(0,0,0,0.2)",
+          }}
+        >
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage:
+                "linear-gradient(90deg, white 1px, transparent 1px)",
+              backgroundSize: "4px 100%",
+            }}
+          />
+        </motion.div>
+
+        {/* Right Pages Stack (gives depth) */}
+        <div
+          className="absolute right-0 top-0 bottom-0 w-[15px] bg-white shadow-inner transform-gpu rounded-tr-md rounded-br-md"
+          style={{
+            transformOrigin: "right",
+            transform: "rotateY(-20deg) translateX(15px)",
+            background: "linear-gradient(to left, #DCE6D5 0%, #fff 100%)",
+            boxShadow: "inset -1px 0 3px rgba(0,0,0,0.15)",
+          }}
+        >
+          <div
+            className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage:
+                "linear-gradient(0deg, #000 1px, transparent 1px)",
+              backgroundSize: "100% 4px",
+            }}
           />
         </div>
-        <div className="p-5 flex flex-col">
-          <h3 className="text-lg md:text-xl font-semibold text-gray-900">
-            {book.title}
-          </h3>
-          <p className="text-sm text-gray-500">{book.author}</p>
-          <p className="mt-3 text-sm md:text-base text-gray-600 line-clamp-3">
-            {book.description}
-          </p>
-          <TopicChips items={book.recommendedFor} />
-          <div className="mt-4 flex gap-2">
-            {/* Primary */}
-            {book.ebookLink ? (
-              <a
-                href={book.ebookLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-white bg-gradient-to-r from-green-500 to-emerald-600 text-sm font-medium"
-              >
-                Open eBook
-              </a>
-            ) : (
-              <Link
-                to={`/book-summary/${book.id}`}
-                className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium"
-              >
-                Read Summary <ArrowRightIcon className="w-4 h-4" />
-              </Link>
-            )}
-            {/* Secondary */}
-            {book.buyLink && (
-              <a
-                href={book.buyLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 text-sm font-medium hover:bg-gray-50"
-              >
-                Buy
-              </a>
-            )}
+
+        {/* Inner Pages */}
+        <motion.div
+          className="absolute w-full h-full bg-white rounded-r-lg overflow-hidden"
+          variants={{
+            open: {
+              opacity: 1,
+              transition: { duration: 0.4, delay: 0.2 },
+            },
+            closed: {
+              opacity: 0,
+              transition: { duration: 0.2 },
+            },
+          }}
+        >
+          <div className="h-full flex flex-col p-4 sm:p-6 bg-gradient-to-br from-[#DCE6D5]/40 to-white">
+            <div className="flex-1 overflow-y-auto">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#006D5B] line-clamp-2">
+                {book.title}
+              </h3>
+              <p className="mt-1 text-xs sm:text-sm text-[#4B4B4B]/80">
+                by {book.author}
+              </p>
+              <div className="w-12 h-0.5 bg-[#006D5B] my-2 sm:my-3 opacity-50"></div>
+              
+              {/* Description */}
+              <p className="text-[#4B4B4B] text-xs sm:text-sm leading-relaxed mb-3">
+                {book.description}
+              </p>
+              
+              {/* Tags */}
+              {book.tags && book.tags.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-xs font-semibold text-[#006D5B] mb-1">Recommended For:</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {book.tags.map((tag, index) => (
+                      <span 
+                        key={index} 
+                        className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#DCE6D5] text-[#006D5B]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-2 mt-auto pt-2">
+              {/* E-book Link */}
+              {book.ebookLink && (
+                <a
+                  href={book.ebookLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#F3F7F4] text-[#006D5B] text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#E0ECE6] hover:shadow-lg hover:-translate-y-0.5 border border-[#006D5B]/20"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <BookOpenIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Read E-book</span>
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-auto opacity-70" />
+                </a>
+              )}
+              
+              {/* Purchase / Buy Link */}
+              {book.buyLink ? (
+                <a
+                  href={book.buyLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#006D5B] text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-2">
+                    <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span>Buy Now</span>
+                  </div>
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-80" />
+                </a>
+              ) : (
+                <a
+                  href={`https://www.google.com/search?q=${encodeURIComponent(book.title + ' ' + book.author + ' buy')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#F3F7F4] text-[#006D5B] text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#E0ECE6] hover:shadow-lg hover:-translate-y-0.5 border border-[#006D5B]/20"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-2">
+                    <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span>Find where to buy</span>
+                  </div>
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-70" />
+                </a>
+              )}
+            </div>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Book Cover */}
+        <motion.div
+          className="absolute w-full h-full rounded-lg shadow-2xl overflow-hidden"
+          style={{
+            transformOrigin: "left",
+            transformStyle: "preserve-3d",
+            boxShadow: "0 20px 40px rgba(0,0,0,0.2)",
+          }}
+          variants={{
+            open: {
+              rotateY: -170,
+              transition: {
+                type: "spring",
+                stiffness: 45,
+                damping: 13,
+                restDelta: 0.5,
+                duration: 0.8,
+              },
+            },
+            closed: {
+              rotateY: 0,
+              transition: {
+                type: "spring",
+                stiffness: 55,
+                damping: 13,
+                duration: 0.5,
+              },
+            },
+          }}
+        >
+          <motion.div
+            className="absolute inset-0 w-full h-full"
+            style={{
+              backfaceVisibility: "hidden",
+              transform: "translateZ(1px)",
+            }}
+          >
+            <SafeImage
+              src={book.coverImage}
+              alt={book.title}
+              className="w-full h-full object-cover rounded-lg"
+            />
+            <motion.div
+              className="absolute inset-0 rounded-lg"
+              style={{
+                background:
+                  "linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 20%)",
+                pointerEvents: "none",
+              }}
+              variants={{
+                open: { opacity: 0 },
+                closed: { opacity: 1 },
+              }}
+            />
+          </motion.div>
+          <motion.div
+            className="absolute inset-0 w-full h-full bg-gradient-to-r from-gray-100 to-gray-50 rounded-lg"
+            style={{
+              backfaceVisibility: "hidden",
+              transform: "rotateY(180deg)",
+              borderLeft: "1px solid rgba(0,0,0,0.1)",
+            }}
+          />
+        </motion.div>
       </div>
+      <motion.div
+        className="absolute -bottom-2 md:-bottom-6 left-1/2 -translate-x-1/2 rounded-full opacity-50 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%)",
+          width: "95%",
+          height: "14px",
+          transform: "rotateX(60deg)",
+        }}
+        variants={{
+          open: {
+            width: "85%",
+            opacity: 0.3,
+          },
+          closed: {
+            width: "95%",
+            opacity: 0.2,
+          },
+        }}
+      />
     </motion.div>
   );
-}
+};
 
 export default function TopBooksPage() {
+  const handleToggle = (bookId) => {
+    setOpenBookId((prevId) => (prevId === bookId ? null : bookId));
+  };
   const [query, setQuery] = useState("");
   const [author, setAuthor] = useState("All");
   const [sortBy, setSortBy] = useState("title-asc");
   const [visible, setVisible] = useState(12);
+  const [books, setBooks] = useState([]);
+  const [openBookId, setOpenBookId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await axios.get(buildApiUrl('/api/books'));
+        const list = Array.isArray(res.data) ? res.data : [];
+        // sort by order if present
+        list.sort((a, b) => (a.order || 0) - (b.order || 0));
+        setBooks(list);
+      } catch (err) {
+        console.error('Failed to load books:', err);
+        setError('Failed to load books.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBooks();
+  }, []);
 
   const authors = useMemo(
-    () => ["All", ...Array.from(new Set(BOOKS.map((b) => b.author))).sort()],
-    []
+    () => ["All", ...Array.from(new Set((books || []).map((b) => b.author))).sort()],
+    [books]
   );
 
   const filtered = useMemo(() => {
-    let list = [...BOOKS];
+    let list = [...books];
 
     if (author !== "All") {
       list = list.filter((b) => b.author === author);
@@ -452,7 +600,7 @@ export default function TopBooksPage() {
       list = list.filter((book) => {
         const content = `${book.title} ${book.author} ${
           book.description
-        } ${book.recommendedFor.join(" ")}`.toLowerCase();
+        } ${(book.tags || []).join(" ")}`.toLowerCase();
         return searchTerms.every((term) => content.includes(term));
       });
     }
@@ -475,10 +623,21 @@ export default function TopBooksPage() {
     }
 
     return list;
-  }, [query, author, sortBy]);
+  }, [books, query, author, sortBy]);
 
   const visibleList = filtered.slice(0, visible);
   const canLoadMore = visible < filtered.length;
+
+  if (loading) {
+    return (
+      <div className="py-16 md:py-24 bg-[#DCE6D5]/30 mt-8 min-h-[60vh] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#006D5B] mx-auto mb-4"></div>
+          <p className="text-[#4B4B4B]">Loading recommended books...</p>
+        </div>
+      </div>
+    );
+  }
 
   const resetFilters = () => {
     setQuery("");
@@ -570,7 +729,7 @@ export default function TopBooksPage() {
           <span className="font-semibold text-[#006D5B]">
             {filtered.length}
           </span>{" "}
-          of {BOOKS.length} books
+          of {books.length} books
         </div>
 
         <AnimatePresence mode="popLayout">
@@ -583,11 +742,14 @@ export default function TopBooksPage() {
           >
             {visibleList.map((book) => (
               <div
-                key={book.id}
-                className="relative w-full"
-                style={{ minHeight: "450px" }}
+                key={book._id || book.id}
+                className="relative w-full min-h-[280px] sm:min-h-[360px] md:min-h-[440px]"
               >
-                <FlipBookCard book={book} />
+                <BookCard
+                  book={book}
+                  isOpen={openBookId === (book._id || book.id)}
+                  onToggle={() => handleToggle(book._id || book.id)}
+                />
               </div>
             ))}
           </motion.div>

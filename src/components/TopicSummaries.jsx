@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   BookOpenIcon,
   DocumentTextIcon,
@@ -13,7 +13,7 @@ import {
   AcademicCapIcon,
 } from "@heroicons/react/24/outline";
 
-const sampleTopics = [
+export const sampleTopics = [
   {
     id: 1,
     title: "Growth and Development",
@@ -88,7 +88,8 @@ const sampleTopics = [
   },
 ];
 
-const TopicCard = ({ topic, isExpanded, onToggle }) => {
+const TopicCard = ({ topic }) => {
+  const navigate = useNavigate();
   return (
     <motion.div
       layout
@@ -96,8 +97,7 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
       whileInView={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.3 }}
-      onClick={onToggle}
-      className="relative cursor-pointer group w-full"
+      className="relative group w-full"
     >
       <div
         className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -129,8 +129,12 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
             </div>
           </div>
           <motion.div
-            animate={{ rotate: isExpanded ? 90 : 0 }}
-            className="p-2 rounded-full bg-[#DCE6D5]/50 text-[#006D5B] hover:bg-[#DCE6D5]/70 transition-colors duration-200"
+            whileTap={{ scale: 0.9 }}
+            className="p-2 rounded-full bg-[#DCE6D5]/50 text-[#006D5B] hover:bg-[#DCE6D5]/70 transition-colors duration-200 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/summaries/${topic.id}`);
+            }}
           >
             <ArrowRightIcon className="w-5 h-5" />
           </motion.div>
@@ -152,71 +156,6 @@ const TopicCard = ({ topic, isExpanded, onToggle }) => {
             ))}
           </div>
         </div>
-
-        <AnimatePresence>
-          {isExpanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mt-4"
-            >
-              <div className="space-y-6">
-                <div className="border-t border-[#006D5B]/10 pt-6">
-                  <h4 className="font-semibold text-[#006D5B] mb-4 text-lg">
-                    Key Topics Covered:
-                  </h4>
-                  <ul className="space-y-3 bg-[#DCE6D5]/20 p-4 rounded-xl">
-                    {topic.preview.map((point, index) => (
-                      <motion.li
-                        key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="flex items-center space-x-3 text-[#4B4B4B]"
-                      >
-                        <div className="p-1 rounded-full bg-[#006D5B]/10">
-                          <CheckCircleIcon className="w-5 h-5 text-[#006D5B]" />
-                        </div>
-                        <span className="text-base">{point}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="border-t border-[#006D5B]/10 pt-6">
-                  <h4 className="font-semibold text-[#006D5B] mb-4 text-lg">
-                    Source Textbooks:
-                  </h4>
-                  <div className="space-y-3 bg-[#DCE6D5]/20 p-4 rounded-xl">
-                    {topic.sources.map((source, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.3 + index * 0.1 }}
-                        className="flex items-center space-x-3 text-[#4B4B4B]"
-                      >
-                        <div className="p-1 rounded-full bg-[#006D5B]/10">
-                          <BookOpenIcon className="w-5 h-5 text-[#006D5B]" />
-                        </div>
-                        <span className="text-base">{source}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-
-                <Link
-                  to={`/summaries/${topic.id}`}
-                  className="mt-6 w-full inline-flex items-center justify-center px-6 py-4 rounded-xl text-white bg-[#006D5B] hover:bg-[#006D5B]/90 transition-all duration-300 shadow-lg hover:shadow-xl"
-                >
-                  Read Full Summary
-                  <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                </Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </motion.div>
   );
@@ -315,7 +254,7 @@ export default function TopicSummaries() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#006D5B]/10 text-[#006D5B] text-sm font-medium mb-4 border border-[#006D5B]/10"
           >
             <DocumentDuplicateIcon className="w-5 h-5" />
-            Topic Summaries
+            Concept Capsules
           </motion.div>
 
           <motion.h2
@@ -347,29 +286,7 @@ export default function TopicSummaries() {
         {/* Topics Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-8 sm:mb-12 md:mb-16">
           {sampleTopics.map((topic) => (
-            <motion.div
-              key={topic.id}
-              animate={{
-                opacity:
-                  expandedId === null || expandedId === topic.id ? 1 : 0.3,
-                scale:
-                  expandedId === topic.id ? 1 : expandedId === null ? 1 : 0.98,
-              }}
-              transition={{ duration: 0.3 }}
-              className={
-                expandedId !== null && expandedId !== topic.id
-                  ? "pointer-events-none"
-                  : ""
-              }
-            >
-              <TopicCard
-                topic={topic}
-                isExpanded={expandedId === topic.id}
-                onToggle={() =>
-                  setExpandedId(expandedId === topic.id ? null : topic.id)
-                }
-              />
-            </motion.div>
+            <TopicCard key={topic.id} topic={topic} />
           ))}
         </div>
 

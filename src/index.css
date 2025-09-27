@@ -5,6 +5,58 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* Styles for dynamically rendered article content from Editor.js */
+  .prose {
+    @apply text-lg leading-relaxed;
+  }
+
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    @apply font-bold text-[#005c4d] mt-8 mb-4;
+  }
+  .prose h1 { @apply text-4xl; }
+  .prose h2 { @apply text-3xl; }
+  .prose h3 { @apply text-2xl; }
+
+  .prose p {
+    @apply mb-6 text-[#4B4B4B];
+  }
+
+  .prose a {
+    @apply text-[#006D5B] underline hover:text-[#004B3F];
+  }
+
+  .prose ul, .prose ol {
+    @apply pl-6 mb-6 text-[#4B4B4B];
+  }
+  .prose ul { @apply list-disc; }
+  .prose ol { @apply list-decimal; }
+
+  .prose blockquote {
+    @apply border-l-4 border-[#006D5B] pl-4 italic text-gray-600 bg-[#DCE6D5]/40 py-2 my-6;
+  }
+
+  .prose img {
+    @apply rounded-xl shadow-md my-8 mx-auto block max-w-full h-auto;
+  }
+
+  .prose .table-wrapper {
+    @apply my-8 flex justify-center;
+  }
+
+  .prose table {
+    @apply border-collapse border border-gray-300;
+  }
+
+  .prose table td, .prose table th {
+    @apply border border-gray-200 p-2;
+  }
+
+  .prose table th {
+    @apply bg-gray-100 font-semibold;
+  }
+}
+
 /* Base styles */
 html {
   scroll-behavior: smooth;

@@ -114,7 +114,7 @@ const Footer = () => {
                 href="#"
                 className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
               >
-                Topic Summaries
+                Concept Capsules
               </a>
               <a
                 href="#"

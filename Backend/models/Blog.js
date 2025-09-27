@@ -35,6 +35,13 @@ const CommentSchema = new mongoose.Schema({
   isStudent: { type: Boolean, default: false },
 }, { timestamps: true });
 
+// Image metadata schema for tracking Cloudinary images
+const ImageMetadataSchema = new mongoose.Schema({
+  heroImageUrl: { type: String, validate: { validator: isUrl, message: 'heroImageUrl must be a URL' } },
+  contentImageUrls: { type: [String], validate: { validator: (arr) => arr.every(isUrl), message: 'contentImageUrls must contain only URLs' }, default: [] },
+  totalImages: { type: Number, default: 0 },
+}, { _id: false });
+
 const BlogSchema = new mongoose.Schema({
   mainHeading: { type: String, required: true, index: true },
   subHeading: { type: String },
@@ -44,8 +51,11 @@ const BlogSchema = new mongoose.Schema({
   heroImage: { type: String, validate: { validator: isUrl, message: 'heroImage must be a URL or local path' } },
   gallery: { type: [String], validate: { validator: (arr) => arr.every(isUrl), message: 'gallery must contain only URLs' }, default: [] },
 
-  // Content may be stored as HTML (from TinyMCE) or markdown text
+  // Content stored as JSON string from EditorJS or HTML from TinyMCE
   content: { type: String },
+
+  // Short description for previews
+  shortDescription: { type: String },
 
   tags: { type: [String], default: [] },
   category: { type: String, index: true },
@@ -63,7 +73,9 @@ const BlogSchema = new mongoose.Schema({
   shares: { type: ShareSchema, default: {} },
 
   comments: { type: [CommentSchema], default: [] },
-  citations: { type: [CitationSchema], default: [] },
+  
+  // Updated citations to handle simple strings
+  citations: { type: [String], default: [] },
   sources: { type: [SourceSchema], default: [] },
 
   videoEmbed: { type: String },
@@ -76,11 +88,15 @@ const BlogSchema = new mongoose.Schema({
   author: { type: String },
   coAuthors: { type: [String], default: [] },
 
+  // Image metadata for tracking Cloudinary usage
+  imageMetadata: { type: ImageMetadataSchema, default: {} },
+
 }, { timestamps: true });
 
 // Indexes for common queries
 BlogSchema.index({ slug: 1 });
 BlogSchema.index({ category: 1, tags: 1 });
+BlogSchema.index({ status: 1, createdAt: -1 });
 
 const Blog = mongoose.models.Blog || mongoose.model('Blog', BlogSchema);
 export default Blog;

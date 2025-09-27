@@ -119,7 +119,7 @@ const RecommendedCard = ({ article }) => {
   );
 };
 
-export default function Recommended() {
+export default function Articles() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -133,7 +133,21 @@ export default function Recommended() {
   const res = await fetch(buildApiUrl('/api/blogs?limit=4'));
         if (!res.ok) throw new Error(`fetch failed ${res.status}`);
         const data = await res.json();
-        if (!cancelled) setArticles(data);
+        if (!cancelled) {
+          // The API returns a paginated response, so we need to access the 'blogs' array
+          const mapped = (data.blogs || []).map((b, idx) => ({
+            id: b.slug || idx + 1,
+            title: b.mainHeading || b.title || "Untitled",
+            description:
+              (b.summaryPoints && b.summaryPoints[0]) || b.subHeading || "",
+            // prefer heroImage so listing thumbnails match the article hero image
+            image:
+              b.heroImage || (b.gallery && b.gallery[0]) || "/article1.jpg",
+            category: b.category || "Article",
+            readTime: `${b.readingTime || 5} min read`,
+          }));
+          setArticles(mapped);
+        }
       } catch (err) {
         if (!cancelled) setError(err.message || "Failed to load");
       } finally {
@@ -173,24 +187,9 @@ export default function Recommended() {
         ) : (
           <>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 md:gap-8 lg:gap-10">
-              {articles.map((b, idx) => {
-                const article = {
-                  id: b.slug || idx,
-                  title: b.mainHeading || "Untitled",
-                  description:
-                    (b.summaryPoints && b.summaryPoints[0]) ||
-                    b.subHeading ||
-                    "",
-                  // Use heroImage first so thumbnails match the article page's hero image
-                  image:
-                    b.heroImage ||
-                    (b.gallery && b.gallery[0]) ||
-                    "/article1.jpg",
-                  category: b.category || "Article",
-                  readTime: b.readingTime ? `${b.readingTime} min read` : "-",
-                };
-                return <RecommendedCard key={article.id} article={article} />;
-              })}
+              {articles.map((article) => (
+                <RecommendedCard key={article.id} article={article} />
+              ))}
             </div>
 
             <div className="mt-10 sm:mt-16 text-center">

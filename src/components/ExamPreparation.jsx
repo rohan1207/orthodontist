@@ -17,131 +17,90 @@ import {
 const DRIVE_ID = "1f3Yo89FL59rsUwpT6KH8kaVDMDylU5el";
 const DEMO_DOWNLOAD = `https://drive.google.com/uc?export=download&id=${DRIVE_ID}`;
 
-const examModules = [
+// New data model: question papers only for now (answers via note)
+const yearsRange = Array.from({ length: 7 }, (_, i) => 2014 + i);
+const makeYears = () => yearsRange.map((year) => ({
+  year,
+  questionPaperUrl: DEMO_DOWNLOAD,
+  answerSheetUrl: null,
+  answersNote: "For answer sheets, please contact us.",
+}));
+
+export const examTopics = [
   {
-    id: 1,
-    title: "Oral Pathology",
-    downloads: 200,
-    likes: 1200,
-    questionPaperUrl: DEMO_DOWNLOAD,
-    answerUrl: DEMO_DOWNLOAD,
+    id: "paper-1",
+    name: "Paper I – Basic Sciences",
+    description: "Paper I 2014–2020 combined question paper.",
+    years: makeYears(),
+    downloadUrl: DEMO_DOWNLOAD,
+    answersNote: "For answer sheets, please contact us.",
   },
   {
-    id: 2,
-    title: "Prosthodontics",
-    downloads: 180,
-    likes: 980,
-    questionPaperUrl: DEMO_DOWNLOAD,
-    answerUrl: DEMO_DOWNLOAD,
+    id: "paper-2",
+    name: "Paper II – Clinical",
+    description: "Paper II 2014–2020 combined question paper.",
+    years: makeYears(),
+    downloadUrl: DEMO_DOWNLOAD,
+    answersNote: "For answer sheets, please contact us.",
   },
   {
-    id: 3,
-    title: "General Anatomy",
-    downloads: 240,
-    likes: 1320,
-    questionPaperUrl: DEMO_DOWNLOAD,
-    answerUrl: DEMO_DOWNLOAD,
+    id: "paper-3",
+    name: "Paper III – Orthodontics MCQ",
+    description: "Paper III 2014–2020 combined question paper.",
+    years: makeYears(),
+    downloadUrl: DEMO_DOWNLOAD,
+    answersNote: "For answer sheets, please contact us.",
   },
   {
-    id: 4,
-    title: "NEET MDS 2023 Paper",
-    downloads: 320,
-    likes: 2100,
-    questionPaperUrl: DEMO_DOWNLOAD,
-    answerUrl: DEMO_DOWNLOAD,
-  },
-  {
-    id: 5,
-    title: "Orthodontics",
-    downloads: 205,
-    likes: 1150,
-    questionPaperUrl: DEMO_DOWNLOAD,
-    answerUrl: DEMO_DOWNLOAD,
-  },
-  {
-    id: 6,
-    title: "Periodontics",
-    downloads: 190,
-    likes: 870,
-    questionPaperUrl: DEMO_DOWNLOAD,
-    answerUrl: DEMO_DOWNLOAD,
+    id: "paper-4",
+    name: "Paper IV – Descriptive & Analytical",
+    description: "Paper IV D&A 2014–2020 combined question paper.",
+    years: makeYears(),
+    downloadUrl: DEMO_DOWNLOAD,
+    answersNote: "For answer sheets, please contact us.",
   },
 ];
 
-const ExamCard = ({ module }) => {
-  const [liked, setLiked] = useState(false);
+
+// Card for each topic/paper
+import { useNavigate } from "react-router-dom";
+export const ExamTopicCard = ({ topic }) => {
+  const navigate = useNavigate();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
-      className="relative group"
+      className="relative group cursor-pointer"
+      onClick={() => navigate(`/exam-prep/${topic.id}`)}
     >
       <div className="relative bg-white rounded-xl md:rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-[#006D5B]/10">
-        {/* Title */}
-        <h3 className="text-lg md:text-xl font-semibold text-[#006D5B] mb-4 line-clamp-1">
-          {module.title}
+        <h3 className="text-lg md:text-xl font-semibold text-[#006D5B] mb-2 line-clamp-1">
+          {topic.name}
         </h3>
-
-        {/* Metrics */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#DCE6D5]/50 border border-[#006D5B]/15 text-[#006D5B]">
-            <ArrowDownTrayIcon className="w-4 h-4" />
-            <span className="text-sm font-medium">
-              {module.downloads}+ downloads
-            </span>
-          </div>
-          <motion.button
-            type="button"
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setLiked((v) => !v)}
-            aria-pressed={liked}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#006D5B]/15 bg-white hover:bg-[#DCE6D5]/40 transition-colors"
-          >
-            {liked ? (
-              <HeartSolid className="w-5 h-5 text-rose-500" />
-            ) : (
-              <HeartOutline className="w-5 h-5 text-[#006D5B]" />
-            )}
-            <span className="text-sm font-medium text-[#4B4B4B]">
-              {(module.likes + (liked ? 1 : 0)).toLocaleString()}
-            </span>
-          </motion.button>
-        </div>
-
-        {/* Downloadables */}
-        <div className="space-y-3">
+        <p className="text-[#4B4B4B] text-sm mb-4 line-clamp-2">{topic.description}</p>
+        <div className="flex flex-col gap-2">
           <a
-            href={module.questionPaperUrl}
+            href={topic.downloadUrl || "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between gap-4 w-full px-4 py-3 rounded-xl border border-[#006D5B]/15 bg-[#DCE6D5]/40 hover:bg-[#DCE6D5]/60 transition-colors"
+            download
+            onClick={(e) => e.stopPropagation()}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#006D5B] text-white text-sm font-semibold hover:bg-[#005c4d] transition-colors"
           >
-            <span className="flex items-center gap-3 text-[#006D5B] font-medium">
-              <DocumentTextIcon className="w-5 h-5" />
-              Question Paper
-            </span>
-            <span className="text-[#4B4B4B] text-sm">Download</span>
+            <ArrowDownTrayIcon className="w-5 h-5" />
+            Download question paper
           </a>
-
-          <a
-            href={module.answerUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-between gap-4 w-full px-4 py-3 rounded-xl border border-[#006D5B]/15 bg-[#DCE6D5]/40 hover:bg-[#DCE6D5]/60 transition-colors"
-          >
-            <span className="flex items-center gap-3 text-[#006D5B] font-medium">
-              <CheckCircleIcon className="w-5 h-5" />
-              Answer Sheet + Explanation
-            </span>
-            <span className="text-[#4B4B4B] text-sm">Download</span>
-          </a>
+          <span className="text-xs text-[#4B4B4B]">
+            {topic.answersNote || "For answer sheets, please contact us."}
+          </span>
         </div>
       </div>
     </motion.div>
   );
 };
+
 
 export default function ExamPreparation() {
   return (
@@ -179,12 +138,10 @@ export default function ExamPreparation() {
           </motion.p>
         </div>
 
-        {/* Simplified layout - no stats block to keep focus on modules */}
-
-        {/* Modules Grid */}
+        {/* Topic Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-          {examModules.map((module) => (
-            <ExamCard key={module.id} module={module} />
+          {examTopics.map((topic) => (
+            <ExamTopicCard key={topic.id} topic={topic} />
           ))}
         </div>
 
@@ -213,7 +170,7 @@ export default function ExamPreparation() {
             </motion.span>
           </Link>
         </motion.div>
-        {/* Optional bottom CTA retained but simplified (can be removed if desired) */}
+        {/* Optional bottom CTA retained but simplified */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

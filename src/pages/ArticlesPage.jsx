@@ -86,7 +86,8 @@ export default function ArticlesPage() {
         if (!res.ok) throw new Error(`fetch failed ${res.status}`);
         const data = await res.json();
         if (!cancelled) {
-          const mapped = data.map((b, idx) => ({
+          // The API returns a paginated response, so we need to access the 'blogs' array
+          const mapped = (data.blogs || []).map((b, idx) => ({
             id: b.slug || idx + 1,
             title: b.mainHeading || b.title || "Untitled",
             description:

@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
 import {
   BookOpenIcon,
   DocumentTextIcon,
   LightBulbIcon,
-  CheckCircleIcon,
   ClockIcon,
   ChartBarIcon,
   ArrowRightIcon,
@@ -13,82 +13,8 @@ import {
   AcademicCapIcon,
 } from "@heroicons/react/24/outline";
 
-export const sampleTopics = [
-  {
-    id: 1,
-    title: "Growth and Development",
-    sources: [
-      "Contemporary Orthodontics",
-      "Graber's Orthodontics",
-      "Proffit's Orthodontics",
-    ],
-    teaser:
-      "Chapter-wise, high-yield summary covering prenatal/postnatal growth, factors, and major growth theories—simplified for quick recall.",
-    highlights: ["High-yield", "Concept-first", "Exam-focused"],
-    icon: LightBulbIcon,
-    color: "from-green-500 to-emerald-600",
-    preview: [
-      "Pre and Post Natal Development",
-      "Factors affecting Growth",
-      "Growth Theories",
-    ],
-  },
-  {
-    id: 2,
-    title: "Biomechanics in Orthodontics",
-    sources: [
-      "Orthodontic Materials",
-      "Clinical Orthodontics",
-      "Biomechanics in Clinical Practice",
-    ],
-    teaser:
-      "Force systems, centers of resistance, and M/F ratio explained with simple visuals and step-by-step intuition.",
-    highlights: ["Visual aids", "Step-by-step", "Tricky concepts made easy"],
-    icon: ChartBarIcon,
-    color: "from-green-500 to-emerald-600",
-    preview: ["Force Systems", "Center of Resistance", "Moment to Force Ratio"],
-  },
-  {
-    id: 3,
-    title: "Diagnosis and Treatment Planning",
-    sources: [
-      "Essential Orthodontics",
-      "Clinical Diagnosis",
-      "Treatment Strategies",
-    ],
-    teaser:
-      "From clinical exam to radiographs and objectives—distilled, organized notes that tell you exactly what to look for.",
-    highlights: ["Structured flow", "Checklists", "Decision cues"],
-    icon: DocumentTextIcon,
-    color: "from-green-500 to-emerald-600",
-    preview: [
-      "Clinical Examination",
-      "Radiographic Analysis",
-      "Treatment Objectives",
-    ],
-  },
-  {
-    id: 4,
-    title: "Orthodontic Appliances",
-    sources: [
-      "Orthodontic Appliances",
-      "Contemporary Orthodontics",
-      "Appliance Design",
-    ],
-    teaser:
-      "Fixed, removable, and functional appliances—what they are, when to use, and how to remember them fast.",
-    highlights: ["Mnemonics", "When-to-use", "Compare & contrast"],
-    icon: DocumentDuplicateIcon,
-    color: "from-green-500 to-emerald-600",
-    preview: [
-      "Fixed Appliances",
-      "Removable Appliances",
-      "Functional Appliances",
-    ],
-  },
-];
-
-const TopicCard = ({ topic }) => {
+const TopicCard = ({ topic, isFetched }) => {
+  const color = topic.color || "from-green-500 to-emerald-600";
   const navigate = useNavigate();
   return (
     <motion.div
@@ -102,9 +28,9 @@ const TopicCard = ({ topic }) => {
       <div
         className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{
-          background: `linear-gradient(to right, ${
-            topic.color.split(" ")[1]
-          }, ${topic.color.split(" ")[3]})`,
+                    background: `linear-gradient(to right, ${
+            color.split(" ")[1]
+          }, ${color.split(" ")[3]})`,
           filter: "blur(8px)",
           zIndex: 0,
         }}
@@ -114,7 +40,7 @@ const TopicCard = ({ topic }) => {
         <div className="flex items-start justify-between mb-4 sm:mb-6">
           <div className="flex items-center space-x-2 sm:space-x-4">
             <div className="p-2 sm:p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
-              <topic.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
+              <DocumentTextIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
             </div>
             <div>
               <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#006D5B] mb-1">
@@ -122,10 +48,7 @@ const TopicCard = ({ topic }) => {
               </h3>
               <div className="flex items-center gap-1 sm:gap-2">
                 <BookOpenIcon className="w-3 h-3 sm:w-4 sm:h-4 text-[#006D5B]/70" />
-                <p className="text-xs sm:text-sm text-[#4B4B4B]">
-                  {topic.sources.length} textbook sources
-                </p>
-              </div>
+                              </div>
             </div>
           </div>
           <motion.div
@@ -133,7 +56,7 @@ const TopicCard = ({ topic }) => {
             className="p-2 rounded-full bg-[#DCE6D5]/50 text-[#006D5B] hover:bg-[#DCE6D5]/70 transition-colors duration-200 cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`/summaries/${topic.id}`);
+              navigate(`/summaries/${topic._id}`);
             }}
           >
             <ArrowRightIcon className="w-5 h-5" />
@@ -143,10 +66,10 @@ const TopicCard = ({ topic }) => {
         {/* Teaser + Highlights to encourage click-through */}
         <div className="mb-4 sm:mb-6">
           <p className="text-sm sm:text-base text-[#4B4B4B] leading-relaxed line-clamp-2">
-            {topic.teaser}
+            {isFetched ? topic.description : topic.teaser}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
-            {topic.highlights?.slice(0, 3).map((tag, idx) => (
+            {(isFetched ? topic.tags : topic.highlights)?.slice(0, 3).map((tag, idx) => (
               <span
                 key={idx}
                 className="px-3 py-1 text-xs font-medium rounded-full bg-[#DCE6D5]/60 text-[#006D5B] border border-[#006D5B]/10"
@@ -241,7 +164,22 @@ const StatBox = ({ icon: Icon, value, label }) => {
 };
 
 export default function TopicSummaries() {
-  const [expandedId, setExpandedId] = useState(null);
+  const [topics, setTopics] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/topicsummaries');
+        setTopics(response.data);
+      } catch (error) {
+        console.error('Error fetching topic summaries:', error);
+      }
+      setLoading(false);
+    };
+
+    fetchTopics();
+  }, []);
 
   return (
     <section className="py-10 sm:py-16 md:py-24 bg-[#DCE6D5]/30">
@@ -284,10 +222,14 @@ export default function TopicSummaries() {
         </div>
 
         {/* Topics Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-8 sm:mb-12 md:mb-16">
-          {sampleTopics.map((topic) => (
-            <TopicCard key={topic.id} topic={topic} />
-          ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-8 sm:mb-12 md:mb-16">
+          {loading ? (
+            <p>Loading topics...</p>
+          ) : (
+            topics.map((topic) => (
+              <TopicCard key={topic._id} topic={topic} isFetched={true} />
+            ))
+          )}
         </div>
 
         {/* View All Button */}

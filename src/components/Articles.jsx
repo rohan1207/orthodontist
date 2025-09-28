@@ -10,7 +10,7 @@ const RecommendedCard = ({ article }) => {
 
   return (
     <motion.div
-      className="relative w-full aspect-[3/4] cursor-pointer"
+      className="relative w-full h-full min-h-[400px] cursor-pointer"
       style={{ perspective: "2000px" }}
       onHoverStart={() => setIsFlipped(true)}
       onHoverEnd={() => setIsFlipped(false)}
@@ -33,29 +33,33 @@ const RecommendedCard = ({ article }) => {
       >
         {/* Front of Card */}
         <div
-          className="absolute w-full h-full bg-white rounded-2xl overflow-hidden shadow-lg border border-[#006D5B]/10 transition-shadow duration-300 hover:shadow-xl"
+          className="absolute w-full h-full bg-white rounded-2xl overflow-hidden shadow-lg border border-[#006D5B]/10 transition-shadow duration-300 hover:shadow-xl flex flex-col"
           style={{ backfaceVisibility: "hidden" }}
         >
-          <div className="relative h-2/3">
+          <div className="relative h-48 flex-shrink-0">
             <img
               src={article.image}
               alt={article.title}
               loading="lazy"
               className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/article1.jpg'; // Fallback image
+              }}
             />
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#006D5B]/80 via-[#006D5B]/20 to-transparent">
-              <span className="inline-block px-3 py-1 rounded-full bg-white/90 text-[#006D5B] text-xs font-medium backdrop-blur-sm border border-[#006D5B]/10">
+            <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-[#006D5B]/80 via-[#006D5B]/20 to-transparent">
+              <span className="inline-block px-2 py-1 rounded-full bg-white/90 text-[#006D5B] text-xs font-medium backdrop-blur-sm border border-[#006D5B]/10">
                 {article.category}
               </span>
             </div>
           </div>
-          <div className="p-2.5 sm:p-5">
-            <h3 className="text-xs sm:text-lg font-medium text-[#006D5B] line-clamp-2 leading-tight sm:leading-snug">
+          <div className="p-4 flex flex-col flex-grow">
+            <h3 className="text-sm sm:text-base font-medium text-[#006D5B] leading-tight mb-2">
               {article.title}
             </h3>
-            <p className="mt-1.5 sm:mt-3 text-[10px] sm:text-sm text-[#4B4B4B]/80 flex items-center gap-1.5 sm:gap-2">
+            <p className="text-xs text-[#4B4B4B]/80 flex items-center gap-1.5 mt-auto">
               <svg
-                className="w-4 h-4 text-[#006D5B]/60"
+                className="w-3 h-3 text-[#006D5B]/60 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -67,37 +71,41 @@ const RecommendedCard = ({ article }) => {
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              {article.readTime}
+              <span className="line-clamp-1">{article.readTime}</span>
             </p>
           </div>
         </div>
 
         {/* Back of Card */}
         <div
-          className="absolute w-full h-full bg-gradient-to-br from-[#DCE6D5]/40 to-white rounded-2xl p-5 sm:p-6 flex flex-col shadow-lg border border-[#006D5B]/10"
+          className="absolute w-full h-full bg-gradient-to-br from-[#DCE6D5]/40 to-white rounded-2xl p-4 sm:p-5 flex flex-col shadow-lg border border-[#006D5B]/10"
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
-          <div className="flex-1">
-            <span className="inline-block px-3 py-1 rounded-full bg-white text-[#006D5B] text-xs font-medium border border-[#006D5B]/10 shadow-sm">
-              {article.category}
-            </span>
-            <h3 className="mt-3 sm:mt-4 text-base sm:text-lg font-medium text-[#006D5B]">
-              {article.title}
-            </h3>
-            <div className="w-12 h-0.5 bg-[#006D5B]/20 my-3"></div>
-            <p className="mt-2 sm:mt-3 text-xs sm:text-base text-[#4B4B4B] line-clamp-2 sm:line-clamp-4 leading-tight sm:leading-relaxed">
-              {article.description}
-            </p>
+          <div className="flex-1 overflow-hidden flex flex-col">
+            <div className="flex-shrink-0">
+              <span className="inline-block px-2 py-1 rounded-full bg-white text-[#006D5B] text-xs font-medium border border-[#006D5B]/10 shadow-sm">
+                {article.category}
+              </span>
+              <h3 className="mt-2 text-sm sm:text-base font-medium text-[#006D5B] line-clamp-2">
+                {article.title}
+              </h3>
+              <div className="w-8 h-0.5 bg-[#006D5B]/20 my-2"></div>
+            </div>
+            <div className="flex-grow overflow-hidden">
+              <p className="text-xs text-[#4B4B4B] line-clamp-5 sm:line-clamp-6 leading-relaxed">
+                {article.description}
+              </p>
+            </div>
           </div>
-          <div className="mt-3 sm:mt-5">
+          <div className="mt-3 sm:mt-4 pt-3 border-t border-[#006D5B]/10">
             <Link
               to={`/article/${article.id}`}
-              className="group relative inline-block w-full py-3 sm:py-3.5 text-center rounded-xl bg-[#006D5B] text-white text-sm font-medium transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
+              className="group relative inline-flex items-center justify-center w-full py-2 px-4 rounded-lg bg-[#006D5B] text-white text-sm font-medium transition-all duration-300 hover:bg-[#004B3F] hover:shadow-md"
             >
-              <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-base">
+              <span className="relative z-10 flex items-center justify-center gap-1.5 text-xs sm:text-sm">
                 Read Article
                 <svg
-                  className="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-1"
+                  className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -110,7 +118,6 @@ const RecommendedCard = ({ article }) => {
                   />
                 </svg>
               </span>
-              <div className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-xl"></div>
             </Link>
           </div>
         </div>

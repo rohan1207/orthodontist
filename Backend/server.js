@@ -7,6 +7,7 @@ import blogRoutes from './routes/blogRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import examPrepRoutes from './routes/examPrepRoutes.js';
+import topicSummaryRoutes from './routes/topicSummaryRoutes.js';
 
 dotenv.config();
 
@@ -53,6 +54,7 @@ async function start() {
     app.use('/api/books', bookRoutes);
     app.use('/api/users', userRoutes);
     app.use('/api/exampreps', examPrepRoutes);
+    app.use('/api/topicsummaries', topicSummaryRoutes);
 
     app.get('/', (req, res) => res.json({ ok: true }));
 

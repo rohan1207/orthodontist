@@ -116,7 +116,7 @@ const ExamPreparation = () => {
           className="mt-12 md:mt-16 text-center"
         >
           <Link
-            to="/exam-preparation"
+            to="/exam-prep"
             className="group inline-flex items-center gap-2 text-[#006D5B] hover:text-[#005c4d] font-semibold text-base md:text-lg"
           >
             View All Preparation Modules

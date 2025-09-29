@@ -1,131 +1,96 @@
-import React, { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useMemo, useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from 'axios';
 import {
-  AcademicCapIcon,
-  ChartBarIcon,
+  BookOpenIcon,
   DocumentTextIcon,
   DocumentDuplicateIcon,
-  CheckCircleIcon,
-  BookOpenIcon,
-  ClockIcon,
-  Squares2X2Icon,
-  Bars3BottomLeftIcon,
+  ArrowRightIcon,
   MagnifyingGlassIcon,
   FunnelIcon,
-  ArrowRightIcon,
+  XMarkIcon,
+  ArrowPathIcon
 } from "@heroicons/react/24/outline";
 
-const TOPICS = [
-  {
-    id: 1,
-    title: "Growth and Development",
-    sources: [
-      "Contemporary Orthodontics",
-      "Graber's Orthodontics",
-      "Proffit's Orthodontics",
-    ],
-    teaser:
-      "Chapter-wise, high-yield summary covering prenatal/postnatal growth, factors, and major growth theories—simplified for quick recall.",
-    highlights: ["High-yield", "Concept-first", "Exam-focused"],
-    color: "from-green-500 to-emerald-600",
-  },
-  {
-    id: 2,
-    title: "Biomechanics in Orthodontics",
-    sources: [
-      "Orthodontic Materials",
-      "Clinical Orthodontics",
-      "Biomechanics in Clinical Practice",
-    ],
-    teaser:
-      "Force systems, centers of resistance, and M/F ratio explained with simple visuals and step-by-step intuition.",
-    highlights: ["Visual aids", "Step-by-step", "Tricky concepts made easy"],
-    color: "from-green-500 to-emerald-600",
-  },
-  {
-    id: 3,
-    title: "Diagnosis and Treatment Planning",
-    sources: [
-      "Essential Orthodontics",
-      "Clinical Diagnosis",
-      "Treatment Strategies",
-    ],
-    teaser:
-      "From clinical exam to radiographs and objectives—distilled, organized notes that tell you exactly what to look for.",
-    highlights: ["Structured flow", "Checklists", "Decision cues"],
-    color: "from-green-500 to-emerald-600",
-  },
-  {
-    id: 4,
-    title: "Orthodontic Appliances",
-    sources: [
-      "Orthodontic Appliances",
-      "Contemporary Orthodontics",
-      "Appliance Design",
-    ],
-    teaser:
-      "Fixed, removable, and functional appliances—what they are, when to use, and how to remember them fast.",
-    highlights: ["Mnemonics", "When-to-use", "Compare & contrast"],
-    color: "from-green-500 to-emerald-600",
-  },
-];
+// Removed static TOPICS array as we'll fetch from backend
 
-const DIFFICULTIES = ["All", "Beginner", "Intermediate", "Medium", "Advanced"];
+const DIFFICULTIES = ["All", "Beginner", "Intermediate", "Advanced"];
 const SORTS = [
   { id: "title-asc", label: "Title A → Z" },
   { id: "title-desc", label: "Title Z → A" },
-  { id: "read-asc", label: "Read time • Low → High" },
-  { id: "read-desc", label: "Read time • High → Low" },
-  { id: "points-desc", label: "Key points • High → Low" },
+  { id: "date-desc", label: "Newest First" },
+  { id: "date-asc", label: "Oldest First" },
 ];
 
-function TopicCard({ topic }) {
+function TopicCard({ topic, isFetched = true }) {
+  const color = topic.color || "from-green-500 to-emerald-600";
+  const navigate = useNavigate();
+  
   return (
     <motion.div
-      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#006D5B]/10 flex flex-col"
+      layout
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -5 }}
+      whileHover={{ scale: 1.01 }}
+      transition={{ duration: 0.3 }}
+      className="relative group w-full"
     >
-      <div className="p-6 flex flex-col gap-3 flex-grow">
-        <div className="flex items-start justify-between">
-          <div className="p-3 rounded-lg bg-[#006D5B]/10">
-            <DocumentTextIcon className="w-6 h-6 text-[#006D5B]" />
+      <div
+        className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: `linear-gradient(to right, ${color.split(" ")[1]}, ${color.split(" ")[3]})`,
+          filter: "blur(8px)",
+          zIndex: 0,
+        }}
+      />
+
+      <div className="relative bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10 h-full flex flex-col">
+        <div className="flex-grow">
+          <div className="flex items-start justify-between mb-4 sm:mb-6">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="p-2 sm:p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
+                <DocumentTextIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#006D5B] mb-1 line-clamp-2 leading-snug h-[2.8em] overflow-hidden" title={topic.title}>
+                  {topic.title}
+                </h3>
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <BookOpenIcon className="w-3 h-3 sm:w-4 sm:h-4 text-[#006D5B]/70" />
+                </div>
+              </div>
+            </div>
+            <motion.div
+              whileTap={{ scale: 0.9 }}
+              className="flex-shrink-0 p-2 rounded-full bg-[#DCE6D5]/50 text-[#006D5B] hover:bg-[#DCE6D5]/70 transition-colors duration-200 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/summaries/${topic._id || topic.id}`);
+              }}
+            >
+              <ArrowRightIcon className="w-5 h-5" />
+            </motion.div>
+          </div>
+
+          <div className="mb-4 sm:mb-6">
+            <p className="text-sm sm:text-base text-[#4B4B4B] leading-relaxed line-clamp-3 h-[4.5em] overflow-hidden">
+              {isFetched ? (topic.description || topic.teaser) : topic.teaser}
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {(isFetched ? (topic.tags || []) : (topic.highlights || [])).slice(0, 3).map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="px-3 py-1 text-xs font-medium rounded-full bg-[#DCE6D5]/60 text-[#006D5B] border border-[#006D5B]/10 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100px]"
+                  title={tag}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-
-        <h3 className="text-xl font-semibold text-[#006D5B] line-clamp-2">
-          {topic.title}
-        </h3>
-
-        <p className="text-sm text-[#4B4B4B] leading-relaxed line-clamp-2">
-          {topic.teaser}
-        </p>
-
-        <p className="text-xs text-[#4B4B4B]/70">
-          Sources: {topic.sources.join(", ")}
-        </p>
-
-        <div className="mt-2 flex flex-wrap gap-2">
-          {topic.highlights?.slice(0, 3).map((tag, idx) => (
-            <span
-              key={idx}
-              className="px-3 py-1 text-xs font-medium rounded-full bg-[#DCE6D5]/60 text-[#006D5B] border border-[#006D5B]/10"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
       </div>
-
-      <Link
-        to={`/summaries/${topic.id}`}
-        className="block bg-[#006D5B] text-white text-center font-medium py-4 hover:bg-[#005c4d] transition-colors duration-300"
-      >
-        Read Summary
-      </Link>
     </motion.div>
   );
 }
@@ -134,10 +99,28 @@ export default function TopicSummariesPage() {
   const [query, setQuery] = useState("");
   const [difficulty, setDifficulty] = useState("All");
   const [sortBy, setSortBy] = useState("title-asc");
-  const [visible, setVisible] = useState(12);
+  const [topics, setTopics] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const topics = useMemo(() => {
-    let list = [...TOPICS];
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/topicsummaries');
+        setTopics(response.data);
+      } catch (err) {
+        console.error('Error fetching topic summaries:', err);
+        setError('Failed to load topic summaries. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTopics();
+  }, []);
+
+  const filteredTopics = useMemo(() => {
+    let list = [...topics];
 
     if (difficulty !== "All") {
       list = list.filter((t) => t.difficulty === difficulty);
@@ -146,9 +129,7 @@ export default function TopicSummariesPage() {
     const searchTerms = query.trim().toLowerCase().split(/\s+/);
     if (searchTerms[0]) {
       list = list.filter((topic) => {
-        const content = `${topic.title} ${topic.sources.join(
-          " "
-        )}`.toLowerCase();
+        const content = `${topic.title} ${topic.description || ''} ${topic.tags?.join(' ') || ''}`.toLowerCase();
         return searchTerms.every((term) => content.includes(term));
       });
     }
@@ -160,30 +141,49 @@ export default function TopicSummariesPage() {
       case "title-desc":
         list.sort((a, b) => b.title.localeCompare(a.title));
         break;
-      case "read-asc":
-        list.sort((a, b) => a.readTimeMin - b.readTimeMin);
+      case "date-desc":
+        list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
-      case "read-desc":
-        list.sort((a, b) => b.readTimeMin - a.readTimeMin);
-        break;
-      case "points-desc":
-        list.sort((a, b) => b.keyPoints - a.keyPoints);
+      case "date-asc":
+        list.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         break;
       default:
         break;
     }
     return list;
-  }, [query, difficulty, sortBy]);
-
-  const visibleList = topics.slice(0, visible);
-  const canLoadMore = visible < topics.length;
+  }, [topics, query, difficulty, sortBy]);
 
   const resetFilters = () => {
     setQuery("");
     setDifficulty("All");
     setSortBy("title-asc");
-    setVisible(12);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#006D5B]"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center p-6 max-w-md mx-auto">
+          <div className="text-red-500 text-4xl mb-4">⚠️</div>
+          <h2 className="text-xl font-semibold text-[#4B4B4B] mb-2">Something went wrong</h2>
+          <p className="text-[#4B4B4B]/70 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-[#006D5B] text-white rounded-lg hover:bg-[#005c4d] transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="py-16 md:py-24 bg-[#DCE6D5]/30 mt-8">
@@ -274,45 +274,11 @@ export default function TopicSummariesPage() {
             exit={{ opacity: 0 }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
           >
-            {visibleList.map((t) => (
-              <TopicCard key={t.id} topic={t} />
+            {filteredTopics.map((topic) => (
+              <TopicCard key={topic._id} topic={topic} isFetched={true} />
             ))}
           </motion.div>
         </AnimatePresence>
-
-        {topics.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20"
-          >
-            <DocumentDuplicateIcon className="w-24 h-24 mx-auto text-[#006D5B]/20 mb-4" />
-            <h3 className="text-xl font-semibold text-[#006D5B] mb-2">
-              No Summaries Found
-            </h3>
-            <p className="text-[#4B4B4B] max-w-md mx-auto">
-              Your search returned no results. Please try different keywords or
-              adjust the filters.
-            </p>
-          </motion.div>
-        )}
-
-        {canLoadMore && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mt-16 text-center"
-          >
-            <button
-              onClick={() => setVisible((v) => v + 6)}
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-[#006D5B] text-white font-medium hover:bg-[#005c4d] transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              Load More Summaries
-              <ArrowRightIcon className="w-5 h-5" />
-            </button>
-          </motion.div>
-        )}
       </div>
     </div>
   );

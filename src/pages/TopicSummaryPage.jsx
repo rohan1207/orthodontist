@@ -10,6 +10,7 @@ const TopicSummaryPage = () => {
     const { id } = useParams();
     const [summary, setSummary] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [viewerLoading, setViewerLoading] = useState(true);
     const [viewUrl, setViewUrl] = useState(null);
     const [viewFileType, setViewFileType] = useState(null);
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
@@ -113,12 +114,22 @@ const TopicSummaryPage = () => {
             </div>
 
             <div className="bg-white rounded-xl shadow-sm overflow-hidden" style={{ height: 'calc(100vh - 220px)' }}>
+                {viewerLoading && (
+                    <div className="flex items-center justify-center h-full">
+                        <div className="text-center">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#006D5B] mx-auto mb-4"></div>
+                            <p className="text-gray-600 text-lg font-medium">Preparing your document...</p>
+                            <p className="text-gray-500 text-sm mt-2">This will just take a moment</p>
+                        </div>
+                    </div>
+                )}
                 {isPdf ? (
-                    <div className="h-full">
+                    <div className={`h-full ${viewerLoading ? 'hidden' : ''}`}>
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
                             <Viewer 
                                 fileUrl={fileUrl} 
-                                plugins={[defaultLayoutPluginInstance]} 
+                                plugins={[defaultLayoutPluginInstance]}
+                                onDocumentLoad={() => setViewerLoading(false)}
                                 theme={{
                                     theme: 'light',
                                 }}
@@ -128,8 +139,9 @@ const TopicSummaryPage = () => {
                 ) : isDocx ? (
                     <iframe
                         title={summary.title}
-                        className="w-full h-full border-0"
+                        className={`w-full h-full border-0 ${viewerLoading ? 'hidden' : ''}`}
                         src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`}
+                        onLoad={() => setViewerLoading(false)}
                     />
                 ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center">

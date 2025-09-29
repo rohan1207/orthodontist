@@ -36,47 +36,50 @@ const TopicCard = ({ topic, isFetched }) => {
         }}
       />
 
-      <div className="relative bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10">
-        <div className="flex items-start justify-between mb-4 sm:mb-6">
-          <div className="flex items-center space-x-2 sm:space-x-4">
-            <div className="p-2 sm:p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
-              <DocumentTextIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
+      <div className="relative bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10 h-full flex flex-col">
+        <div className="flex-grow">
+          <div className="flex items-start justify-between mb-4 sm:mb-6">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="p-2 sm:p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
+                <DocumentTextIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#006D5B] mb-1 line-clamp-2 leading-snug h-[2.8em] overflow-hidden" title={topic.title}>
+                  {topic.title}
+                </h3>
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <BookOpenIcon className="w-3 h-3 sm:w-4 sm:h-4 text-[#006D5B]/70" />
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#006D5B] mb-1">
-                {topic.title}
-              </h3>
-              <div className="flex items-center gap-1 sm:gap-2">
-                <BookOpenIcon className="w-3 h-3 sm:w-4 sm:h-4 text-[#006D5B]/70" />
-                              </div>
-            </div>
+            <motion.div
+              whileTap={{ scale: 0.9 }}
+              className="flex-shrink-0 p-2 rounded-full bg-[#DCE6D5]/50 text-[#006D5B] hover:bg-[#DCE6D5]/70 transition-colors duration-200 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/summaries/${topic._id}`);
+              }}
+            >
+              <ArrowRightIcon className="w-5 h-5" />
+            </motion.div>
           </div>
-          <motion.div
-            whileTap={{ scale: 0.9 }}
-            className="p-2 rounded-full bg-[#DCE6D5]/50 text-[#006D5B] hover:bg-[#DCE6D5]/70 transition-colors duration-200 cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/summaries/${topic._id}`);
-            }}
-          >
-            <ArrowRightIcon className="w-5 h-5" />
-          </motion.div>
-        </div>
 
-        {/* Teaser + Highlights to encourage click-through */}
-        <div className="mb-4 sm:mb-6">
-          <p className="text-sm sm:text-base text-[#4B4B4B] leading-relaxed line-clamp-2">
-            {isFetched ? topic.description : topic.teaser}
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {(isFetched ? topic.tags : topic.highlights)?.slice(0, 3).map((tag, idx) => (
-              <span
-                key={idx}
-                className="px-3 py-1 text-xs font-medium rounded-full bg-[#DCE6D5]/60 text-[#006D5B] border border-[#006D5B]/10"
-              >
-                {tag}
-              </span>
-            ))}
+          {/* Teaser + Highlights to encourage click-through */}
+          <div className="mb-4 sm:mb-6">
+            <p className="text-sm sm:text-base text-[#4B4B4B] leading-relaxed line-clamp-3 h-[4.5em] overflow-hidden">
+              {isFetched ? topic.description : topic.teaser}
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {(isFetched ? topic.tags : topic.highlights)?.slice(0, 3).map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="px-3 py-1 text-xs font-medium rounded-full bg-[#DCE6D5]/60 text-[#006D5B] border border-[#006D5B]/10 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100px]"
+                  title={tag}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>

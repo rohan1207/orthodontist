@@ -19,11 +19,11 @@ const TopicSummaryPage = () => {
         const fetchSummary = async () => {
             try {
                 // This endpoint needs to be created in the backend
-                const response = await axios.get(`http://localhost:5000/api/topicsummaries/${id}`);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/topicsummaries/${id}`);
                 setSummary(response.data);
                 // Try to get a time-limited signed URL for robust access
                 try {
-                    const signed = await axios.get(`http://localhost:5000/api/topicsummaries/${id}/signed-url`);
+                    const signed = await axios.get(`${import.meta.env.VITE_API_URL}/api/topicsummaries/${id}/signed-url`);
                     setViewUrl(signed.data.url);
                     setViewFileType(signed.data.fileType);
                 } catch (signErr) {

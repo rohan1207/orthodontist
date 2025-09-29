@@ -173,7 +173,7 @@ export default function TopicSummaries() {
   useEffect(() => {
     const fetchTopics = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/topicsummaries');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/topicsummaries`);
         setTopics(response.data);
       } catch (error) {
         console.error('Error fetching topic summaries:', error);

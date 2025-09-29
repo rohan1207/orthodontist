@@ -2,8 +2,9 @@ services:
   - type: web
     name: futureal
     env: static
-    buildCommand: cd AdminPannel && npm install && npm run build
-    staticPublishPath: ./AdminPannel/dist
+    rootDir: AdminPannel
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
     headers:
       - path: /*
         name: Cache-Control

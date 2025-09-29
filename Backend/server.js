@@ -8,12 +8,13 @@ import bookRoutes from './routes/bookRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import examPrepRoutes from './routes/examPrepRoutes.js';
 import topicSummaryRoutes from './routes/topicSummaryRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
 
 dotenv.config();
 
 const app = express();
 
-// Configure and normalize CORS origi ns from env (comma-separated). If not set,
+// Configure and normalize CORS origins from env (comma-separated). If not set,
 // fall back to allowing all origins for easier debugging.
 let corsOptions;
 if (process.env.CORS_ORIGIN) {
@@ -55,6 +56,7 @@ async function start() {
     app.use('/api/users', userRoutes);
     app.use('/api/exampreps', examPrepRoutes);
     app.use('/api/topicsummaries', topicSummaryRoutes);
+    app.use('/api', dashboardRoutes); // Dashboard routes include /api prefix in their paths
 
     app.get('/', (req, res) => res.json({ ok: true }));
 

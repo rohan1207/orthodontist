@@ -16,13 +16,6 @@ const ExamTopicCard = ({ topic }) => {
       <div className="p-6 flex-grow">
         <h3 className="text-xl font-bold text-[#006D5B] mb-2">{topic.name}</h3>
         <p className="text-[#4B4B4B] text-sm mb-4">{topic.description}</p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {topic.years.map((year) => (
-            <span key={year} className="px-2 py-1 text-xs rounded-full bg-[#DCE6D5] text-[#006D5B] font-medium">
-              {year}
-            </span>
-          ))}
-        </div>
         {topic.answersNote && (
           <p className="text-xs text-gray-500 italic">{topic.answersNote}</p>
         )}

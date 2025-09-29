@@ -51,9 +51,9 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <img
-              src="/logo2.png"
+              src="/newlogo.png"
               alt="Logo"
-              className="h-10 w-10 md:h-14 md:w-14"
+              className="h-8 w-10 md:h-14 md:w-16"
             />
             <Link to="/">
               <span

@@ -24,3 +24,12 @@ export const protect = async (req, res, next) => {
     res.status(401).json({ message: 'Token failed' });
   }
 };
+
+// Admin middleware - must be used after protect middleware
+export const admin = (req, res, next) => {
+  if (req.admin && req.admin.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Not authorized as an admin' });
+  }
+};

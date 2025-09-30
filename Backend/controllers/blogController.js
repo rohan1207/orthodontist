@@ -11,15 +11,20 @@ export async function uploadImage(req, res) {
   }
 
   try {
-    const imageUrl = await uploadBufferToCloudinary(req.file, 'blogs');
+    const imageUrl = await uploadBufferToCloudinary(req.file,'blogs');
     console.log('Upload successful:', imageUrl);
-    res.json({ url: imageUrl });
+    // Send explicit JSON with content-length to avoid body being stripped by proxies/CDNs
+    const payload = JSON.stringify({ url: imageUrl });
+    res.set('Content-Type', 'application/json; charset=utf-8');
+    res.set('Content-Length', String(Buffer.byteLength(payload)));
+    return res.status(200).send(payload);
   } catch (err) {
     console.error('--- CLOUDINARY UPLOAD ERROR ---', err);
     res.status(500).json({
       error: 'Image upload failed.',
       details: err.message,
     });
+    return;
   }
 }
 
@@ -30,7 +35,6 @@ function extractImageUrlsFromContent(content) {
 
   try {
     const parsedContent = typeof content === 'string' ? JSON.parse(content) : content;
-    
     if (parsedContent.blocks && Array.isArray(parsedContent.blocks)) {
       parsedContent.blocks.forEach(block => {
         if (block.type === 'image' && block.data && block.data.file && block.data.file.url) {
@@ -119,7 +123,7 @@ export async function createBlog(req, res) {
 
     console.log('Blog created successfully:', blog._id, blog.slug);
     
-    res.status(201).json({
+    const responsePayload = JSON.stringify({
       success: true,
       message: 'Blog created successfully',
       blog: {
@@ -131,6 +135,9 @@ export async function createBlog(req, res) {
         imageMetadata: blog.imageMetadata
       }
     });
+    res.set('Content-Type', 'application/json; charset=utf-8');
+    res.set('Content-Length', String(Buffer.byteLength(responsePayload)));
+    return res.status(201).send(responsePayload);
     
   } catch (err) {
     console.error('Error creating blog:', err);

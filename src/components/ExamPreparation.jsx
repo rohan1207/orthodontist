@@ -70,7 +70,7 @@ const ExamPreparation = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#006D5B]/10 text-[#006D5B] text-sm font-medium mb-4 border border-[#006D5B]/10"
           >
             <AcademicCapIcon className="w-5 h-5" />
-            Exam Preparation
+            Ace Every Exam
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -78,7 +78,7 @@ const ExamPreparation = () => {
             viewport={{ once: true }}
             className="text-2xl md:text-4xl font-bold text-[#005c4d] mb-3 md:mb-4"
           >
-            Your Path to NEET MDS Success
+            Your Path to Success
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -86,7 +86,9 @@ const ExamPreparation = () => {
             viewport={{ once: true }}
             className="text-base md:text-xl text-[#4B4B4B] max-w-3xl mx-auto"
           >
-            Structured preparation modules designed by top educators with proven success rates.
+           Explore our thoroughly organized question banks to ensure comprehensive coverage of every
+study topic, and make use of our mindmaps to craft clearer, more concise answers in your
+exams.
           </motion.p>
         </div>
 

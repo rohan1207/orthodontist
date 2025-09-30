@@ -28,7 +28,7 @@ export default function Navbar() {
 
   const menuItems = [
     { name: "Home", href: "/" },
-    { name: "Articles", href: "/articles" },
+    { name: "Research Recap", href: "/articles" },
     { name: "Top Books", href: "/top-books" },
     { name: "Exam Preparation", href: "/exam-prep" },
     { name: "Concept Capsules", href: "/summaries" },
@@ -54,7 +54,7 @@ export default function Navbar() {
             <img
               src="/newlogo.png"
               alt="Logo"
-              className="h-10 w-10 md:h-[65px] md:w-[170px]"
+              className="h-10 w-10 md:h-[75px] md:w-[185px]"
             />
             
             

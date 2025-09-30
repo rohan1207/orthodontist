@@ -37,7 +37,7 @@ export default function Founder() {
             {/* Tagline */}
             <div className="mt-6 rounded-2xl border border-[#006D5B]/15 bg-white/90 p-3 md:p-4 text-[13px] md:text-sm text-[#4B4B4B]">
               <p className="italic text-center text-[#006D5B] font-medium">
-                "where every lesson leaves a smile, bright minds, brighter smiles"
+                "Bright minds, brighter smiles"
               </p>
             </div>
           </div>

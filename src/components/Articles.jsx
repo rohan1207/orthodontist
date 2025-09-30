@@ -175,11 +175,12 @@ export default function Articles() {
             Featured Content
           </span>
           <h2 className="text-xl sm:text-3xl md:text-4xl font-medium text-[#006D5B] mb-2 sm:mb-4">
-            Top Recommended Articles
+            Research Recap
           </h2>
           <p className="text-[#4B4B4B] max-w-2xl mx-auto text-xs sm:text-base md:text-lg px-2">
-            Curated content to enhance your dental knowledge and academic
-            success. Discover our most impactful articles.
+          Discover evidence-based content, breakthrough technologies, and clinical tips
+that keep you informed and enhance your daily practice. This space is your gateway to
+staying current with everything new in the world of orthodontics.
           </p>
         </div>
 

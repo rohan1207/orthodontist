@@ -11,7 +11,7 @@ function BracesUnderline() {
   const brackets = [60, 140, 220, 300, 360];
   return (
     <div
-      className="mx-auto lg:mx-0 group"
+      className="mx-auto lg:mx-[110px] group"
       style={{ width: "clamp(160px, 38vw, 360px)", height: 32 }}
     >
       <svg
@@ -99,7 +99,7 @@ export default function NewHero() {
   const scrollToFounder = () => {
     const founderSection = document.getElementById("founder");
     if (founderSection) {
-      founderSection.scrollIntoView({ behavior: "smooth" });
+      founderSection.scrollIntoView({ behavior: "smooth" , block: "center" });
     }
   };
   const [isLoaded, setIsLoaded] = useState(false);
@@ -144,7 +144,7 @@ export default function NewHero() {
             {/* === Left: Text Content === */}
             <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8 relative">
               {/* Title */}
-              <div className="space-y-4">
+              <div className="space-y-2">
                 <h1
                   className="font-bold tracking-tight leading-[1.1]"
                   style={{
@@ -164,32 +164,36 @@ export default function NewHero() {
               </div>
 
               {/* Sub-text */}
-              <div className="space-y-5">
-                <p className="text-lg md:text-xl text-slate-700 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  <span className="font-semibold text-[#004B3F]">
-                    Cracked NEET MDS?
-                  </span>{" "}
-                  Your orthodontic journey starts here!
+              <div className="space-y-3 ">
+                <p className="text-lg md:text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                  Welcome to your one‑stop destination for a smoother, smarter, and more connected journey through Orthodontics.
                 </p>
 
-                <p className="text-base md:text-lg text-slate-500 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  From clinics to exams—we make the tough stuff simple. Get
-                  summaries, reviews, strategies & trusted resources.
-                </p>
+                <ul className="text-base md:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0 list-disc pl-6 space-y-2">
+                  <li>
+                    <span className="font-semibold text-[#004B3F]">For BDS students:</span> master the basics with concise, evidence‑based articles and trusted resources.
+                  </li>
+                  <li>
+                    <span className="font-semibold text-[#004B3F]">For postgraduates:</span> get strategic study tips, focused summaries, and exam‑oriented guidance.
+                  </li>
+                  <li>
+                    <span className="font-semibold text-[#004B3F]">For practising clinicians:</span> stay current with breakthroughs, new technologies, AI‑driven products, and global trends.
+                  </li>
+                </ul>
 
-                <p className="text-sm md:text-base text-transparent bg-gradient-to-r from-black to-black bg-clip-text font-medium">
-                  Your academic anchor from braces 🦷
+                <p className="text-sm md:text-base text-slate-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                  Whether tackling coursework or upgrading treatment protocols, everything here is designed to make learning and practising orthodontics simpler, more efficient, and always up to date.
                 </p>
               </div>
 
               {/* Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start -mt-8 ">
                 <button
                   onClick={scrollToFounder}
                   className="group relative flex items-center justify-center bg-[#D6EDDS] text-[#006D5B] font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
                   style={{
-                    width: "300px",
-                    height: "75px",
+                    width: "280px",
+                    height: "65px",
                     borderRadius: "50px",
                   }}
                 >
@@ -210,8 +214,8 @@ export default function NewHero() {
                   onClick={() => navigate("/exam-prep")}
                   className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
                   style={{
-                    width: "300px",
-                    height: "75px",
+                    width: "280px",
+                    height: "65px",
                     borderRadius: "50px",
                   }}
                 >
@@ -227,36 +231,6 @@ export default function NewHero() {
                 </button>
               </div>
 
-              {/* Stats */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 pt-6 opacity-80 w-full">
-                <div className="flex items-center gap-2">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className="w-8 h-8 bg-gradient-to-br from-[#B6E2D3] to-[#006D5B] rounded-full border-2 border-[#DCE6D5]"
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm font-medium text-slate-600">
-                    1000+ Students
-                  </span>
-                </div>
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <svg
-                      key={i}
-                      className="w-4 h-4 text-yellow-400 fill-current"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                  <span className="text-sm font-medium text-slate-600 ml-1">
-                    4.9/5
-                  </span>
-                </div>
-              </div>
             </div>
 
             {/* === Right: Interactive Visual === */}

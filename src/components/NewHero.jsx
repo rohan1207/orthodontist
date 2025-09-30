@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Environment, Image } from "@react-three/drei";
 
@@ -93,6 +94,14 @@ function BracesUnderline() {
 }
 
 export default function NewHero() {
+  const navigate = useNavigate();
+
+  const scrollToFounder = () => {
+    const founderSection = document.getElementById("founder");
+    if (founderSection) {
+      founderSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -176,6 +185,7 @@ export default function NewHero() {
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
                 <button
+                  onClick={scrollToFounder}
                   className="group relative flex items-center justify-center bg-[#D6EDDS] text-[#006D5B] font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
                   style={{
                     width: "300px",
@@ -197,6 +207,7 @@ export default function NewHero() {
                 </button>
 
                 <button
+                  onClick={() => navigate("/exam-prep")}
                   className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
                   style={{
                     width: "300px",

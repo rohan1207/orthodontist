@@ -15,8 +15,12 @@ export default function Home() {
     <>
       
       <NewHero />
-      <Founder/>
-      <ExamPreparation/>
+      <div id="founder">
+        <Founder />
+      </div>
+      <div id="exam-preparation">
+        <ExamPreparation />
+      </div>
       <TopBooks/>
       <Articles />
 			

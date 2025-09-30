@@ -164,24 +164,34 @@ export default function NewHero() {
               </div>
 
               {/* Sub-text */}
-              <div className="space-y-3 ">
-                <p className="text-lg md:text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <div className="space-y-6">
+                <p className="text-lg md:text-xl text-slate-700 leading-relaxed max-w-xl mx-auto lg:mx-0">
                   Welcome to your one‑stop destination for a smoother, smarter, and more connected journey through Orthodontics.
                 </p>
 
-                <ul className="text-base md:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0 list-disc pl-6 space-y-2">
-                  <li>
-                    <span className="font-semibold text-[#004B3F]">For BDS students:</span> master the basics with concise, evidence‑based articles and trusted resources.
-                  </li>
-                  <li>
-                    <span className="font-semibold text-[#004B3F]">For postgraduates:</span> get strategic study tips, focused summaries, and exam‑oriented guidance.
-                  </li>
-                  <li>
-                    <span className="font-semibold text-[#004B3F]">For practising clinicians:</span> stay current with breakthroughs, new technologies, AI‑driven products, and global trends.
-                  </li>
-                </ul>
+                {/* Audience cards replacing long bullets */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 max-w-2xl mx-auto lg:mx-0">
+                  <div className="rounded-xl border border-[#006D5B]/15 bg-white/70 backdrop-blur p-4 shadow-sm">
+                    <p className="font-semibold text-[#004B3F]">For BDS students:</p>
+                    <p className="text-slate-700 text-sm mt-1">
+                      master the basics with concise, evidence‑based articles and trusted resources.
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-[#006D5B]/15 bg-white/70 backdrop-blur p-4 shadow-sm">
+                    <p className="font-semibold text-[#004B3F]">For postgraduates:</p>
+                    <p className="text-slate-700 text-sm mt-1">
+                      get strategic study tips, focused summaries, and exam‑oriented guidance.
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-[#006D5B]/15 bg-white/70 backdrop-blur p-4 shadow-sm">
+                    <p className="font-semibold text-[#004B3F]">For practising clinicians:</p>
+                    <p className="text-slate-700 text-sm mt-1">
+                      stay current with breakthroughs, new technologies, AI‑driven products, and global trends.
+                    </p>
+                  </div>
+                </div>
 
-                <p className="text-sm md:text-base text-slate-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                <p className="text-sm md:text-base text-slate-700 leading-relaxed max-w-xl mx-auto lg:mx-0">
                   Whether tackling coursework or upgrading treatment protocols, everything here is designed to make learning and practising orthodontics simpler, more efficient, and always up to date.
                 </p>
               </div>

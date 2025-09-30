@@ -10,26 +10,63 @@ const ExamTopicCard = ({ topic }) => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden border border-[#006D5B]/10"
+      whileHover={{ y: -8, scale: 1.02 }}
+      transition={{ duration: 0.5, type: 'spring', stiffness: 220, damping: 18 }}
+      className="group relative rounded-2xl border border-[#006D5B]/10 bg-white/90 backdrop-blur-sm shadow-lg overflow-hidden flex flex-col hover:shadow-2xl"
     >
+      {/* soft glow on hover */}
+      <div
+        className="pointer-events-none absolute -inset-24 bg-[#006D5B]/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+      />
+
       <div className="p-6 flex-grow">
-        <h3 className="text-xl font-bold text-[#006D5B] mb-2">{topic.name}</h3>
+        <h3 className="text-lg md:text-xl font-extrabold text-[#006D5B] tracking-tight mb-2">
+          {topic.name}
+        </h3>
         <p className="text-[#4B4B4B] text-sm mb-4">{topic.description}</p>
         {topic.answersNote && (
           <p className="text-xs text-gray-500 italic">{topic.answersNote}</p>
         )}
       </div>
-      <div className="bg-gray-50 p-4">
-        <a
+
+      <div className="p-4 bg-gradient-to-b from-gray-50 to-white flex justify-center">
+        <motion.a
           href={getGoogleDriveDownloadUrl(topic.downloadUrl)}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full group inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#006D5B] rounded-lg hover:bg-[#005c4d] transition-colors"
+          initial="rest"
+          animate="rest"
+          whileHover="hover"
+          className="relative inline-flex items-center justify-center overflow-hidden rounded-full border-2 border-[#006D5B] px-5 py-2 text-sm font-semibold"
         >
-          <ArrowDownTrayIcon className="w-4 h-4" />
-          Download Papers
-        </a>
+          {/* liquid fill */}
+          <motion.span
+            className="absolute left-0 top-0 h-full w-0 bg-[#006D5B]"
+            variants={{ rest: { width: '0%' }, hover: { width: '100%' } }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+          />
+          {/* flowing line */}
+          <motion.span
+            className="absolute bottom-0 left-0 h-[3px] w-1/3 bg-white/60 mix-blend-overlay"
+            variants={{ rest: { opacity: 0, x: '-120%' }, hover: { opacity: 1, x: '120%' } }}
+            transition={{ duration: 1.2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
+          />
+
+          {/* content with color transition */}
+          <motion.span
+            className="relative z-10 flex items-center gap-2"
+            variants={{ rest: { color: '#006D5B' }, hover: { color: '#ffffff' } }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.span
+              variants={{ rest: { y: -6, opacity: 0 }, hover: { y: 0, opacity: 1 } }}
+              transition={{ type: 'spring', stiffness: 500, damping: 16 }}
+            >
+              <ArrowDownTrayIcon className="w-4 h-4" />
+            </motion.span>
+            <span>Download Papers</span>
+          </motion.span>
+        </motion.a>
       </div>
     </motion.div>
   );

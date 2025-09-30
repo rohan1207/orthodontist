@@ -300,14 +300,14 @@ export default function TopBooks() {
         if (response.data && Array.isArray(response.data)) {
           // Sort books by order field if available
           const sortedBooks = [...response.data].sort((a, b) => (a.order || 0) - (b.order || 0));
-          setBooks(sortedBooks);
+          setBooks(sortedBooks.slice(0, 3));
         } else {
-          setBooks(fallbackBooks);
+          setBooks(fallbackBooks.slice(0, 3));
         }
       } catch (err) {
         console.error('Error fetching books:', err);
         setError('Failed to load books. Using fallback data.');
-        setBooks(fallbackBooks);
+        setBooks(fallbackBooks.slice(0, 3));
       } finally {
         setLoading(false);
       }
@@ -351,11 +351,11 @@ export default function TopBooks() {
           )}
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-10 md:gap-y-12 lg:gap-x-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center gap-x-4 gap-y-8 md:gap-x-10 md:gap-y-12 lg:gap-x-12">
           {books.map((book) => (
             <div
               key={book._id || book.id}
-              className="relative w-full min-h-[280px] sm:min-h-[360px] md:min-h-[440px]"
+              className="relative w-full max-w-[300px] min-h-[280px] sm:min-h-[360px] md:min-h-[440px]"
             >
               <BookCard
                 book={book}

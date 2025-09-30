@@ -35,19 +35,38 @@ export default function ContactPage() {
     e.preventDefault();
     setTouched({ name: true, email: true, subject: true, message: true });
     if (Object.keys(errors).length) return;
+
     setSending(true);
-    // Simulate sending
+
+    const messageBody = `
+*New Contact Form Submission*
+-----------------------------
+*Name:* ${form.name}
+*Email:* ${form.email}
+*Subject:* ${form.subject}
+*Message:*
+${form.message}
+-----------------------------
+    `.trim();
+
+    const encodedMessage = encodeURIComponent(messageBody);
+    const phoneNumber = "+918855817434";
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, "_blank");
+
     setTimeout(() => {
       setSending(false);
       setForm(initialForm);
       setTouched({});
       Swal.fire({
-        title: "Message Sent!",
-        text: "Thank you for reaching out. We will get back to you shortly.",
+        title: "Redirecting to WhatsApp",
+        text: "Your message is ready to be sent. Please confirm in WhatsApp.",
         icon: "success",
-        confirmButtonColor: "#006D5B",
+        timer: 2500,
+        showConfirmButton: false,
       });
-    }, 900);
+    }, 500);
   }
 
   const InfoCard = ({ icon, title, children }) => (
@@ -63,7 +82,7 @@ export default function ContactPage() {
   );
 
   return (
-    <section className="py-16 md:py-24 bg-[#F9F9F9]">
+    <section className="py-16 md:py-24 bg-[#F9F9F9] mt-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 md:mb-20">
@@ -111,10 +130,10 @@ export default function ContactPage() {
             <div className="space-y-6">
               <InfoCard icon={EnvelopeIcon} title="Email Us">
                 <a
-                  href="mailto:hello@orthochronicles.com"
+                  href="mailto:orthochronicles@gmail.com"
                   className="hover:text-[#006D5B] transition-colors"
                 >
-                  hello@orthochronicles.com
+                  orthochronicles@gmail.com
                 </a>
               </InfoCard>
               <InfoCard icon={PhoneIcon} title="Call Us">
@@ -125,12 +144,12 @@ export default function ContactPage() {
                   +1 (234) 567-890
                 </a>
               </InfoCard>
-              <InfoCard icon={BuildingOffice2Icon} title="Our Office">
+              {/* <InfoCard icon={BuildingOffice2Icon} title="Our Office">
                 OrthoChronicles, Pune, India
-              </InfoCard>
+              </InfoCard> */}
             </div>
 
-            <div className="mt-8 pt-8 border-t border-gray-200/80">
+            {/* <div className="mt-8 pt-8 border-t border-gray-200/80">
               <h3 className="text-lg font-semibold text-[#4B4B4B] mb-4">
                 Office Hours
               </h3>
@@ -146,7 +165,7 @@ export default function ContactPage() {
                   <span className="font-medium">Sunday:</span> Closed
                 </li>
               </ul>
-            </div>
+            </div> */}
           </motion.div>
 
           {/* Form */}
@@ -252,8 +271,8 @@ export default function ContactPage() {
                 a: "Absolutely. Share your target exam date and current progress, and our academic advisors will help you craft a tailored study plan.",
               },
               {
-                q: "Do you offer discounts for students or group sign-ups?",
-                a: "Yes, we frequently run promotional offers for students and provide special rates for group enrollments. Please ask us about our current deals!",
+                q: "Where to get answers of question papers?",
+                a: "Contact us.",
               },
             ].map((item, idx) => (
               <Disclosure key={idx} question={item.q} answer={item.a} />

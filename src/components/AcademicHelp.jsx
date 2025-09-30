@@ -152,8 +152,21 @@ const StatsItem = ({ icon: Icon, value, label }) => (
 
 export default function AcademicHelp() {
   return (
-    <section className="py-10 sm:py-16 md:py-24 bg-[#DCE6D5]">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <section className="relative py-10 sm:py-16 md:py-24 bg-[#DCE6D5]">
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center bg-gray-200 bg-opacity-20 backdrop-blur-[2px]">
+        <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#006D5B] mb-4">
+          Coming Soon!
+        </h3>
+        <p className="text-base sm:text-lg md:text-xl text-[#4B4B4B] max-w-md mx-auto">
+          Our Academic Help section is under construction. We're working hard to
+          bring you these services soon.
+        </p>
+      </div>
+
+      <div
+        className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pointer-events-none"
+        aria-hidden="true"
+      >
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12 md:mb-16">
           <motion.div

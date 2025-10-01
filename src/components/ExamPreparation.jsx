@@ -5,69 +5,74 @@ import { AcademicCapIcon, ArrowRightIcon, ArrowDownTrayIcon } from '@heroicons/r
 import { buildApiUrl, getGoogleDriveDownloadUrl } from '../utils/api';
 
 const ExamTopicCard = ({ topic }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const cardVariants = {
+    rest: { backgroundColor: '#F3F4F6', y: 0 },
+    hover: { backgroundColor: '#E5E7EB', y: -8 },
+  };
+
+  const contentVariants = {
+    rest: { y: 0 },
+    hover: { y: -40 },
+  };
+
+  const buttonContainerVariants = {
+    rest: { opacity: 0, y: 20 },
+    hover: { opacity: 1, y: 0, transition: { delay: 0.1 } },
+  };
+
+  const downloadButtonVariants = {
+    rest: { width: '3rem', backgroundColor: '#FFFFFF' },
+    hover: { width: '9rem', backgroundColor: '#FFFFFF' },
+  };
+
+  const downloadTextVariants = {
+    rest: { opacity: 0, x: -10 },
+    hover: { opacity: 1, x: 0, transition: { delay: 0.15 } },
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -8, scale: 1.02 }}
-      transition={{ duration: 0.5, type: 'spring', stiffness: 220, damping: 18 }}
-      className="group relative rounded-2xl border border-[#006D5B]/10 bg-white/90 backdrop-blur-sm shadow-lg overflow-hidden flex flex-col hover:shadow-2xl"
+      className="relative rounded-2xl shadow-lg overflow-hidden cursor-pointer"
+      style={{ minHeight: '180px' }}
+      variants={cardVariants}
+      initial="rest"
+      whileHover="hover"
+      animate={isHovered ? 'hover' : 'rest'}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      onTap={() => setIsHovered(!isHovered)} // Toggle for touch devices
+      transition={{ type: 'spring', stiffness: 250, damping: 25 }}
     >
-      {/* soft glow on hover */}
-      <div
-        className="pointer-events-none absolute -inset-24 bg-[#006D5B]/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-      />
-
-      <div className="p-6 flex-grow">
-        <h3 className="text-lg md:text-xl font-extrabold text-[#006D5B] tracking-tight mb-2">
+      <motion.div className="p-6" variants={contentVariants}>
+        <h3 className="text-lg md:text-xl font-extrabold text-[#005c4d] tracking-tight mb-2">
           {topic.name}
         </h3>
-        <p className="text-[#4B4B4B] text-sm mb-4">{topic.description}</p>
-        {topic.answersNote && (
-          <p className="text-xs text-gray-500 italic">{topic.answersNote}</p>
-        )}
-      </div>
+        <p className="text-gray-600 text-sm">{topic.description}</p>
+      </motion.div>
 
-      <div className="p-4 bg-gradient-to-b from-gray-50 to-white flex justify-center">
+      <motion.div
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full flex justify-center"
+        variants={buttonContainerVariants}
+      >
         <motion.a
           href={getGoogleDriveDownloadUrl(topic.downloadUrl)}
           target="_blank"
           rel="noopener noreferrer"
-          initial="rest"
-          animate="rest"
-          whileHover="hover"
-          className="relative inline-flex items-center justify-center overflow-hidden rounded-full border-2 border-[#006D5B] px-5 py-2 text-sm font-semibold"
+          className="flex items-center justify-center gap-2 h-12 rounded-full shadow-md"
+          variants={downloadButtonVariants}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
-          {/* liquid fill */}
+          <ArrowDownTrayIcon className="w-6 h-6 text-[#006D5B] flex-shrink-0 ml-3" />
           <motion.span
-            className="absolute left-0 top-0 h-full w-0 bg-[#006D5B]"
-            variants={{ rest: { width: '0%' }, hover: { width: '100%' } }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
-          />
-          {/* flowing line */}
-          <motion.span
-            className="absolute bottom-0 left-0 h-[3px] w-1/3 bg-white/60 mix-blend-overlay"
-            variants={{ rest: { opacity: 0, x: '-120%' }, hover: { opacity: 1, x: '120%' } }}
-            transition={{ duration: 1.2, repeat: Infinity, repeatType: 'loop', ease: 'easeInOut' }}
-          />
-
-          {/* content with color transition */}
-          <motion.span
-            className="relative z-10 flex items-center gap-2"
-            variants={{ rest: { color: '#006D5B' }, hover: { color: '#ffffff' } }}
-            transition={{ duration: 0.2 }}
+            className="text-sm font-semibold text-[#006D5B] whitespace-nowrap mr-4"
+            variants={downloadTextVariants}
           >
-            <motion.span
-              variants={{ rest: { y: -6, opacity: 0 }, hover: { y: 0, opacity: 1 } }}
-              transition={{ type: 'spring', stiffness: 500, damping: 16 }}
-            >
-              <ArrowDownTrayIcon className="w-4 h-4" />
-            </motion.span>
-            <span>Download Papers</span>
+            Download
           </motion.span>
         </motion.a>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };

@@ -93,9 +93,9 @@ const BookCard = ({ book, isOpen, onToggle }) => {
             },
           }}
         >
-          <div className="h-full flex flex-col p-4 sm:p-6 bg-gradient-to-br from-[#DCE6D5]/40 to-white">
+          <div className="h-full flex flex-col p-3 sm:p-4 bg-gradient-to-br from-[#DCE6D5]/40 to-white">
             <div className="flex-1 overflow-y-auto">
-              <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#006D5B] line-clamp-2">
+              <h3 className="text-sm sm:text-base md:text-lg font-bold text-[#006D5B] line-clamp-2">
                 {book.title}
               </h3>
               <p className="mt-1 text-xs sm:text-sm text-[#4B4B4B]/80">
@@ -134,12 +134,12 @@ const BookCard = ({ book, isOpen, onToggle }) => {
                   href={book.ebookLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#F3F7F4] text-[#006D5B] text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#E0ECE6] hover:shadow-lg hover:-translate-y-0.5 border border-[#006D5B]/20"
+                  className="group relative inline-flex items-center justify-center gap-2 px-3 py-2 sm:px-5 sm:py-2.5 rounded-full bg-[#F3F7F4] text-[#006D5B] text-xs sm:text-sm font-semibold transition-all duration-300 hover:bg-[#E0ECE6] hover:shadow-lg hover:-translate-y-0.5 border border-[#006D5B]/20"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <BookOpenIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <BookOpenIcon className="w-4 h-4" />
                   <span>Read E-book</span>
-                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-auto opacity-70" />
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 ml-auto opacity-70" />
                 </a>
               )}
               
@@ -149,14 +149,14 @@ const BookCard = ({ book, isOpen, onToggle }) => {
                   href={book.buyLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#006D5B] text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
+                  className="group relative flex items-center justify-between px-3 py-2 sm:px-5 sm:py-2.5 rounded-full bg-[#006D5B] text-white text-xs sm:text-sm font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center gap-2">
-                    <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <ShoppingCartIcon className="w-4 h-4" />
                     <span>Buy Now</span>
                   </div>
-                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-80" />
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 opacity-80" />
                 </a>
               ) : book.purchaseLinks && book.purchaseLinks.length > 0 ? (
                 <div className="space-y-2">
@@ -166,14 +166,14 @@ const BookCard = ({ book, isOpen, onToggle }) => {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group relative flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#006D5B] text-white text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
+                      className="group relative flex items-center justify-between px-3 py-2 sm:px-5 sm:py-2.5 rounded-full bg-[#006D5B] text-white text-xs sm:text-sm font-semibold transition-all duration-300 hover:bg-[#004B3F] hover:shadow-lg hover:-translate-y-0.5"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <div className="flex items-center gap-2">
-                        <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <ShoppingCartIcon className="w-4 h-4" />
                         <span>Buy on {link.platform}</span>
                       </div>
-                      <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-80" />
+                      <ArrowTopRightOnSquareIcon className="w-3 h-3 opacity-80" />
                     </a>
                   ))}
                 </div>
@@ -182,14 +182,14 @@ const BookCard = ({ book, isOpen, onToggle }) => {
                   href={`https://www.google.com/search?q=${encodeURIComponent(book.title + ' ' + book.author + ' buy')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative flex items-center justify-between px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#F3F7F4] text-[#006D5B] text-sm sm:text-base font-semibold transition-all duration-300 hover:bg-[#E0ECE6] hover:shadow-lg hover:-translate-y-0.5 border border-[#006D5B]/20"
+                  className="group relative flex items-center justify-between px-3 py-2 sm:px-5 sm:py-2.5 rounded-full bg-[#F3F7F4] text-[#006D5B] text-xs sm:text-sm font-semibold transition-all duration-300 hover:bg-[#E0ECE6] hover:shadow-lg hover:-translate-y-0.5 border border-[#006D5B]/20"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center gap-2">
-                    <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <ShoppingCartIcon className="w-4 h-4" />
                     <span>Find where to buy</span>
                   </div>
-                  <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-70" />
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 opacity-70" />
                 </a>
               )}
               
@@ -355,7 +355,7 @@ export default function TopBooks() {
           {books.map((book) => (
             <div
               key={book._id || book.id}
-              className="relative w-full max-w-[300px] min-h-[280px] sm:min-h-[360px] md:min-h-[440px]"
+              className="relative w-full max-w-[230px] min-h-[210px] sm:min-h-[260px] md:min-h-[330px]"
             >
               <BookCard
                 book={book}

@@ -4,32 +4,111 @@ import { AcademicCapIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
 import { buildApiUrl, getGoogleDriveDownloadUrl } from '../utils/api';
 
 const ExamTopicCard = ({ topic }) => {
+  const [isActive, setIsActive] = useState(false);
+  const [btnExpanded, setBtnExpanded] = useState(false);
+  const downloadUrl = getGoogleDriveDownloadUrl(topic.downloadUrl);
+  const active = isActive;
+
+  const handleCardTap = () => {
+    setIsActive((v) => !v);
+    setBtnExpanded(false);
+  };
+
+  const handleDownloadClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!btnExpanded) {
+      setBtnExpanded(true);
+      return;
+    }
+    window.open(downloadUrl, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden border border-[#006D5B]/10"
+      animate={active ? { y: -8 } : { y: 0 }}
+      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative rounded-2xl border border-[#006D5B]/10 bg-white/90 backdrop-blur-sm shadow-lg overflow-hidden flex flex-col"
+      onHoverStart={() => { setIsActive(true); }}
+      onHoverEnd={() => { setIsActive(false); setBtnExpanded(false); }}
+      onClick={handleCardTap}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { handleCardTap(); } }}
     >
-      <div className="p-6 flex-grow">
-        <h3 className="text-xl font-bold text-[#006D5B] mb-2">{topic.name}</h3>
-        <p className="text-[#4B4B4B] text-sm mb-4">{topic.description}</p>
+      {/* soft glow on active */}
+      <div className={`pointer-events-none absolute -inset-24 bg-[#006D5B]/10 blur-2xl transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`} />
+
+      <div className="p-6 pb-6 flex-grow">
+        <h3 className="text-lg md:text-xl font-extrabold text-[#006D5B] tracking-tight mb-2">
+          {topic.name}
+        </h3>
+        <p
+          className="text-[#4B4B4B] text-sm"
+          style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+        >
+          {topic.description}
+        </p>
         {topic.answersNote && (
-          <p className="text-xs text-gray-500 italic">{topic.answersNote}</p>
+          <p className="mt-2 text-xs text-gray-500 italic">{topic.answersNote}</p>
         )}
       </div>
-      <div className="bg-gray-50 p-4">
-        <a
-          href={getGoogleDriveDownloadUrl(topic.downloadUrl)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full group inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#006D5B] rounded-lg hover:bg-[#005c4d] transition-colors"
+
+      {/* bottom grow area so the card extends from the bottom */}
+      <motion.div
+        className="w-full"
+        initial={false}
+        animate={active ? 'active' : 'rest'}
+        variants={{ rest: { height: 0 }, active: { height: 80 } }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      />
+
+      {/* bottom-left floating download button (left-pinned icon, center text) */}
+      <motion.button
+        type="button"
+        onClick={handleDownloadClick}
+        onHoverStart={() => setBtnExpanded(true)}
+        onHoverEnd={() => setBtnExpanded(false)}
+        className="absolute left-4 bottom-4 h-12 flex items-center border-2 border-[#006D5B] rounded-full shadow-md bg-white text-[#006D5B] font-semibold overflow-hidden relative"
+        aria-label="Download"
+        initial={false}
+        animate={active ? (btnExpanded ? 'expandedVisible' : 'visible') : 'hidden'}
+        variants={{
+          hidden: { opacity: 0, pointerEvents: 'none', width: 0 },
+          visible: { opacity: 1, pointerEvents: 'auto', width: 52 },
+          expandedVisible: { opacity: 1, pointerEvents: 'auto', width: 'calc(100% - 32px)' }
+        }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {/* Icon Circle */}
+        <motion.span
+          className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-[#006D5B] bg-white"
+          variants={{
+            hidden: { marginLeft: 6 },
+            visible: { marginLeft: 6 },
+            expandedVisible: { marginLeft: 8 }
+          }}
+          transition={{ duration: 0.2 }}
         >
-          <ArrowDownTrayIcon className="w-4 h-4" />
-          Download Papers
-        </a>
-      </div>
+          <ArrowDownTrayIcon className="w-5 h-5 text-[#006D5B]" />
+        </motion.span>
+
+        {/* Expanding Text */}
+        <motion.span
+          className="absolute left-1/2 -translate-x-1/2 text-[#111827] whitespace-nowrap"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 0 },
+            expandedVisible: { opacity: 1 }
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          download
+        </motion.span>
+      </motion.button>
     </motion.div>
   );
 };

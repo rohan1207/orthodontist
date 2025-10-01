@@ -5,74 +5,112 @@ import { AcademicCapIcon, ArrowRightIcon, ArrowDownTrayIcon } from '@heroicons/r
 import { buildApiUrl, getGoogleDriveDownloadUrl } from '../utils/api';
 
 const ExamTopicCard = ({ topic }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [btnExpanded, setBtnExpanded] = useState(false);
+  const downloadUrl = getGoogleDriveDownloadUrl(topic.downloadUrl);
+  const active = isActive;
 
-  const cardVariants = {
-    rest: { backgroundColor: '#F3F4F6', y: 0 },
-    hover: { backgroundColor: '#E5E7EB', y: -8 },
+  const handleCardTap = () => {
+    setIsActive((v) => !v);
+    setBtnExpanded(false);
   };
 
-  const contentVariants = {
-    rest: { y: 0 },
-    hover: { y: -40 },
-  };
-
-  const buttonContainerVariants = {
-    rest: { opacity: 0, y: 20 },
-    hover: { opacity: 1, y: 0, transition: { delay: 0.1 } },
-  };
-
-  const downloadButtonVariants = {
-    rest: { width: '3rem', backgroundColor: '#FFFFFF' },
-    hover: { width: '9rem', backgroundColor: '#FFFFFF' },
-  };
-
-  const downloadTextVariants = {
-    rest: { opacity: 0, x: -10 },
-    hover: { opacity: 1, x: 0, transition: { delay: 0.15 } },
+  const handleDownloadClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!btnExpanded) {
+      setBtnExpanded(true);
+      return;
+    }
+    window.open(downloadUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
     <motion.div
-      className="relative rounded-2xl shadow-lg overflow-hidden cursor-pointer"
-      style={{ minHeight: '180px' }}
-      variants={cardVariants}
-      initial="rest"
-      whileHover="hover"
-      animate={isHovered ? 'hover' : 'rest'}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      onTap={() => setIsHovered(!isHovered)} // Toggle for touch devices
-      transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      animate={active ? { y: -8 } : { y: 0 }}
+      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative rounded-2xl border border-[#006D5B]/10 bg-white/90 backdrop-blur-sm shadow-lg overflow-hidden flex flex-col"
+      onHoverStart={() => { setIsActive(true); }}
+      onHoverEnd={() => { setIsActive(false); setBtnExpanded(false); }}
+      onClick={handleCardTap}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { handleCardTap(); } }}
     >
-      <motion.div className="p-6" variants={contentVariants}>
-        <h3 className="text-lg md:text-xl font-extrabold text-[#005c4d] tracking-tight mb-2">
+      {/* soft glow on active */}
+      <div className={`pointer-events-none absolute -inset-24 bg-[#006D5B]/10 blur-2xl transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`} />
+
+      <div className="p-6 pb-6 flex-grow">
+        <h3 className="text-lg md:text-xl font-extrabold text-[#006D5B] tracking-tight mb-2">
           {topic.name}
         </h3>
-        <p className="text-gray-600 text-sm">{topic.description}</p>
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full flex justify-center"
-        variants={buttonContainerVariants}
-      >
-        <motion.a
-          href={getGoogleDriveDownloadUrl(topic.downloadUrl)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 h-12 rounded-full shadow-md"
-          variants={downloadButtonVariants}
-          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        <p
+          className="text-[#4B4B4B] text-sm"
+          style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
         >
-          <ArrowDownTrayIcon className="w-6 h-6 text-[#006D5B] flex-shrink-0 ml-3" />
-          <motion.span
-            className="text-sm font-semibold text-[#006D5B] whitespace-nowrap mr-4"
-            variants={downloadTextVariants}
-          >
-            Download
-          </motion.span>
-        </motion.a>
-      </motion.div>
+          {topic.description}
+        </p>
+        {topic.answersNote && (
+          <p className="mt-2 text-xs text-gray-500 italic">{topic.answersNote}</p>
+        )}
+      </div>
+
+      {/* bottom grow area so the card extends from the bottom */}
+      <motion.div
+        className="w-full"
+        initial={false}
+        animate={active ? 'active' : 'rest'}
+        variants={{ rest: { height: 0 }, active: { height: 80 } }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      />
+
+      {/* bottom-left floating download button (left-pinned icon, center text) */}
+      <motion.button
+  type="button"
+  onClick={handleDownloadClick}
+  onHoverStart={() => setBtnExpanded(true)}
+  onHoverEnd={() => setBtnExpanded(false)}
+  className="absolute left-4 bottom-4 h-12 flex items-center border-2 border-[#006D5B] rounded-full shadow-md bg-white text-[#006D5B] font-semibold overflow-hidden relative"
+  aria-label="Download"
+  initial={false}
+  animate={active ? (btnExpanded ? 'expandedVisible' : 'visible') : 'hidden'}
+  variants={{
+    hidden: { opacity: 0, pointerEvents: 'none', width: 0 },
+    visible: { opacity: 1, pointerEvents: 'auto', width: 52 },
+    expandedVisible: { opacity: 1, pointerEvents: 'auto', width: 'calc(100% - 32px)' }
+  }}
+  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+>
+  {/* Icon Circle */}
+  <motion.span
+    className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-[#006D5B] bg-white"
+    variants={{
+      hidden: { marginLeft: 6 },
+      visible: { marginLeft: 6 }, // center within 52px outer (48 content + 4 border)
+      expandedVisible: { marginLeft: 8 } // slight left padding when expanded
+    }}
+    transition={{ duration: 0.2 }}
+  >
+    <ArrowDownTrayIcon className="w-5 h-5 text-[#006D5B]" />
+  </motion.span>
+
+  {/* Expanding Text */}
+  <motion.span
+    className="absolute left-1/2 -translate-x-1/2 text-[#111827] whitespace-nowrap"
+    variants={{
+      hidden: { opacity: 0 },
+      visible: { opacity: 0 },
+      expandedVisible: { opacity: 1 }
+    }}
+    transition={{ duration: 0.2 }}
+  >
+    download
+  </motion.span>
+</motion.button>
+
     </motion.div>
   );
 };

@@ -185,7 +185,7 @@ export default function TopicSummaries() {
   }, []);
 
   return (
-    <section className="py-10 sm:py-16 md:py-24 bg-[#DCE6D5]/30">
+    <section className="py-10 sm:py-16 md:py-24 bg-[#DCE6D5]">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-10 sm:mb-16">

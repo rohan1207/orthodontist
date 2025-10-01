@@ -52,16 +52,7 @@ const TopicCard = ({ topic, isFetched }) => {
                 </div>
               </div>
             </div>
-            <motion.div
-              whileTap={{ scale: 0.9 }}
-              className="flex-shrink-0 p-2 rounded-full bg-[#DCE6D5]/50 text-[#006D5B] hover:bg-[#DCE6D5]/70 transition-colors duration-200 cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/summaries/${topic._id}`);
-              }}
-            >
-              <ArrowRightIcon className="w-5 h-5" />
-            </motion.div>
+            {/* (removed arrow icon) */}
           </div>
 
           {/* Teaser + Highlights to encourage click-through */}
@@ -82,6 +73,18 @@ const TopicCard = ({ topic, isFetched }) => {
             </div>
           </div>
         </div>
+
+        {/* Read CTA at bottom-right */}
+        <motion.div
+          whileTap={{ scale: 0.96 }}
+          className="absolute bottom-4 right-4 text-[#006D5B] font-semibold cursor-pointer select-none"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/summaries/${topic._id}`);
+          }}
+        >
+          Read
+        </motion.div>
       </div>
     </motion.div>
   );

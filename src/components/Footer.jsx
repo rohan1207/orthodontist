@@ -1,11 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const HERO_FONT = "Inter, Helvetica Neue, Arial, sans-serif";
 
 const Footer = () => {
   return (
     <footer
-      className="w-full bg-[#DCE6D5]/30 border-t border-[#006D5B]/10 pt-16 pb-8 px-4 sm:px-6 lg:px-8"
+      className="w-full bg-[#006D5B] border-t border-[#006D5B]/10 pt-16 pb-8 px-4 sm:px-6 lg:px-8"
       style={{ fontFamily: HERO_FONT }}
     >
       <div className="max-w-7xl mx-auto">
@@ -13,17 +14,25 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="col-span-1 md:col-span-2 lg:col-span-1">
             <div className="flex flex-col items-start">
-              <span className="text-2xl font-semibold text-[#006D5B] mb-3">
-                OrthoChronicles
-              </span>
-              <span className="text-[#4B4B4B] text-base mb-4">
+            <div className="flex items-center gap-3">
+            <img
+              src="/newlogo.png"
+              alt="Logo"
+              className="h-10 w-10 md:h-[75px] md:w-[185px]"
+            />
+            
+            
+
+            
+          </div>
+              <span className="text-white/90 text-base mb-4">
                 Credible. Trusted Orthodontic Education.
               </span>
               <div className="flex items-center gap-4 mb-6">
                 <a
                   href="#"
                   aria-label="Instagram"
-                  className="p-2 rounded-full bg-[#006D5B]/10 text-[#006D5B] hover:bg-[#006D5B]/20 transition-colors duration-300"
+                  className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors duration-300"
                 >
                   <svg
                     width="20"
@@ -41,7 +50,7 @@ const Footer = () => {
                 <a
                   href="#"
                   aria-label="Twitter"
-                  className="p-2 rounded-full bg-[#006D5B]/10 text-[#006D5B] hover:bg-[#006D5B]/20 transition-colors duration-300"
+                  className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors duration-300"
                 >
                   <svg
                     width="20"
@@ -57,7 +66,7 @@ const Footer = () => {
                 <a
                   href="#"
                   aria-label="LinkedIn"
-                  className="p-2 rounded-full bg-[#006D5B]/10 text-[#006D5B] hover:bg-[#006D5B]/20 transition-colors duration-300"
+                  className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors duration-300"
                 >
                   <svg
                     width="20"
@@ -77,104 +86,60 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-[#006D5B] font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-white font-semibold mb-4">Quick Links</h3>
             <div className="flex flex-col space-y-3">
-              <a
-                href="#"
-                className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
-              >
-                Home
-              </a>
-              <a
-                href="#"
-                className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
-              >
-                Articles
-              </a>
-              <a
-                href="#"
-                className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
-              >
-                Top Books
-              </a>
+              <Link to="/" className="text-white/90 hover:text-white transition-colors duration-300">Home</Link>
+              <Link to="/articles" className="text-white/90 hover:text-white transition-colors duration-300">Articles</Link>
+              <Link to="/top-books" className="text-white/90 hover:text-white transition-colors duration-300">Top Books</Link>
+              <Link to="/contact" className="text-white/90 hover:text-white transition-colors duration-300">Contact</Link>
             </div>
           </div>
 
           {/* Resources */}
           <div>
-            <h3 className="text-[#006D5B] font-semibold mb-4">Resources</h3>
+            <h3 className="text-white font-semibold mb-4">Resources</h3>
             <div className="flex flex-col space-y-3">
-              <a
-                href="#"
-                className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
-              >
-                Exam Preparation
-              </a>
-              <a
-                href="#"
-                className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
-              >
-                Concept Capsules
-              </a>
-              <a
-                href="#"
-                className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
-              >
-                Academic Help
-              </a>
+              <Link to="/exam-prep" className="text-white/90 hover:text-white transition-colors duration-300">Exam Preparation</Link>
+              <Link to="/summaries" className="text-white/90 hover:text-white transition-colors duration-300">Concept Capsules</Link>
+              <Link to="/academic-help" className="text-white/90 hover:text-white transition-colors duration-300">Academic Help</Link>
             </div>
           </div>
 
           {/* Contact */}
           <div>
-            <h3 className="text-[#006D5B] font-semibold mb-4">Contact Us</h3>
+            <h3 className="text-white font-semibold mb-4">Contact Us</h3>
             <div className="flex flex-col space-y-3">
               <a
-                href="mailto:info@orthochronicles.com"
-                className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
+                href="mailto:orthochronicles@gmail.com"
+                className="text-white/90 hover:text-white transition-colors duration-300"
               >
-                info@orthochronicles.com
+                orthochronicles@gmail.com
               </a>
               <a
-                href="#"
-                className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
+                href="tel:+1234567890"
+                className="text-white/90 hover:text-white transition-colors duration-300"
               >
-                Support Center
+                +1 (234) 567-890
               </a>
-              <a
-                href="#"
-                className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
+              <Link
+                to="/contact"
+                className="text-white/90 hover:text-white transition-colors duration-300"
               >
-                FAQ
-              </a>
+                Contact Form
+              </Link>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-[#006D5B]/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <span className="text-[#4B4B4B] text-sm">
+          <span className="text-white text-sm">
             © {new Date().getFullYear()} OrthoChronicles. All rights reserved.
           </span>
           <div className="flex items-center gap-6 text-sm">
-            <a
-              href="#"
-              className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
-            >
-              Privacy Policy
-            </a>
-            <a
-              href="#"
-              className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
-            >
-              Terms of Service
-            </a>
-            <a
-              href="#"
-              className="text-[#4B4B4B] hover:text-[#006D5B] transition-colors duration-300"
-            >
-              Cookie Policy
-            </a>
+            <a href="#" className="text-white/90 hover:text-white transition-colors duration-300">Privacy Policy</a>
+            <a href="#" className="text-white/90 hover:text-white transition-colors duration-300">Terms of Service</a>
+            <a href="#" className="text-white/90 hover:text-white transition-colors duration-300">Cookie Policy</a>
           </div>
         </div>
       </div>

@@ -107,7 +107,7 @@ const ExamTopicCard = ({ topic }) => {
     }}
     transition={{ duration: 0.2 }}
   >
-    download
+    Download
   </motion.span>
 </motion.button>
 

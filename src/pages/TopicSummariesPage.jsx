@@ -6,7 +6,6 @@ import {
   BookOpenIcon,
   DocumentTextIcon,
   DocumentDuplicateIcon,
-  ArrowRightIcon,
   MagnifyingGlassIcon,
   FunnelIcon,
   XMarkIcon,
@@ -45,15 +44,22 @@ function TopicCard({ topic, isFetched = true }) {
         }}
       />
 
-      <div className="relative bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10 h-full flex flex-col">
+      <motion.div
+        whileTap={{ scale: 0.96 }}
+        className="relative bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10 h-full flex flex-col"
+        onClick={() => navigate(`/summaries/${topic._id || topic.id}`)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate(`/summaries/${topic._id || topic.id}`); }}
+      >
         <div className="flex-grow">
-          <div className="flex items-start justify-between mb-4 sm:mb-6">
+          <div className="flex items-start justify-between mb-4">
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="p-2 sm:p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
-                <DocumentTextIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
+              <div className="p-2 sm:p-3 rounded-xl bg-[#006D5B] shadow-lg">
+                <DocumentTextIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#006D5B] mb-1 line-clamp-2 leading-snug h-[2.8em] overflow-hidden" title={topic.title}>
+                <h3 className="text-base sm:text-lg font-bold text-[#006D5B] mb-1 line-clamp-2 leading-snug" title={topic.title}>
                   {topic.title}
                 </h3>
                 <div className="flex items-center gap-1 sm:gap-2">
@@ -61,37 +67,40 @@ function TopicCard({ topic, isFetched = true }) {
                 </div>
               </div>
             </div>
-            <motion.div
-              whileTap={{ scale: 0.9 }}
-              className="flex-shrink-0 p-2 rounded-full bg-[#DCE6D5]/50 text-[#006D5B] hover:bg-[#DCE6D5]/70 transition-colors duration-200 cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/summaries/${topic._id || topic.id}`);
-              }}
-            >
-              <ArrowRightIcon className="w-5 h-5" />
-            </motion.div>
+            {/* (arrow removed; whole card is clickable) */}
+          </div>
           </div>
 
-          <div className="mb-4 sm:mb-6">
-            <p className="text-sm sm:text-base text-[#4B4B4B] leading-relaxed line-clamp-3 h-[4.5em] overflow-hidden">
-              {isFetched ? (topic.description || topic.teaser) : topic.teaser}
+          <div className="mb-4">
+            <p className="text-sm text-[#4B4B4B] leading-relaxed line-clamp-3">
+              {isFetched ? topic.description : topic.teaser}
             </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {(isFetched ? (topic.tags || []) : (topic.highlights || [])).slice(0, 3).map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1 text-xs font-medium rounded-full bg-[#DCE6D5]/60 text-[#006D5B] border border-[#006D5B]/10 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100px]"
-                  title={tag}
-                >
-                  {tag}
-                </span>
-              ))}
+            <div className="mt-3 flex items-center justify-between gap-2">
+              <div className="flex flex-wrap gap-2">
+                {(isFetched ? topic.tags : topic.highlights)?.slice(0, 3).map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 text-xs font-medium rounded-full bg-[#DCE6D5]/60 text-[#006D5B] border border-[#006D5B]/10 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100px]"
+                    title={tag}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <motion.button
+                whileTap={{ scale: 0.96 }}
+                className="px-3 py-1 text-xs font-medium rounded-full bg-[#006D5B] text-white border border-[#006D5B]/10 hover:bg-[#DCE6D5]/80 hover:text-[#006D5B] transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/summaries/${topic._id || topic.id}`);
+                }}
+              >
+                Read
+              </motion.button>
             </div>
           </div>
-        </div>
-      </div>
-    </motion.div>
+        </motion.div>
+      </motion.div>
   );
 }
 
@@ -193,15 +202,15 @@ export default function TopicSummariesPage() {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-bold text-[#006D5B] mb-6 flex items-center justify-center gap-3"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#006D5B] mb-6 flex items-center justify-center gap-3"
           >
-            <DocumentDuplicateIcon className="w-10 h-10" /> Concept Capsules
+            <DocumentDuplicateIcon className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" /> Concept Capsules
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-lg md:text-xl text-[#4B4B4B]"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl"
           >
             High-yield summaries of key orthodontic topics, distilled from
             trusted sources to accelerate your learning.
@@ -216,13 +225,13 @@ export default function TopicSummariesPage() {
           className="mb-10"
         >
           <div className="relative max-w-3xl mx-auto mb-6">
-            <MagnifyingGlassIcon className="w-6 h-6 text-[#006D5B] absolute left-4 top-1/2 -translate-y-1/2" />
+            <MagnifyingGlassIcon className="w-5 sm:w-6 h-5 sm:h-6 text-[#006D5B] absolute left-3 sm:left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search topics or sources (e.g., 'growth proffit')..."
-              className="w-full pl-12 pr-4 py-4 rounded-xl border border-[#006D5B]/20 bg-white text-[#4B4B4B] placeholder-[#4B4B4B]/60 focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 shadow-sm"
+              placeholder="Search topics..."
+              className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 rounded-xl border border-[#006D5B]/20 bg-white text-sm sm:text-base text-[#4B4B4B] placeholder-[#4B4B4B]/60 focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 shadow-sm"
             />
           </div>
 
@@ -272,7 +281,7 @@ export default function TopicSummariesPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {filteredTopics.map((topic) => (
               <TopicCard key={topic._id} topic={topic} isFetched={true} />

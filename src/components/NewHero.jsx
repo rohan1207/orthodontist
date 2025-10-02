@@ -142,7 +142,7 @@ export default function NewHero() {
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 lg:pt-0">
             {/* === Left: Text Content === */}
-            <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8 relative">
+            <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8 py-12 lg:py-0">
               {/* Title */}
               <div className="space-y-2">
                 <h1
@@ -197,15 +197,10 @@ export default function NewHero() {
               </div>
 
               {/* Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start -mt-8 ">
+              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start pt-4">
                 <button
                   onClick={scrollToFounder}
-                  className="group relative flex items-center justify-center bg-[#D6EDDS] text-[#006D5B] font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
-                  style={{
-                    width: "280px",
-                    height: "65px",
-                    borderRadius: "50px",
-                  }}
+                  className="group relative flex items-center justify-center bg-[#D6EDDS] text-[#006D5B] font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible w-full sm:w-[280px] h-[65px] rounded-[50px]"
                 >
                   {/* Tooth peeks from top center on hover/click */}
                   <div className="pointer-events-none absolute left-1/2 top-0 z-[3] -translate-x-1/2 -translate-y-2 opacity-0 scale-90 transition-all duration-300 ease-out group-hover:-translate-y-8 group-hover:opacity-100 group-hover:scale-100 group-active:translate-y-10 text-xl">
@@ -222,12 +217,7 @@ export default function NewHero() {
 
                 <button
                   onClick={() => navigate("/exam-prep")}
-                  className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible"
-                  style={{
-                    width: "280px",
-                    height: "65px",
-                    borderRadius: "50px",
-                  }}
+                  className="group relative flex items-center justify-center bg-[#006D5B] text-white font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible w-full sm:w-[280px] h-[65px] rounded-[50px]"
                 >
                   {/* Tooth peeks from top center on hover/click */}
                   <div className="pointer-events-none absolute left-1/2 top-0 z-[3] -translate-x-1/2 -translate-y-2 opacity-0 scale-90 transition-all duration-300 ease-out group-hover:-translate-y-8 group-hover:opacity-100 group-hover:scale-100 group-active:translate-y-10 text-xl">
@@ -244,7 +234,7 @@ export default function NewHero() {
             </div>
 
             {/* === Right: Interactive Visual === */}
-            <div className="flex-1 w-full h-[350px] sm:h-[400px] lg:h-[550px] relative mt-8 lg:mt-0">
+            <div className="flex-1 w-full h-[350px] sm:h-[400px] lg:h-[550px] relative mt-8 lg:mt-0 hidden lg:block">
               <div className="absolute inset-0 rounded-2xl overflow-visible">
                 <HeroInteractive />
               </div>

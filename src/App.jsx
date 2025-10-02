@@ -43,7 +43,10 @@ const AnimatedRoutes = () => {
       </AnimatePresence>
       <Footer />
       <div className="w-full text-center py-4 text-gray-400 text-xs font-light">
-        Designed and developed by TheSocialKollab
+      Designed & Developed by{' '}
+            <a href="https://www.instagram.com/thesocialkollab/" target="_blank" rel="noopener noreferrer" className="text-[#004B3F] font-semibold hover:underline">
+              TheSocialKollab
+            </a>
       </div>
     </>
   );

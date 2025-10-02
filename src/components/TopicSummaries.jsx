@@ -80,7 +80,7 @@ const TopicCard = ({ topic, isFetched }) => {
               </div>
               <motion.button
                 whileTap={{ scale: 0.96 }}
-                className="px-3 py-1 text-xs font-medium rounded-full bg-[#006D5B] text-white border border-[#006D5B]/10 hover:bg-[#DCE6D5]/80 transition-colors"
+                className="px-3 py-1 text-xs font-medium rounded-full bg-[#006D5B] text-white border border-[#006D5B]/10 hover:bg-[#DCE6D5]/80 hover:text-[#006D5B] transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   navigate(`/summaries/${topic._id}`);

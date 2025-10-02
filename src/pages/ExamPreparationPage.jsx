@@ -17,11 +17,10 @@ const ExamTopicCard = ({ topic }) => {
   const handleDownloadClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!btnExpanded) {
-      setBtnExpanded(true);
-      return;
-    }
+    // Immediately trigger the download
     window.open(downloadUrl, '_blank', 'noopener,noreferrer');
+    // Set expanded to true for visual feedback, especially on hover
+    setBtnExpanded(true);
   };
 
   return (
@@ -40,7 +39,7 @@ const ExamTopicCard = ({ topic }) => {
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { handleCardTap(); } }}
     >
       {/* soft glow on active */}
-      <div className={`pointer-events-none absolute -inset-24 bg-[#006D5B]/10 blur-2xl transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`} />
+      <div className={`pointer-events-none absolute -inset-24  blur-2xl transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`} />
 
       <div className="p-6 pb-6 flex-grow">
         <h3 className="text-lg md:text-xl font-extrabold text-[#006D5B] tracking-tight mb-2">
@@ -62,53 +61,77 @@ const ExamTopicCard = ({ topic }) => {
         className="w-full"
         initial={false}
         animate={active ? 'active' : 'rest'}
-        variants={{ rest: { height: 0 }, active: { height: 80 } }}
+        variants={{ rest: { height: 0 }, active: { height: 'auto' } }}
         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      />
+      >
+        <div className="h-20" />
+      </motion.div>
 
       {/* bottom-left floating download button (left-pinned icon, center text) */}
       <motion.button
-        type="button"
-        onClick={handleDownloadClick}
-        onHoverStart={() => setBtnExpanded(true)}
-        onHoverEnd={() => setBtnExpanded(false)}
-        className="absolute left-4 bottom-4 h-12 flex items-center border-2 border-[#006D5B] rounded-full shadow-md bg-white text-[#006D5B] font-semibold overflow-hidden relative"
-        aria-label="Download"
-        initial={false}
-        animate={active ? (btnExpanded ? 'expandedVisible' : 'visible') : 'hidden'}
-        variants={{
-          hidden: { opacity: 0, pointerEvents: 'none', width: 0 },
-          visible: { opacity: 1, pointerEvents: 'auto', width: 52 },
-          expandedVisible: { opacity: 1, pointerEvents: 'auto', width: 'calc(100% - 32px)' }
-        }}
-        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      >
-        {/* Icon Circle */}
-        <motion.span
-          className="flex items-center justify-center w-9 h-9 rounded-full border-2 border-[#006D5B] bg-white"
-          variants={{
-            hidden: { marginLeft: 6 },
-            visible: { marginLeft: 6 },
-            expandedVisible: { marginLeft: 8 }
-          }}
-          transition={{ duration: 0.2 }}
-        >
-          <ArrowDownTrayIcon className="w-5 h-5 text-[#006D5B]" />
-        </motion.span>
+  type="button"
+  onClick={handleDownloadClick}
+  onHoverStart={() => setBtnExpanded(true)}
+  onHoverEnd={() => setBtnExpanded(false)}
+  className="absolute left-4 sm:left-6 bottom-4 h-12 flex items-center rounded-full shadow-md font-semibold relative"
+  aria-label="Download"
+  initial={false}
+  animate={active ? (btnExpanded ? "expandedVisible" : "visible") : "hidden"}
+  variants={{
+    hidden: { opacity: 0, pointerEvents: "none", width: 0 },
+    visible: { 
+      opacity: 1, 
+      pointerEvents: "auto", 
+      width: 52, 
+      backgroundColor: "#FFFFFF", 
+      border: "2px solid #006D5B",
+      color: "#006D5B"
+    },
+    expandedVisible: { 
+      opacity: 1, 
+      pointerEvents: "auto", 
+      width: `calc(100% - ${window.innerWidth < 640 ? '32px' : '48px'})`,
+      backgroundColor: "#006D5B",  
+      border: "2px solid #006D5B",
+      color: "#FFFFFF" 
+    }
+  }}
+  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+>
+  {/* Icon Circle */}
+  <motion.span
+  className="flex items-center justify-center rounded-full bg-white z-10"
+  variants={{
+    hidden: { marginLeft: 6, width: 36, height: 36, scale: 1, borderColor: "#006D5B", borderWidth: 2 },
+    visible: { marginLeft: 6, width: 36, height: 36, scale: 1, borderColor: "#006D5B", borderWidth: 2 },
+    expandedVisible: { 
+      marginLeft: 4, 
+      width: 42, 
+      height: 42, 
+      scale: 1.3, 
+      borderColor: "transparent",   // <<-- removes green border
+      borderWidth: 0                // <<-- optional, removes thickness
+    }
+  }}
+  transition={{ duration: 0.25 }}
+>
+  <ArrowDownTrayIcon className="w-5 h-5 text-[#006D5B]" />
+</motion.span>
 
-        {/* Expanding Text */}
-        <motion.span
-          className="absolute left-1/2 -translate-x-1/2 text-[#111827] whitespace-nowrap"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 0 },
-            expandedVisible: { opacity: 1 }
-          }}
-          transition={{ duration: 0.2 }}
-        >
-          Download
-        </motion.span>
-      </motion.button>
+
+  {/* Expanding Text */}
+  <motion.span
+    className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap"
+    variants={{
+      hidden: { opacity: 0 },
+      visible: { opacity: 0 },
+      expandedVisible: { opacity: 1 }
+    }}
+    transition={{ duration: 0.2 }}
+  >
+    Download
+  </motion.span>
+</motion.button>
     </motion.div>
   );
 };
@@ -150,17 +173,17 @@ const ExamPreparationPage = () => {
             <AcademicCapIcon className="w-5 h-5" />
             Exam Preparation
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-[#006D5B] mb-3">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#006D5B] mb-3">
             Exam Preparation Modules
           </h1>
-          <p className="text-lg text-[#4B4B4B] max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-[#4B4B4B] max-w-3xl mx-auto">
             Browse topics, view year-wise papers, and download resources for your exam success.
           </p>
         </header>
 
         <motion.div
           layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
         >
           {loading ? (
             <div className="text-center col-span-full py-10">Loading...</div>

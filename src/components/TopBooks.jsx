@@ -351,11 +351,11 @@ export default function TopBooks() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center gap-x-4 gap-y-8 md:gap-x-10 md:gap-y-12 lg:gap-x-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 place-items-center gap-x-8 gap-y-16">
           {books.map((book) => (
             <div
               key={book._id || book.id}
-              className="relative w-full max-w-[230px] min-h-[210px] sm:min-h-[260px] md:min-h-[330px]"
+              className="relative w-4/5 sm:w-full max-w-xs"
             >
               <BookCard
                 book={book}

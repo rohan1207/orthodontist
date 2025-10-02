@@ -38,9 +38,9 @@ export default function Navbar() {
   return (
     <>
       <nav
-          className={
-            "fixed top-0 left-1/2 transform -translate-x-1/2 z-50 rounded-b-[20px] bg-[#006D5B] shadow-sm border-b border-white/10 backdrop-blur-sm"
-          }
+        className={
+          "fixed top-0 left-1/2 transform -translate-x-1/2 z-50 rounded-b-[20px] bg-[#006D5B] shadow-sm border-b border-white/10 backdrop-blur-sm"
+        }
         style={{
           fontFamily: NAV_FONT,
           width: "min(1728px, 100%)",
@@ -50,17 +50,13 @@ export default function Navbar() {
         <div className="w-full h-full mx-auto flex items-center justify-between px-6 md:px-[28px]">
           {/* Logo */}
           <Link to="/">
-          <div className="flex items-center gap-3">
-            <img
-              src="/newlogo.png"
-              alt="Logo"
-              className="h-10 w-10 md:h-[75px] md:w-[185px]"
-            />
-            
-            
-
-            
-          </div>
+            <div className="flex items-center gap-3">
+              <img
+                src="/newlogo.png"
+                alt="Logo"
+                className="h-16 w-auto md:h-[75px] md:w-[185px]"
+              />
+            </div>
           </Link>
 
           {/* Desktop Menu */}
@@ -181,27 +177,10 @@ export default function Navbar() {
             <div className="w-full h-full flex flex-col">
               <div className="flex items-center justify-between p-6 border-b border-white/10">
                 <div className="flex items-center gap-3">
-                  <img src="/logo2.png" alt="Logo" className="h-12 w-12" />
-                  <div>
-                    <span
-                      className="text-lg font-normal tracking-wide text-white"
-                      style={{ letterSpacing: "0.08em" }}
-                    >
-                      OrthoChronicles
-                    </span>
-                    <span
-                      className="text-sm font-light block text-white/70"
-                      style={{
-                        letterSpacing: "0.1em",
-                        marginTop: "-4px",
-                      }}
-                    >
-                      From Braces To Breakthroughs
-                    </span>
-                  </div>
+                  <img src="/newlogo.png" alt="Logo" className="h-12 w-auto" />
                 </div>
                 <button
-                  className="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-white"
+                  className="p-4 rounded-full bg-white/10 focus:outline-none focus:ring-2 focus:ring-white"
                   onClick={() => setMenuOpen(false)}
                 >
                   <svg

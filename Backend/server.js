@@ -60,6 +60,10 @@ async function start() {
 
     app.get('/', (req, res) => res.json({ ok: true }));
 
+    app.get('/ping', (req, res) => {
+      res.json({ message: 'pong' });
+    });
+
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   } catch (err) {
     console.error(err);

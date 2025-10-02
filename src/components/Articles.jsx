@@ -22,19 +22,23 @@ const RecommendedCard = ({ article }) => {
         className="relative w-full h-full transform-gpu"
         animate={{
           rotateY: isFlipped ? 180 : 0,
-          z: isFlipped ? 50 : 0,
         }}
         transition={{
           duration: 0.7,
           ease: [0.23, 1, 0.32, 1],
-          z: { duration: 0.3 },
         }}
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* Front of Card */}
         <div
           className="absolute w-full h-full bg-white rounded-2xl overflow-hidden shadow-lg border border-[#006D5B]/10 transition-shadow duration-300 hover:shadow-xl flex flex-col"
-          style={{ backfaceVisibility: "hidden" }}
+          style={{
+            backfaceVisibility: "hidden",
+            transform: "translateZ(0)",
+            willChange: "transform",
+            WebkitFontSmoothing: "subpixel-antialiased",
+            fontSmoothing: "antialiased",
+          }}
         >
           <div className="relative h-48 flex-shrink-0">
             <img
@@ -53,7 +57,16 @@ const RecommendedCard = ({ article }) => {
               </span>
             </div>
           </div>
-          <div className="p-4 flex flex-col flex-grow">
+          <div
+            className="p-4 flex flex-col flex-grow"
+            style={{
+              backfaceVisibility: "visible",
+              transform: "translate3d(0,0,0)",
+              willChange: "transform",
+              WebkitFontSmoothing: "subpixel-antialiased",
+              textRendering: "optimizeLegibility",
+            }}
+          >
             <h3 className="text-sm sm:text-base font-medium text-[#006D5B] leading-tight mb-2">
               {article.title}
             </h3>
@@ -79,9 +92,24 @@ const RecommendedCard = ({ article }) => {
         {/* Back of Card */}
         <div
           className="absolute w-full h-full bg-gradient-to-br from-[#DCE6D5]/40 to-white rounded-2xl p-4 sm:p-5 flex flex-col shadow-lg border border-[#006D5B]/10"
-          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+          style={{
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg) translateZ(0)",
+            willChange: "transform",
+            WebkitFontSmoothing: "subpixel-antialiased",
+            fontSmoothing: "antialiased",
+          }}
         >
-          <div className="flex-1 overflow-hidden flex flex-col">
+          <div
+            className="flex-1 overflow-hidden flex flex-col"
+            style={{
+              backfaceVisibility: "visible",
+              transform: "translate3d(0,0,0)",
+              willChange: "transform",
+              WebkitFontSmoothing: "subpixel-antialiased",
+              textRendering: "optimizeLegibility",
+            }}
+          >
             <div className="flex-shrink-0">
               <span className="inline-block px-2 py-1 rounded-full bg-white text-[#006D5B] text-xs font-medium border border-[#006D5B]/10 shadow-sm">
                 {article.category}

@@ -10,24 +10,24 @@ const Footer = () => {
       style={{ fontFamily: HERO_FONT }}
     >
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-12">
           {/* Brand Column */}
-          <div className="col-span-1 md:col-span-2 lg:col-span-1">
-            <div className="flex flex-col items-start">
+          <div className="col-span-1 sm:col-span-2 lg:col-span-1">
+            <div className="flex flex-col items-center sm:items-start">
             <div className="flex items-center gap-3">
             <img
               src="/newlogo.png"
               alt="Logo"
-              className="h-10 w-10 md:h-[75px] md:w-[185px]"
+              className="h-16 w-auto md:h-[75px] md:w-[185px]"
             />
             
             
 
             
           </div>
-              <span className="text-white/90 text-base mb-4">
+              <p className="text-white/90 text-base mb-4 text-center sm:text-left">
                 Credible. Trusted Orthodontic Education.
-              </span>
+              </p>
               <div className="flex items-center gap-4 mb-6">
                 <a
                   href="#"
@@ -132,11 +132,12 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-[#006D5B]/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <span className="text-white text-sm">
-            © {new Date().getFullYear()} OrthoChronicles. All rights reserved.
+        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <span className="text-white text-sm text-center sm:text-left">
+            © {new Date().getFullYear()} OrthoChronicles. All rights reserved. <br />
+           
           </span>
-          <div className="flex items-center gap-6 text-sm">
+          <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-sm">
             <a href="#" className="text-white/90 hover:text-white transition-colors duration-300">Privacy Policy</a>
             <a href="#" className="text-white/90 hover:text-white transition-colors duration-300">Terms of Service</a>
             <a href="#" className="text-white/90 hover:text-white transition-colors duration-300">Cookie Policy</a>

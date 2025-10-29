@@ -14,6 +14,11 @@ const topicSummarySchema = new mongoose.Schema({
         type: String,
         trim: true
     }],
+    category: {
+        type: String,
+        required: true,
+        trim: true
+    },
     // Generic file URL (PDF or DOCX)
     fileUrl: {
         type: String,

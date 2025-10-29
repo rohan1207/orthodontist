@@ -50,10 +50,33 @@ ${form.message}
     `.trim();
 
     const encodedMessage = encodeURIComponent(messageBody);
-    const phoneNumber = "+918855817434";
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    // WhatsApp wa.me requires only digits (no '+' or spaces)
+    const phoneNumber = "918884886275";
+    const sanitizedPhone = phoneNumber.replace(/[^0-9]/g, "");
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    window.open(whatsappUrl, "_blank");
+    // Build platform-specific URLs
+    const appUrl = `whatsapp://send?phone=${sanitizedPhone}&text=${encodedMessage}`; // iOS/Android app
+    const webUrl = `https://wa.me/${sanitizedPhone}?text=${encodedMessage}`; // Universal web fallback
+    const desktopUrl = `https://web.whatsapp.com/send?phone=${sanitizedPhone}&text=${encodedMessage}`; // Desktop web
+
+    if (isMobile) {
+      // Try to open the native app first; if it fails, fallback to web after a short delay
+      window.location.href = appUrl;
+      setTimeout(() => {
+        // If app didn't open, navigate to web URL
+        try {
+          if (!document.hidden) {
+            window.location.href = webUrl;
+          }
+        } catch (_) {
+          window.location.href = webUrl;
+        }
+      }, 1200);
+    } else {
+      // Desktop: open Web WhatsApp in a new tab
+      window.open(desktopUrl, "_blank", "noopener");
+    }
 
     setTimeout(() => {
       setSending(false);
@@ -141,7 +164,7 @@ ${form.message}
                   href="tel:+1234567890"
                   className="hover:text-[#006D5B] transition-colors"
                 >
-                  +1 (234) 567-890
+                  +918884886275
                 </a>
               </InfoCard>
               {/* <InfoCard icon={BuildingOffice2Icon} title="Our Office">

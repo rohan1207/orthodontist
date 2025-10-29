@@ -564,7 +564,6 @@ export default function TopBooksPage() {
   const [openBookId, setOpenBookId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -582,21 +581,6 @@ export default function TopBooksPage() {
       }
     };
     fetchBooks();
-  }, []);
-
-  // Track mobile viewport (Tailwind 'sm' breakpoint: <640px)
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
-    const handler = (e) => setIsMobile(e.matches);
-    // initialize
-    setIsMobile(mq.matches);
-    // subscribe
-    if (mq.addEventListener) mq.addEventListener("change", handler);
-    else mq.addListener(handler);
-    return () => {
-      if (mq.removeEventListener) mq.removeEventListener("change", handler);
-      else mq.removeListener(handler);
-    };
   }, []);
 
   const authors = useMemo(
@@ -640,13 +624,6 @@ export default function TopBooksPage() {
 
     return list;
   }, [books, query, author, sortBy]);
-
-  // When filters change, set initial visible based on viewport
-  // - Mobile: show first 4, reveal more via "View more"
-  // - Desktop/tablet: show all
-  useEffect(() => {
-    setVisible(isMobile ? Math.min(4, filtered.length) : filtered.length);
-  }, [filtered.length, isMobile]);
 
   const visibleList = filtered.slice(0, visible);
   const canLoadMore = visible < filtered.length;
@@ -761,12 +738,12 @@ export default function TopBooksPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-12 sm:gap-y-16"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-16"
           >
             {visibleList.map((book) => (
               <div
                 key={book._id || book.id}
-                className="relative w-full"
+                className="relative w-full min-h-[280px] sm:min-h-[360px] md:min-h-[440px]"
               >
                 <BookCard
                   book={book}
@@ -796,34 +773,23 @@ export default function TopBooksPage() {
           </motion.div>
         )}
 
-        {/* Load more (mobile-only shows 'View more') */}
-        {canLoadMore &&
-          (isMobile ? (
-            <div className="mt-10 text-center">
-              <button
-                onClick={() => setVisible((v) => Math.min(v + 4, filtered.length))}
-                className="inline-flex items-center gap-1 text-[#006D5B] font-medium underline underline-offset-4"
-              >
-                View more
-                <ArrowRightIcon className="w-4 h-4" />
-              </button>
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mt-16 text-center"
+        {/* Load more */}
+        {canLoadMore && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-16 text-center"
+          >
+            <button
+              onClick={() => setVisible((v) => v + 8)}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-[#006D5B] text-white font-medium hover:bg-[#005c4d] transition-all duration-300 shadow-lg hover:shadow-xl"
             >
-              <button
-                onClick={() => setVisible((v) => v + 8)}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-[#006D5B] text-white font-medium hover:bg-[#005c4d] transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Load More Books
-                <ArrowRightIcon className="w-5 h-5" />
-              </button>
-            </motion.div>
-          ))}
+              Load More Books
+              <ArrowRightIcon className="w-5 h-5" />
+            </button>
+          </motion.div>
+        )}
       </div>
     </div>
   );

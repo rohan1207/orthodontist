@@ -30,7 +30,7 @@ export default defineConfig({
   // Allow the backend host (hosted on Render) when using `vite preview` locally
   preview: {
     // Add hosts you want to allow; this prevents Vite from blocking external preview requests
-    allowedHosts: ['orthodontist-backend.onrender.com']
+    allowedHosts: ['orthodontist-backend-586c.onrender.com']
   },
 
   build: {

@@ -111,7 +111,7 @@ export const getSignedFileUrl = async (req, res) => {
 };
 
 export const createTopicSummary = async (req, res) => {
-    const { title, description, tags } = req.body;
+    const { title, description, tags, category } = req.body;
     const file = req.file;
 
     if (!file) {
@@ -148,6 +148,7 @@ export const createTopicSummary = async (req, res) => {
             title,
             description,
             tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+            category,
             fileUrl,
             fileType,
             // For backward compatibility, still set pdfUrl when file is PDF

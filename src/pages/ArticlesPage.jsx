@@ -20,7 +20,7 @@ function formatDate(dateString) {
 function ArticleCard({ article }) {
   return (
     <motion.div
-      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#006D5B]/10 "
+      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-[#006D5B]/10"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -34,7 +34,7 @@ function ArticleCard({ article }) {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4 hidden sm:flex items-center justify-between">
+        <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
           <span className="px-3 py-1.5 rounded-lg bg-[#006D5B] text-white text-sm font-medium">
             {article.category}
           </span>
@@ -43,19 +43,19 @@ function ArticleCard({ article }) {
           </span>
         </div>
       </div>
-      <div className="p-4 sm:p-6">
-        <div className="text-xs sm:text-sm text-[#4B4B4B]/70 mb-2">
+      <div className="p-6">
+        <div className="text-sm text-[#4B4B4B]/70 mb-2">
           {formatDate(article.date)}
         </div>
-        <h3 className="text-base sm:text-xl font-semibold text-[#006D5B] line-clamp-2 mb-2 sm:mb-3 min-h-[2.75rem] sm:min-h-[3.5rem]">
+        <h3 className="text-xl font-semibold text-[#006D5B] line-clamp-2 mb-3 min-h-[3.5rem]">
           {article.title}
         </h3>
-        <p className="text-sm sm:text-base text-[#4B4B4B] line-clamp-2 mb-3 sm:mb-4 min-h-[2.5rem] sm:min-h-[3rem]">
+        <p className="text-[#4B4B4B] line-clamp-2 mb-4 min-h-[3rem]">
           {article.description}
         </p>
         <Link
           to={`/article/${article.id}`}
-          className="inline-flex items-center gap-2 text-sm sm:text-base text-[#006D5B] font-medium hover:text-[#006D5B]/80 transition-colors group"
+          className="inline-flex items-center gap-2 text-[#006D5B] font-medium hover:text-[#006D5B]/80 transition-colors group"
         >
           Read Article
           <ArrowRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -71,7 +71,6 @@ export default function ArticlesPage() {
   // default: no sort applied until user chooses
   const [sortBy, setSortBy] = useState("none");
   const [visible, setVisible] = useState(8);
-  const [isMobile, setIsMobile] = useState(false);
 
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -103,7 +102,8 @@ export default function ArticlesPage() {
               : new Date().toISOString().slice(0, 10),
           }));
           setArticles(mapped);
-          // visible is set by the responsive effect below
+          // Show all fetched articles by default
+          setVisible(mapped.length);
         }
       } catch (err) {
         if (!cancelled) setError(err.message || "Failed to load");
@@ -114,21 +114,6 @@ export default function ArticlesPage() {
     fetchArticles();
     return () => {
       cancelled = true;
-    };
-  }, []);
-
-  // Track mobile viewport (Tailwind 'sm' breakpoint: <640px)
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 639px)');
-    const handler = (e) => setIsMobile(e.matches);
-    // initialize
-    setIsMobile(mq.matches);
-    // subscribe
-    if (mq.addEventListener) mq.addEventListener('change', handler);
-    else mq.addListener(handler);
-    return () => {
-      if (mq.removeEventListener) mq.removeEventListener('change', handler);
-      else mq.removeListener(handler);
     };
   }, []);
 
@@ -168,15 +153,15 @@ export default function ArticlesPage() {
   const visibleList = filtered.slice(0, visible);
   const canLoadMore = visible < filtered.length;
 
-  // When filters change, set initial visible based on viewport
-  // - Mobile: show first 4, reveal more via "View more"
-  // - Desktop/tablet: show all
+  // When the filtered results change (e.g. articles loaded or filters applied),
+  // show all filtered results by default (no implicit pagination unless user loads more).
   useEffect(() => {
-    setVisible(isMobile ? Math.min(4, filtered.length) : filtered.length);
-  }, [filtered.length, isMobile]);
+    setVisible(filtered.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filtered.length]);
 
   return (
-    <div className="py-16 md:py-24 bg-[#DCE6D5]/30 mt-12 sm:mt-8">
+    <div className="py-16 md:py-24 bg-[#DCE6D5]/30 mt-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
@@ -204,13 +189,13 @@ export default function ArticlesPage() {
             transition={{ delay: 0.2 }}
             className="relative max-w-2xl mx-auto"
           >
-            <MagnifyingGlassIcon className="w-5 sm:w-6 h-5 sm:h-6 text-[#006D5B] absolute left-3 sm:left-4 top-1/2 -translate-y-1/2" />
+            <MagnifyingGlassIcon className="w-6 h-6 text-[#006D5B] absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search articles..."
-              className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 rounded-xl border border-[#006D5B]/20 bg-white text-sm sm:text-base text-[#4B4B4B] placeholder-[#4B4B4B]/60 focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 shadow-sm"
+              placeholder="Search articles by topic, keyword, or category..."
+              className="w-full pl-12 pr-4 py-4 rounded-xl border border-[#006D5B]/20 bg-white text-[#4B4B4B] placeholder-[#4B4B4B]/60 focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 shadow-sm"
             />
           </motion.div>
         </div>
@@ -220,13 +205,13 @@ export default function ArticlesPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10"
+          className="flex flex-wrap justify-center gap-3 mb-10"
         >
           {CATEGORIES.map((c) => (
             <button
               key={c}
               onClick={() => setCategory(c)}
-              className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 ${
+              className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
                 category === c
                   ? "bg-[#006D5B] text-white shadow-md"
                   : "bg-white text-[#4B4B4B] border border-[#006D5B]/10 hover:border-[#006D5B]/30"
@@ -238,8 +223,8 @@ export default function ArticlesPage() {
         </motion.div>
 
         {/* Results Section */}
-        <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-4 sm:gap-0">
-          <div className="text-[#4B4B4B] w-full">
+        <div className="mb-8 flex items-center justify-between">
+          <div className="text-[#4B4B4B]">
             {loading ? (
               "Loading articles..."
             ) : error ? (
@@ -258,7 +243,7 @@ export default function ArticlesPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-4 py-2 rounded-lg border border-[#006D5B]/20 text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
+            className="px-4 py-2 rounded-lg border border-[#006D5B]/20 text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20"
           >
             <option value="none">Default</option>
             <option value="newest">Latest First</option>
@@ -279,7 +264,7 @@ export default function ArticlesPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
             >
               {visibleList.map((article) => (
                 <ArticleCard key={article.id} article={article} />
@@ -310,19 +295,22 @@ export default function ArticlesPage() {
           </motion.div>
         )}
 
-        {/* Load more (mobile-only shows 'View more') */}
+        {/* Load more */}
         {canLoadMore && (
-          isMobile ? (
-            <div className="mt-6 text-center">
-              <button
-                onClick={() => setVisible((v) => Math.min(v + 4, filtered.length))}
-                className="inline-flex items-center gap-1 text-[#006D5B] font-medium underline underline-offset-4"
-              >
-                View more
-                <ArrowRightIcon className="w-4 h-4" />
-              </button>
-            </div>
-          ) : null
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-12 text-center"
+          >
+            <button
+              onClick={() => setVisible((v) => v + 6)}
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-[#006D5B] text-white font-medium hover:bg-[#006D5B]/90 transition-all duration-300 shadow-md hover:shadow-lg"
+            >
+              Load More Articles
+              <ArrowRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </button>
+          </motion.div>
         )}
       </div>
     </div>

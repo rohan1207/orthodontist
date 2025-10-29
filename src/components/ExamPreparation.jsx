@@ -40,7 +40,7 @@ const ExamTopicCard = ({ topic }) => {
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { handleCardTap(); } }}
     >
       {/* soft glow on active */}
-      <div className={`pointer-events-none absolute -inset-24  blur-2xl transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`} />
+      <div className={`pointer-events-none absolute -inset-24 blur-2xl transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`} />
 
       <div className="p-6 pb-6 flex-grow">
         <h3 className="text-lg md:text-xl font-extrabold text-[#006D5B] tracking-tight mb-2">
@@ -70,73 +70,68 @@ const ExamTopicCard = ({ topic }) => {
 
       {/* bottom-left floating download button (left-pinned icon, center text) */}
       <motion.button
-  type="button"
-  onClick={handleDownloadClick}
-  onHoverStart={() => setBtnExpanded(true)}
-  onHoverEnd={() => setBtnExpanded(false)}
-  className="absolute left-4 sm:left-6 bottom-4 h-12 flex items-center rounded-full shadow-md font-semibold relative"
-  aria-label="Download"
-  initial={false}
-  animate={active ? (btnExpanded ? "expandedVisible" : "visible") : "hidden"}
-  variants={{
-    hidden: { opacity: 0, pointerEvents: "none", width: 0 },
-    visible: { 
-      opacity: 1, 
-      pointerEvents: "auto", 
-      width: 52, 
-      backgroundColor: "#FFFFFF", 
-      border: "2px solid #006D5B",
-      color: "#006D5B"
-    },
-    expandedVisible: { 
-      opacity: 1, 
-      pointerEvents: "auto", 
-      width: `calc(100% - ${window.innerWidth < 640 ? '32px' : '48px'})`,
-      backgroundColor: "#006D5B",  
-      border: "2px solid #006D5B",
-      color: "#FFFFFF" 
-    }
-  }}
-  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
->
-  {/* Icon Circle */}
-  <motion.span
-  className="flex items-center justify-center rounded-full bg-white z-10"
-  variants={{
-    hidden: { marginLeft: 6, width: 36, height: 36, scale: 1, borderColor: "#006D5B", borderWidth: 2 },
-    visible: { marginLeft: 6, width: 36, height: 36, scale: 1, borderColor: "#006D5B", borderWidth: 2 },
-    expandedVisible: { 
-      marginLeft: 4, 
-      width: 42, 
-      height: 42, 
-      scale: 1.3, 
-      borderColor: "transparent",   // <<-- removes green border
-      borderWidth: 0                // <<-- optional, removes thickness
-    }
-  }}
-  transition={{ duration: 0.25 }}
->
-  <ArrowDownTrayIcon className="w-5 h-5 text-[#006D5B]" />
-</motion.span>
+        type="button"
+        onClick={handleDownloadClick}
+        onHoverStart={() => setBtnExpanded(true)}
+        onHoverEnd={() => setBtnExpanded(false)}
+        className="absolute left-4 sm:left-6 bottom-4 h-12 flex items-center rounded-full shadow-md font-semibold"
+        aria-label="Download"
+        initial={false}
+        animate={active ? (btnExpanded ? "expandedVisible" : "visible") : "hidden"}
+        variants={{
+          hidden: { opacity: 0, pointerEvents: "none", width: 0 },
+          visible: { 
+            opacity: 1, 
+            pointerEvents: "auto", 
+            width: 52, 
+            backgroundColor: "#FFFFFF", 
+            border: "2px solid #006D5B",
+            color: "#006D5B"
+          },
+          expandedVisible: { 
+            opacity: 1, 
+            pointerEvents: "auto", 
+            width: `calc(100% - ${window.innerWidth < 640 ? '32px' : '48px'})`,
+            backgroundColor: "#006D5B",  
+            border: "2px solid #006D5B",
+            color: "#FFFFFF" 
+          }
+        }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {/* Icon Circle */}
+        <motion.span
+          className="flex items-center justify-center rounded-full bg-white z-10"
+          variants={{
+            hidden: { marginLeft: 6, width: 36, height: 36, scale: 1, borderColor: "#006D5B", borderWidth: 2 },
+            visible: { marginLeft: 6, width: 36, height: 36, scale: 1, borderColor: "#006D5B", borderWidth: 2 },
+            expandedVisible: { 
+              marginLeft: 4, 
+              width: 42, 
+              height: 42, 
+              scale: 1.3, 
+              borderColor: "transparent",
+              borderWidth: 0
+            }
+          }}
+          transition={{ duration: 0.25 }}
+        >
+          <ArrowDownTrayIcon className="w-5 h-5 text-[#006D5B]" />
+        </motion.span>
 
-
-  {/* Expanding Text */}
-  <motion.span
-    className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap"
-    variants={{
-      hidden: { opacity: 0 },
-      visible: { opacity: 0 },
-      expandedVisible: { opacity: 1 }
-    }}
-    transition={{ duration: 0.2 }}
-  >
-    Download
-  </motion.span>
-</motion.button>
-
-
-
-
+        {/* Expanding Text */}
+        <motion.span
+          className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 0 },
+            expandedVisible: { opacity: 1 }
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          Download
+        </motion.span>
+      </motion.button>
     </motion.div>
   );
 };
@@ -192,9 +187,9 @@ const ExamPreparation = () => {
             viewport={{ once: true }}
             className="text-base md:text-xl text-[#4B4B4B] max-w-3xl mx-auto"
           >
-           Explore our thoroughly organized question banks to ensure comprehensive coverage of every
-study topic, and make use of our mindmaps to craft clearer, more concise answers in your
-exams.
+            Explore our thoroughly organized question banks to ensure comprehensive coverage of every
+            study topic, and make use of our mindmaps to craft clearer, more concise answers in your
+            exams.
           </motion.p>
         </div>
 

@@ -16,9 +16,9 @@ const Footer = () => {
             <div className="flex flex-col items-center sm:items-start">
             <div className="flex items-center gap-3">
             <img
-              src="/newlogo.png"
+              src="/logo3.png"
               alt="Logo"
-              className="h-16 w-auto md:h-[75px] md:w-[185px]"
+              className="h-18 w-auto md:h-[85px] md:w-auto -ml-6"
             />
             
             
@@ -119,7 +119,7 @@ const Footer = () => {
                 href="tel:+1234567890"
                 className="text-white/90 hover:text-white transition-colors duration-300"
               >
-                +1 (234) 567-890
+                +918884886275
               </a>
               <Link
                 to="/contact"

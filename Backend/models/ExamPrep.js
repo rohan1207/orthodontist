@@ -11,6 +11,11 @@ const examPrepSchema = new mongoose.Schema({
     required: [true, 'An exam prep must have a description'],
     trim: true,
   },
+  category: {
+    type: String,
+    required: [true, 'A category is required'],
+    trim: true,
+  },
   downloadUrl: {
     type: String,
     required: [true, 'A download URL is required'],

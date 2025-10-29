@@ -107,6 +107,7 @@ function TopicCard({ topic, isFetched = true }) {
 export default function TopicSummariesPage() {
   const [query, setQuery] = useState("");
   const [difficulty, setDifficulty] = useState("All");
+  const [category, setCategory] = useState("All");
   const [sortBy, setSortBy] = useState("title-asc");
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -116,10 +117,18 @@ export default function TopicSummariesPage() {
     const fetchTopics = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/topicsummaries`);
-        setTopics(response.data);
+        console.log('Topic summaries response:', response.data);
+        // Ensure we're setting an array
+        if (Array.isArray(response.data)) {
+          setTopics(response.data);
+        } else {
+          console.error('Unexpected response format:', response.data);
+          setTopics([]);
+        }
       } catch (err) {
         console.error('Error fetching topic summaries:', err);
         setError('Failed to load topic summaries. Please try again later.');
+        setTopics([]);
       } finally {
         setLoading(false);
       }
@@ -128,11 +137,21 @@ export default function TopicSummariesPage() {
     fetchTopics();
   }, []);
 
-  const filteredTopics = useMemo(() => {
+    const filteredTopics = useMemo(() => {
+    // Ensure topics is an array before processing
+    if (!Array.isArray(topics)) {
+      console.error('Topics is not an array:', topics);
+      return [];
+    }
+
     let list = [...topics];
 
     if (difficulty !== "All") {
       list = list.filter((t) => t.difficulty === difficulty);
+    }
+
+    if (category !== "All") {
+      list = list.filter((t) => t.category === category);
     }
 
     const searchTerms = query.trim().toLowerCase().split(/\s+/);
@@ -145,28 +164,34 @@ export default function TopicSummariesPage() {
 
     switch (sortBy) {
       case "title-asc":
-        list.sort((a, b) => a.title.localeCompare(b.title));
+        list.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
         break;
       case "title-desc":
-        list.sort((a, b) => b.title.localeCompare(a.title));
+        list.sort((a, b) => (b.title || "").localeCompare(a.title || ""));
         break;
       case "date-desc":
-        list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        list.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
         break;
       case "date-asc":
-        list.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        list.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
         break;
       default:
         break;
     }
     return list;
-  }, [topics, query, difficulty, sortBy]);
+  }, [topics, query, difficulty, category, sortBy]);
 
   const resetFilters = () => {
     setQuery("");
     setDifficulty("All");
+    setCategory("All");
     setSortBy("title-asc");
   };
+
+  const categories = useMemo(() => {
+    const allCategories = Array.isArray(topics) ? topics.map(t => t.category).filter(Boolean) : [];
+    return ["All", ...[...new Set(allCategories)]];
+  }, [topics]);
 
   if (loading) {
     return (
@@ -249,6 +274,18 @@ export default function TopicSummariesPage() {
             </select>
 
             <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
+            >
+              {categories.map((c) => (
+                <option key={c} value={c}>
+                  {c === "All" ? "All Categories" : c}
+                </option>
+              ))}
+            </select>
+
+            <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
@@ -271,7 +308,7 @@ export default function TopicSummariesPage() {
 
         <div className="mb-8 text-center sm:text-left text-[#4B4B4B]">
           Displaying{" "}
-          <span className="font-semibold text-[#006D5B]">{topics.length}</span>{" "}
+          <span className="font-semibold text-[#006D5B]">{filteredTopics.length}</span>{" "}
           summaries
         </div>
 

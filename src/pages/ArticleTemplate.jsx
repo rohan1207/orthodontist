@@ -245,7 +245,7 @@ export default function ArticleTemplate() {
           readTime: data.readingTime || 0,
           publishDate: new Date(data.scheduledAt || data.createdAt || Date.now()).toLocaleDateString(),
           author: data.author || "",
-          authorImage:  "/user.jpeg" || data.heroImage ,
+          authorImage: data.heroImage || "/user.jpeg",
           authorBio: (data.coAuthors && data.coAuthors.join(", ")) || "",
           heroImage: data.heroImage || "/article1.jpg",
           contentPreviewHtml: "",

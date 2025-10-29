@@ -52,9 +52,9 @@ export default function Navbar() {
           <Link to="/">
             <div className="flex items-center gap-3">
               <img
-                src="/newlogo.png"
+                src="/logo3.png"
                 alt="Logo"
-                className="h-16 w-auto md:h-[75px] md:w-[185px]"
+                className="h-18 w-auto md:h-[85px] md:w-auto"
               />
             </div>
           </Link>
@@ -65,14 +65,14 @@ export default function Navbar() {
               const isActive = location.pathname === item.href;
               return (
                 <div key={item.name} className="relative group">
-                  {/* Subtle hover background */}
+                  {/* Subtle hover background
                   <span
                     className={`pointer-events-none absolute inset-0 rounded-full bg-white/10 transition-opacity duration-300 ${
                       isActive
                         ? "opacity-100"
                         : "opacity-0 group-hover:opacity-100"
                     }`}
-                  ></span>
+                  ></span> */}
 
                   <Link
                     to={item.href}
@@ -175,40 +175,24 @@ export default function Navbar() {
             style={{ fontFamily: NAV_FONT }}
           >
             <div className="w-full h-full flex flex-col">
-              <div className="flex items-center justify-between p-6 border-b border-white/10">
+              <div className="relative z-20 flex items-center justify-between p-6 border-b border-white/10">
                 <div className="flex items-center gap-3">
-                  <img src="/newlogo.png" alt="Logo" className="h-12 w-auto" />
+                  <img src="/logo3.png" alt="Logo" className="h-16 w-auto" />
                 </div>
                 <button
-                  className="p-4 rounded-full bg-white/10 focus:outline-none focus:ring-2 focus:ring-white"
                   onClick={() => setMenuOpen(false)}
-                >
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M18 6L6 18"
-                      stroke="white"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M6 6L18 18"
-                      stroke="white"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
+                  onPointerDown={() => setMenuOpen(false)}
+                  aria-label="Close menu"
+                  className="relative z-30 w-12 h-12 rounded-full bg-white/10 focus:outline-none focus:ring-2 focus:ring-white bg-no-repeat bg-center"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18 6L6 18' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M6 6L18 18' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
+                    touchAction: 'manipulation',
+                    WebkitTapHighlightColor: 'transparent',
+                  }}
+                />
               </div>
 
-              <div className="flex flex-col items-center justify-center h-full gap-6 -mt-16">
+              <div className="relative z-10 flex flex-col items-center justify-center h-full gap-6 mt-0">
                 {menuItems.map((item) => (
                   <Link
                     key={item.name}

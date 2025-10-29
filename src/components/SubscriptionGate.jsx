@@ -210,9 +210,9 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 10 }}
       transition={{ duration: 0.28 }}
-      className="w-full max-w-xl"
+      className="w-full max-w-xl mx-auto px-4 sm:px-0 py-4 sm:py-0"
     >
-      <div className="bg-white/75 backdrop-blur-2xl rounded-2xl border border-white/60 shadow-2xl p-6 sm:p-8">
+      <div className="bg-white/80 backdrop-blur-2xl rounded-2xl border border-white/60 shadow-2xl p-4 sm:p-8 max-h-[80vh] sm:max-h-none overflow-y-auto overscroll-contain">
         {!showForm ? (
           <div className="text-center">
             <LockClosedIcon className="w-14 h-14 text-[#006D5B] mx-auto mb-4" />
@@ -343,14 +343,14 @@ const SubscriptionGate = ({ onAuthSuccess }) => {
                 </div>
               )}
               <div className="relative flex py-2 items-center">
-                  <div className="flex-grow border-t border-gray-300"></div>
-                  <span className="flex-shrink mx-4 text-gray-400 text-sm">OR</span>
+                  {/* <div className="flex-grow border-t border-gray-300"></div>
+                  <span className="flex-shrink mx-4 text-gray-400 text-sm">OR</span> */}
                   <div className="flex-grow border-t border-gray-300"></div>
               </div>
-              <button type="button" onClick={handleGoogleSignIn} disabled={loading} className="w-full flex items-center justify-center gap-3 bg-white text-[#4B4B4B] py-3 rounded-xl font-semibold border border-gray-300 hover:bg-gray-50 transition-colors disabled:bg-gray-200 disabled:cursor-not-allowed">
+              {/* <button type="button" onClick={handleGoogleSignIn} disabled={loading} className="w-full flex items-center justify-center gap-3 bg-white text-[#4B4B4B] py-3 rounded-xl font-semibold border border-gray-300 hover:bg-gray-50 transition-colors disabled:bg-gray-200 disabled:cursor-not-allowed">
                 <img src="/google-icon.svg" alt="Google" className="w-5 h-5" />
                 Sign in with Google
-              </button>
+              </button> */}
               <p className="text-xs text-center text-gray-500">By continuing you agree to our Terms and Privacy Policy</p>
             </form>
           </div>

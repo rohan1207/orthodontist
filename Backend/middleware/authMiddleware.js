@@ -27,7 +27,8 @@ export const protect = async (req, res, next) => {
 
 // Admin middleware - must be used after protect middleware
 export const admin = (req, res, next) => {
-  if (req.admin && req.admin.role === 'admin') {
+  if (req.admin) {
+    // If the user exists in the Admin collection, they are an admin
     next();
   } else {
     res.status(403).json({ message: 'Not authorized as an admin' });

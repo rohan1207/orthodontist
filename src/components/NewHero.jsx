@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Environment, Image } from "@react-three/drei";
+import { AcademicCapIcon, SparklesIcon, BeakerIcon } from "@heroicons/react/24/outline";
 
 const HERO_FONT = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 // Right-side visual uses hero.png card with torus + orbs (from Hero.jsx logic)
@@ -11,7 +12,7 @@ function BracesUnderline() {
   const brackets = [60, 140, 220, 300, 360];
   return (
     <div
-      className="mx-auto lg:mx-[110px] group"
+      className="mx-auto lg:mx-[0px] group"
       style={{ width: "clamp(160px, 38vw, 360px)", height: 32 }}
     >
       <svg
@@ -110,7 +111,7 @@ export default function NewHero() {
 
   return (
     <section
-      className="relative min-h-screen overflow-hidden bg-[#DCE6D5] mt-16"
+      className="relative min-h-screen overflow-hidden bg-[#DCE6D5]  mt-4 sm:mt-16"
       style={{ fontFamily: HERO_FONT }}
     >
       {/* Subtle green wash */}
@@ -142,7 +143,7 @@ export default function NewHero() {
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 lg:pt-0">
             {/* === Left: Text Content === */}
-            <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8 py-12 lg:py-0">
+            <div className="flex-1 text-center lg:text-left space-y-6 md:space-y-8 py-8 lg:py-0">
               {/* Title */}
               <div className="space-y-2">
                 <h1
@@ -160,44 +161,83 @@ export default function NewHero() {
                   OrthoChronicles
                 </h1>
 
-                <BracesUnderline />
+                <div className="hidden sm:block">
+                  <BracesUnderline />
+                </div>
               </div>
 
-              {/* Sub-text */}
-              <div className="space-y-6">
-                <p className="text-lg md:text-xl text-slate-700 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  Welcome to your one‑stop destination for a smoother, smarter, and more connected journey through Orthodontics.
-                </p>
-
-                {/* Audience cards replacing long bullets */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 max-w-2xl mx-auto lg:mx-0">
-                  <div className="rounded-xl border border-[#006D5B]/15 bg-white/70 backdrop-blur p-4 shadow-sm">
-                    <p className="font-semibold text-[#004B3F]">For BDS students:</p>
-                    <p className="text-slate-700 text-sm mt-1">
-                      master the basics with concise, evidence‑based articles and trusted resources.
-                    </p>
-                  </div>
-                  <div className="rounded-xl border border-[#006D5B]/15 bg-white/70 backdrop-blur p-4 shadow-sm">
-                    <p className="font-semibold text-[#004B3F]">For postgraduates:</p>
-                    <p className="text-slate-700 text-sm mt-1">
-                      get strategic study tips, focused summaries, and exam‑oriented guidance.
-                    </p>
-                  </div>
-                  <div className="rounded-xl border border-[#006D5B]/15 bg-white/70 backdrop-blur p-4 shadow-sm">
-                    <p className="font-semibold text-[#004B3F]">For practising clinicians:</p>
-                    <p className="text-slate-700 text-sm mt-1">
-                      stay current with breakthroughs, new technologies, AI‑driven products, and global trends.
-                    </p>
-                  </div>
+              {/* Sub-text (minimal, premium) */}
+              <div className="space-y-5">
+                <div className="max-w-xl mx-auto lg:mx-0">
+                  <p className="text-xl sm:text-2xl font-extrabold leading-snug text-[#004B3F]">
+                    Step into the fast lane of orthodontics
+                  </p>
+                  <p className="text-md sm:text-xl leading-snug text-[#004B3F] mt-1">
+                    —where learning meets tech, study gets strategic, and breakthroughs are always at your fingertips.
+                  </p>
                 </div>
-
-                <p className="text-sm md:text-base text-slate-700 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  Whether tackling coursework or upgrading treatment protocols, everything here is designed to make learning and practising orthodontics simpler, more efficient, and always up to date.
-                </p>
+                <div className="mt-3 flex flex-wrap items-center justify-center lg:justify-start gap-2">
+                  <span className="px-3 py-1.5 rounded-full bg-[#D6EDDS] text-[#004B3F] border border-[#006D5B]/20 text-sm sm:text-base shadow-sm">Study smart</span>
+                  <span className="px-3 py-1.5 rounded-full bg-[#D6EDDS] text-[#006D5B] border border-[#006D5B]/20 text-sm sm:text-base shadow-sm">Practice bold</span>
+                  <span className="px-3 py-1.5 rounded-full bg-[#D6EDDS] text-[#006D5B] border border-[#006D5B]/20 text-sm sm:text-base shadow-sm">Stay ahead</span>
+                </div>
+                {/* <ul className="max-w-xl mx-auto lg:mx-0 space-y-3">
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => navigate('/summaries')}
+                      className="group w-full text-left flex items-center gap-3 px-3 py-2 "
+                      aria-label="For BDS Students"
+                    >
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#D6EDDS] border border-[#006D5B]/20">
+                        <AcademicCapIcon className="w-5 h-5 text-[#006D5B]" />
+                      </span>
+                      <span className="text-sm sm:text-base text-slate-800">
+                        <span className="font-semibold text-[#004B3F]">For BDS Students:</span>
+                        <span className="ml-2 text-slate-700">Master basics with concise articles</span>
+                      </span>
+                      <span className="ml-auto text-[#006D5B] opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">›</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => navigate('/exam-prep')}
+                      className="group w-full text-left flex items-center gap-3 px-3 py-2 "
+                      aria-label="For Postgrads"
+                    >
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#D6EDDS] border border-[#006D5B]/20">
+                        <SparklesIcon className="w-5 h-5 text-[#006D5B]" />
+                      </span>
+                      <span className="text-sm sm:text-base text-slate-800">
+                        <span className="font-semibold text-[#004B3F]">For Postgrads:</span>
+                        <span className="ml-2 text-slate-700">Strategic exam prep</span>
+                      </span>
+                      <span className="ml-auto text-[#006D5B] opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">›</span>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => navigate('/articles')}
+                      className="group w-full text-left flex items-center gap-3 px-3 py-2 "
+                      aria-label="For Clinicians"
+                    >
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#D6EDDS] border border-[#006D5B]/20">
+                        <BeakerIcon className="w-5 h-5 text-[#006D5B]" />
+                      </span>
+                      <span className="text-sm sm:text-base text-slate-800">
+                        <span className="font-semibold text-[#004B3F]">For Clinicians:</span>
+                        <span className="ml-2 text-slate-700">Latest breakthroughs & tech</span>
+                      </span>
+                      <span className="ml-auto text-[#006D5B] opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">›</span>
+                    </button>
+                  </li>
+                </ul> */}
               </div>
 
               {/* Buttons */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start pt-4">
+              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
                 <button
                   onClick={scrollToFounder}
                   className="group relative flex items-center justify-center bg-[#D6EDDS] text-[#006D5B] font-semibold border border-[#006D5B]/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-visible w-full sm:w-[280px] h-[65px] rounded-[50px]"

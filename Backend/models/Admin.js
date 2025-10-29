@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 const AdminSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  role: { type: String, default: 'admin' },  // All users in Admin collection are admins
 }, { timestamps: true });
 
 AdminSchema.pre('save', async function(next) {

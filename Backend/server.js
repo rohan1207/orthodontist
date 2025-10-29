@@ -7,14 +7,15 @@ import blogRoutes from './routes/blogRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import examPrepRoutes from './routes/examPrepRoutes.js';
-import topicSummaryRoutes from './routes/topicSummaryRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import topicSummaryRoutes from './routes/topicSummaryRoutes.js';
+import publicRoutes from './routes/publicRoutes.js';
 
 dotenv.config();
 
 const app = express();
 
-// Configure and normalize CORS origins from env (comma-separated). If not set,
+// Configure and normalize CORS origi ns from env (comma-separated). If not set,
 // fall back to allowing all origins for easier debugging.
 let corsOptions;
 if (process.env.CORS_ORIGIN) {
@@ -50,19 +51,18 @@ async function start() {
     console.log('MongoDB connected');
 
     // Add routes after CORS middleware
-    app.use('/api/admin', adminRoutes);
-    app.use('/api/blogs', blogRoutes);
-    app.use('/api/books', bookRoutes);
-    app.use('/api/users', userRoutes);
-    app.use('/api/exampreps', examPrepRoutes);
-    app.use('/api/topicsummaries', topicSummaryRoutes);
-    app.use('/api', dashboardRoutes); // Dashboard routes include /api prefix in their paths
+  app.use('/api/admin', adminRoutes);
+  app.use('/api/blogs', blogRoutes);
+  app.use('/api/books', bookRoutes);
+  app.use('/api/users', userRoutes);
+  app.use('/api/exampreps', examPrepRoutes);
+  app.use('/api/dashboard', dashboardRoutes);
+  app.use('/api/topicsummaries', topicSummaryRoutes);
+  // Allow-all CORS for public endpoints to avoid auth-related CORS blocks on Render
+  app.options('/api/public/*', cors());
+  app.use('/api/public', cors(), publicRoutes);
 
     app.get('/', (req, res) => res.json({ ok: true }));
-
-    app.get('/ping', (req, res) => {
-      res.json({ message: 'pong' });
-    });
 
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   } catch (err) {

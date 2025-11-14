@@ -20,6 +20,8 @@ const allowedOrigins = [
   'http://localhost:5174',
   'http://localhost:3000',
   'https://orthodontist-backend-586c.onrender.com',
+  'https://orthochronicles.com',
+  'https://admin.orthochronicles.com'
   // Add other allowed origins as needed
 ];
 

@@ -12,15 +12,10 @@ import {
   ArrowPathIcon
 } from "@heroicons/react/24/outline";
 
-// Removed static TOPICS array as we'll fetch from backend
-
-const DIFFICULTIES = ["All", "Beginner", "Intermediate", "Advanced"];
-const SORTS = [
-  { id: "title-asc", label: "Title A → Z" },
-  { id: "title-desc", label: "Title Z → A" },
-  { id: "date-desc", label: "Newest First" },
-  { id: "date-asc", label: "Oldest First" },
-];
+// Removed static TOPICS array and difficulty/sort filters; we now filter only by category (plus search).
+// Align API config with TopicSummaries component so both hit the same backend.
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const TOPICS_ENDPOINT = `${API_BASE}/api/topicsummaries`;
 
 function TopicCard({ topic, isFetched = true }) {
   const color = topic.color || "from-green-500 to-emerald-600";
@@ -106,9 +101,7 @@ function TopicCard({ topic, isFetched = true }) {
 
 export default function TopicSummariesPage() {
   const [query, setQuery] = useState("");
-  const [difficulty, setDifficulty] = useState("All");
   const [category, setCategory] = useState("All");
-  const [sortBy, setSortBy] = useState("title-asc");
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -116,13 +109,15 @@ export default function TopicSummariesPage() {
   useEffect(() => {
     const fetchTopics = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/topicsummaries`);
-        console.log('Topic summaries response:', response.data);
-        // Ensure we're setting an array
+        const response = await axios.get(TOPICS_ENDPOINT);
+        console.log('TopicSummariesPage response:', response.data);
+        // Handle both direct array and { data: [...] } formats, same as TopicSummaries component
         if (Array.isArray(response.data)) {
           setTopics(response.data);
+        } else if (response.data && Array.isArray(response.data.data)) {
+          setTopics(response.data.data);
         } else {
-          console.error('Unexpected response format:', response.data);
+          console.error('Unexpected response format in TopicSummariesPage:', response.data);
           setTopics([]);
         }
       } catch (err) {
@@ -137,7 +132,7 @@ export default function TopicSummariesPage() {
     fetchTopics();
   }, []);
 
-    const filteredTopics = useMemo(() => {
+  const filteredTopics = useMemo(() => {
     // Ensure topics is an array before processing
     if (!Array.isArray(topics)) {
       console.error('Topics is not an array:', topics);
@@ -145,10 +140,6 @@ export default function TopicSummariesPage() {
     }
 
     let list = [...topics];
-
-    if (difficulty !== "All") {
-      list = list.filter((t) => t.difficulty === difficulty);
-    }
 
     if (category !== "All") {
       list = list.filter((t) => t.category === category);
@@ -162,30 +153,12 @@ export default function TopicSummariesPage() {
       });
     }
 
-    switch (sortBy) {
-      case "title-asc":
-        list.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
-        break;
-      case "title-desc":
-        list.sort((a, b) => (b.title || "").localeCompare(a.title || ""));
-        break;
-      case "date-desc":
-        list.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-        break;
-      case "date-asc":
-        list.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
-        break;
-      default:
-        break;
-    }
     return list;
-  }, [topics, query, difficulty, category, sortBy]);
+  }, [topics, query, category]);
 
   const resetFilters = () => {
     setQuery("");
-    setDifficulty("All");
     setCategory("All");
-    setSortBy("title-asc");
   };
 
   const categories = useMemo(() => {
@@ -262,18 +235,6 @@ export default function TopicSummariesPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <select
-              value={difficulty}
-              onChange={(e) => setDifficulty(e.target.value)}
-              className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
-            >
-              {DIFFICULTIES.map((d) => (
-                <option key={d} value={d}>
-                  {d === "All" ? "All Levels" : d}
-                </option>
-              ))}
-            </select>
-
-            <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
@@ -281,18 +242,6 @@ export default function TopicSummariesPage() {
               {categories.map((c) => (
                 <option key={c} value={c}>
                   {c === "All" ? "All Categories" : c}
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2.5 rounded-lg border border-[#006D5B]/20 bg-white text-[#4B4B4B] focus:outline-none focus:ring-2 focus:ring-[#006D5B]/20 w-full sm:w-auto"
-            >
-              {SORTS.map((o) => (
-                <option key={o.id} value={o.id}>
-                  {o.label}
                 </option>
               ))}
             </select>

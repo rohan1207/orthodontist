@@ -15,28 +15,58 @@ const TopicSummaryPage = () => {
     const [viewFileType, setViewFileType] = useState(null);
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
+    // Prefer signed URL when available; fallback to stored URL
+    const fileUrl = viewUrl || summary?.fileUrl || summary?.pdfUrl;
+    const inferredType = viewFileType || summary?.fileType || (summary?.pdfUrl ? 'application/pdf' : '');
+    const isPdf = inferredType === 'application/pdf' || (fileUrl && fileUrl.toLowerCase().endsWith('.pdf'));
+    const isDocx = inferredType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || (fileUrl && fileUrl.toLowerCase().endsWith('.docx'));
+
     useEffect(() => {
         const fetchSummary = async () => {
             try {
                 // This endpoint needs to be created in the backend
                 const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/topicsummaries/${id}`);
+                console.log('TopicSummaryPage summary response:', response.data);
                 setSummary(response.data);
                 // Try to get a time-limited signed URL for robust access
                 try {
                     const signed = await axios.get(`${import.meta.env.VITE_API_URL}/api/topicsummaries/${id}/signed-url`);
+                    console.log('TopicSummaryPage signed URL response:', signed.data);
                     setViewUrl(signed.data.url);
                     setViewFileType(signed.data.fileType);
                 } catch (signErr) {
-                    console.error('Error fetching signed URL:', signErr);
+                    console.error('TopicSummaryPage signed URL error:', signErr);
                 }
             } catch (error) {
-                console.error('Error fetching topic summary:', error);
+                console.error('TopicSummaryPage error fetching topic summary:', error);
             }
             setLoading(false);
         };
 
         fetchSummary();
     }, [id]);
+
+    useEffect(() => {
+        // If there is no file URL, or the type is not a PDF/DOCX we can preview,
+        // stop showing the loading state so the fallback UI is visible.
+        if (summary && (!fileUrl || (!isPdf && !isDocx))) {
+            setViewerLoading(false);
+        }
+    }, [summary, fileUrl, isPdf, isDocx]);
+
+    // Log current file info whenever relevant data changes
+    if (summary) {
+        console.log('TopicSummaryPage file info', {
+            id,
+            fileUrl,
+            inferredType,
+            isPdf,
+            isDocx,
+            summaryFileUrl: summary.fileUrl,
+            summaryPdfUrl: summary.pdfUrl,
+            summaryFileType: summary.fileType,
+        });
+    }
 
     if (loading) {
         return (
@@ -73,12 +103,6 @@ const TopicSummaryPage = () => {
             </div>
         );
     }
-
-    // Prefer signed URL when available; fallback to stored URL
-    const fileUrl = viewUrl || summary.fileUrl || summary.pdfUrl;
-    const inferredType = viewFileType || summary.fileType || (summary.pdfUrl ? 'application/pdf' : '');
-    const isPdf = inferredType === 'application/pdf' || (fileUrl && fileUrl.toLowerCase().endsWith('.pdf'));
-    const isDocx = inferredType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || (fileUrl && fileUrl.toLowerCase().endsWith('.docx'));
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16">
@@ -139,9 +163,10 @@ const TopicSummaryPage = () => {
                 ) : isDocx ? (
                     <iframe
                         title={summary.title}
-                        className={`w-full h-full border-0 ${viewerLoading ? 'hidden' : ''}`}
+                        className="w-full h-full border-0"
                         src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`}
                         onLoad={() => setViewerLoading(false)}
+                        onError={() => setViewerLoading(false)}
                     />
                 ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center">

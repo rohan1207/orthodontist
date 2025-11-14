@@ -190,3 +190,121 @@ export const getTopicSummaries = async (req, res) => {
         res.status(500).json({ message: 'Server error while fetching topic summaries.' });
     }
 };
+
+export const updateTopicSummary = async (req, res) => {
+    try {
+        const { title, description, tags, category } = req.body;
+        const file = req.file;
+        const updateData = { title, description, tags, category };
+
+        // Find the existing summary
+        const existingSummary = await TopicSummary.findById(req.params.id);
+        if (!existingSummary) {
+            return res.status(404).json({ message: 'Topic summary not found.' });
+        }
+
+        // Handle file upload if a new file is provided
+        if (file) {
+            // Validate file type
+            const allowedTypes = [
+                'application/pdf',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            ];
+            
+            if (!allowedTypes.includes(file.mimetype)) {
+                return res.status(400).json({ message: 'Only PDF or DOCX files are allowed.' });
+            }
+
+            // Delete old file from Cloudinary if it exists
+            if (existingSummary.cloudinaryId) {
+                try {
+                    await cloudinary.uploader.destroy(existingSummary.cloudinaryId, {
+                        resource_type: 'raw',
+                        type: 'upload',
+                        invalidate: true
+                    });
+                } catch (cloudinaryError) {
+                    console.error('Error deleting old file from Cloudinary:', cloudinaryError);
+                    // Continue with update even if Cloudinary deletion fails
+                }
+            }
+
+            // Upload new file to Cloudinary
+            const ext = file.mimetype === 'application/pdf' ? 'pdf' : 'docx';
+            const result = await uploadToCloudinary(file.buffer, {
+                folder: 'topic_summaries',
+                resource_type: 'raw',
+                format: ext,
+                type: 'authenticated',
+                use_filename: true,
+                unique_filename: true
+            });
+
+            // Update file-related fields
+            updateData.fileUrl = result.secure_url;
+            updateData.fileType = file.mimetype;
+            updateData.cloudinaryId = result.public_id;
+            
+            // For backward compatibility
+            if (file.mimetype === 'application/pdf') {
+                updateData.pdfUrl = result.secure_url;
+            }
+        }
+
+        // Process tags if provided
+        if (tags) {
+            updateData.tags = typeof tags === 'string' 
+                ? tags.split(',').map(tag => tag.trim())
+                : tags;
+        }
+
+        // Update the document
+        const updatedSummary = await TopicSummary.findByIdAndUpdate(
+            req.params.id,
+            { $set: updateData },
+            { new: true, runValidators: true }
+        );
+
+        res.status(200).json(updatedSummary);
+    } catch (error) {
+        console.error('Error updating topic summary:', error);
+        const status = error.http_code || 500;
+        const message = error.message || 'Failed to update topic summary';
+        res.status(status).json({ message });
+    }
+};
+
+export const deleteTopicSummary = async (req, res) => {
+    try {
+        const summary = await TopicSummary.findById(req.params.id);
+        
+        if (!summary) {
+            return res.status(404).json({ message: 'Topic summary not found.' });
+        }
+
+        // Delete the file from Cloudinary if it exists
+        if (summary.cloudinaryId) {
+            try {
+                await cloudinary.uploader.destroy(summary.cloudinaryId, {
+                    resource_type: 'raw',
+                    type: 'upload',
+                    invalidate: true
+                });
+            } catch (cloudinaryError) {
+                console.error('Error deleting file from Cloudinary:', cloudinaryError);
+                // Continue with deletion even if Cloudinary deletion fails
+            }
+        }
+
+        // Delete the document from MongoDB
+        await TopicSummary.findByIdAndDelete(req.params.id);
+        
+        res.status(200).json({ message: 'Topic summary deleted successfully.' });
+    } catch (error) {
+        console.error('Error deleting topic summary:', error);
+        res.status(500).json({ 
+            message: 'Failed to delete topic summary',
+            error: error.message 
+        });
+    }
+};

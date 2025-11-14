@@ -15,29 +15,46 @@ dotenv.config();
 
 const app = express();
 
-// Configure and normalize CORS origi ns from env (comma-separated). If not set,
-// fall back to allowing all origins for easier debugging.
-let corsOptions;
-if (process.env.CORS_ORIGIN) {
-  const origins = process.env.CORS_ORIGIN
-    .split(',')
-    .map((s) => s.trim().replace(/\/$/, ''))
-    .filter(Boolean);
-  corsOptions = {
-    origin: origins,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  };
-} else {
-  // undefined => allow all origins (cors default)
-  corsOptions = undefined;
-}
+// Configure CORS with credentials support
+const allowedOrigins = [
+  'http://localhost:5174',
+  'http://localhost:3000',
+  'https://orthodontist-backend-586c.onrender.com',
+  // Add other allowed origins as needed
+];
 
-console.log('Effective CORS origins:', corsOptions && corsOptions.origin ? corsOptions.origin : 'allow-all');
+// CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  maxAge: 600, // Cache preflight request for 10 minutes
+};
+
+// Apply CORS middleware
 app.use(cors(corsOptions));
+
 // Handle preflight requests
 app.options('*', cors(corsOptions));
+
+// Log CORS configuration
+console.log('CORS Configuration:', {
+  allowedOrigins,
+  credentials: corsOptions.credentials,
+  methods: corsOptions.methods,
+  allowedHeaders: corsOptions.allowedHeaders
+});
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));

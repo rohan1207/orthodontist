@@ -57,77 +57,77 @@ const services = [
   },
 ];
 
-const ServiceCard = ({ service }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
-      className="relative group"
-    >
-      <div
-        className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-all duration-500 blur-lg"
-        style={{
-          background: `linear-gradient(to right, ${
-            service.color.split(" ")[1]
-          }, ${service.color.split(" ")[3]})`,
-        }}
-      />
+// const ServiceCard = ({ service }) => {
+//   return (
+//     <motion.div
+//       initial={{ opacity: 0, y: 20 }}
+//       whileInView={{ opacity: 1, y: 0 }}
+//       whileHover={{ y: -5 }}
+//       transition={{ duration: 0.3 }}
+//       className="relative group"
+//     >
+//       <div
+//         className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-all duration-500 blur-lg"
+//         style={{
+//           background: `linear-gradient(to right, ${
+//             service.color.split(" ")[1]
+//           }, ${service.color.split(" ")[3]})`,
+//         }}
+//       />
 
-      <div className="relative bg-white p-6 md:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10">
-        <div className="flex items-start gap-4 mb-6">
-          <div className="p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
-            <service.icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
-          </div>
-          <div>
-            <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#006D5B] mb-1 sm:mb-2">
-              {service.title}
-            </h3>
-            <p className="text-sm sm:text-base text-[#4B4B4B]">
-              {service.description}
-            </p>
-          </div>
-        </div>
+//       <div className="relative bg-white p-6 md:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 border border-[#006D5B]/10">
+//         <div className="flex items-start gap-4 mb-6">
+//           <div className="p-3 md:p-4 rounded-xl bg-[#006D5B] shadow-lg">
+//             <service.icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
+//           </div>
+//           <div>
+//             <h3 className="text-base sm:text-xl md:text-2xl font-bold text-[#006D5B] mb-1 sm:mb-2">
+//               {service.title}
+//             </h3>
+//             <p className="text-sm sm:text-base text-[#4B4B4B]">
+//               {service.description}
+//             </p>
+//           </div>
+//         </div>
 
-        <div className="bg-[#DCE6D5]/30 rounded-xl p-4 md:p-5">
-          <h4 className="text-[#006D5B] font-semibold mb-3">Key Features:</h4>
-          <ul className="space-y-3">
-            {service.features.map((feature, index) => (
-              <motion.li
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="flex items-center text-base text-[#4B4B4B]"
-              >
-                <div className="p-1 rounded-full bg-[#006D5B]/10 mr-3">
-                  <ShieldCheckIcon className="w-4 h-4 text-[#006D5B]" />
-                </div>
-                {feature}
-              </motion.li>
-            ))}
-          </ul>
-        </div>
+//         <div className="bg-[#DCE6D5]/30 rounded-xl p-4 md:p-5">
+//           <h4 className="text-[#006D5B] font-semibold mb-3">Key Features:</h4>
+//           <ul className="space-y-3">
+//             {service.features.map((feature, index) => (
+//               <motion.li
+//                 key={index}
+//                 initial={{ opacity: 0, x: -20 }}
+//                 whileInView={{ opacity: 1, x: 0 }}
+//                 transition={{ delay: index * 0.1 }}
+//                 className="flex items-center text-base text-[#4B4B4B]"
+//               >
+//                 <div className="p-1 rounded-full bg-[#006D5B]/10 mr-3">
+//                   <ShieldCheckIcon className="w-4 h-4 text-[#006D5B]" />
+//                 </div>
+//                 {feature}
+//               </motion.li>
+//             ))}
+//           </ul>
+//         </div>
 
-        <motion.div
-          className="mt-6 flex justify-end"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Link
-            to={`/services/${service.id}`}
-            className="inline-flex items-center text-[#006D5B] hover:text-[#006D5B]/80 font-medium"
-          >
-            Learn More
-            <ArrowRightIcon className="w-4 h-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
-        </motion.div>
-      </div>
-    </motion.div>
-  );
-};
+//         <motion.div
+//           className="mt-6 flex justify-end"
+//           initial={{ opacity: 0 }}
+//           whileInView={{ opacity: 1 }}
+//           transition={{ delay: 0.3 }}
+//         >
+//           <Link
+//             to={`/services/${service.id}`}
+//             className="inline-flex items-center text-[#006D5B] hover:text-[#006D5B]/80 font-medium"
+//           >
+//             Learn More
+//             <ArrowRightIcon className="w-4 h-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+//           </Link>
+//         </motion.div>
+//       </div>
+//     </motion.div>
+//   );
+// };
 
 const StatsItem = ({ icon: Icon, value, label }) => (
   <motion.div
@@ -153,15 +153,7 @@ const StatsItem = ({ icon: Icon, value, label }) => (
 export default function AcademicHelp() {
   return (
     <section className="relative py-10 sm:py-16 md:py-24 bg-[#DCE6D5]">
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center bg-gray-200 bg-opacity-20 backdrop-blur-[2px]">
-        <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#006D5B] mb-4">
-          Coming Soon!
-        </h3>
-        <p className="text-base sm:text-lg md:text-xl text-[#4B4B4B] max-w-md mx-auto">
-          Our Academic Help section is under construction. We're working hard to
-          bring you these services soon.
-        </p>
-      </div>
+      
 
       <div
         className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pointer-events-none"
@@ -212,12 +204,12 @@ export default function AcademicHelp() {
           />
         </div>
 
-        {/* Services Grid */}
+        {/* Services Grid
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-8 sm:mb-12 md:mb-16">
           {services.map((service) => (
             <ServiceCard key={service.id} service={service} />
           ))}
-        </div>
+        </div> */}
 
         {/* Main CTA */}
         <div className="w-full flex justify-center mb-12">
@@ -266,7 +258,7 @@ export default function AcademicHelp() {
               <ArrowRightIcon className="w-5 h-5 ml-2" />
             </Link>
             <Link
-              to="/services"
+              to="/academic-help"
               className="inline-flex items-center justify-center px-8 py-4 text-white border-2 border-white rounded-xl font-semibold hover:bg-white/10 transition-all duration-300"
             >
               View Service Details

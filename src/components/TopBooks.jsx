@@ -6,8 +6,6 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { buildApiUrl } from "../utils/api";
 
-
-
 const BookCard = ({ book, isOpen, onToggle }) => {
   return (
     <motion.div
@@ -192,8 +190,6 @@ const BookCard = ({ book, isOpen, onToggle }) => {
                   <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-4 sm:h-4 opacity-70" />
                 </a>
               )}
-              
-             
             </div>
           </div>
         </motion.div>
@@ -296,18 +292,23 @@ export default function TopBooks() {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await axios.get(buildApiUrl('/api/books'));
+        const response = await axios.get(buildApiUrl('/api/books?limit=4'));
+        
         if (response.data && Array.isArray(response.data)) {
-          // Sort books by order field if available
-          const sortedBooks = [...response.data].sort((a, b) => (a.order || 0) - (b.order || 0));
+          // Sort books by order field if available and strictly limit to 4
+          const sortedBooks = [...response.data]
+            .sort((a, b) => (a.order || 0) - (b.order || 0))
+            .slice(0, 4);
+          
           setBooks(sortedBooks);
         } else {
-          setBooks(fallbackBooks);
+          setError('Invalid data format received from server.');
+          setBooks([]);
         }
       } catch (err) {
         console.error('Error fetching books:', err);
-        setError('Failed to load books. Using fallback data.');
-        setBooks(fallbackBooks);
+        setError(err.response?.data?.message || 'Failed to load books. Please try again later.');
+        setBooks([]);
       } finally {
         setLoading(false);
       }
@@ -331,6 +332,42 @@ export default function TopBooks() {
     );
   }
 
+  if (error) {
+    return (
+      <section className="py-16 md:py-24 bg-[#DCE6D5] min-h-[60vh] flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg">
+            <div className="flex items-center mb-2">
+              <svg className="w-6 h-6 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="text-red-800 font-semibold">Error Loading Books</h3>
+            </div>
+            <p className="text-red-700 text-sm">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (books.length === 0) {
+    return (
+      <section className="py-16 md:py-24 bg-[#DCE6D5] min-h-[60vh] flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto px-4">
+          <BookOpenIcon className="w-16 h-16 text-[#006D5B] mx-auto mb-4 opacity-50" />
+          <h3 className="text-xl font-semibold text-[#006D5B] mb-2">No Books Available</h3>
+          <p className="text-[#4B4B4B]">There are currently no recommended books to display. Please check back later.</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 md:py-24 bg-[#DCE6D5]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -344,11 +381,6 @@ export default function TopBooks() {
             aspiring orthodontist. Dive into the foundational knowledge that
             shapes modern practice.
           </p>
-          {error && (
-            <div className="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
-              <p className="text-sm">{error}</p>
-            </div>
-          )}
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-10 md:gap-y-12 lg:gap-x-12">
